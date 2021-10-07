@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.otherlogin.linkedin.mapper.TolinkedUserInfoMapper">
+    
+    <resultMap type="TolinkedUserInfo" id="TolinkedUserInfoResult">
+        <result property="id"    column="id"    />
+        <result property="userid"    column="userid"    />
+        <result property="nickname"    column="nickname"    />
+        <result property="sex"    column="sex"    />
+        <result property="provice"    column="provice"    />
+        <result property="status"    column="status"    />
+        <result property="health"    column="health"    />
+        <result property="remark"    column="remark"    />
+        <result property="createtime"    column="createtime"    />
+        <result property="version"    column="version"    />
+    </resultMap>
+
+    <sql id="selectTolinkedUserInfoVo">
+        select id, userid, nickname, sex, provice, status, health, remark, createtime, version from tolinked_user_info
+    </sql>
+
+    <select id="selectTolinkedUserInfoList" parameterType="TolinkedUserInfo" resultMap="TolinkedUserInfoResult">
+        <include refid="selectTolinkedUserInfoVo"/>
+        <where>  
+            <if test="userid != null  and userid != ''"> and userid = #{userid}</if>
+            <if test="nickname != null  and nickname != ''"> and nickname like  '%' ||  #{nickname} || '%'</if>
+            <if test="sex != null  and sex != ''"> and sex = #{sex}</if>
+            <if test="provice != null  and provice != ''"> and provice = #{provice}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="health != null  and health != ''"> and health = #{health}</if>
+            <if test="createtime != null "> and createtime = #{createtime}</if>
+            <if test="version != null "> and version = #{version}</if>
+        </where>
+    </select>
+    
+    <select id="selectTolinkedUserInfoById" parameterType="String" resultMap="TolinkedUserInfoResult">
+        <include refid="selectTolinkedUserInfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTolinkedUserInfo" parameterType="TolinkedUserInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into tolinked_user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userid != null  and userid != ''">userid,</if>
+            <if test="nickname != null  and nickname != ''">nickname,</if>
+            <if test="sex != null  and sex != ''">sex,</if>
+            <if test="provice != null  and provice != ''">provice,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="health != null  and health != ''">health,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="createtime != null ">createtime,</if>
+            <if test="version != null ">version,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userid != null  and userid != ''">#{userid},</if>
+            <if test="nickname != null  and nickname != ''">#{nickname},</if>
+            <if test="sex != null  and sex != ''">#{sex},</if>
+            <if test="provice != null  and provice != ''">#{provice},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="health != null  and health != ''">#{health},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createtime != null ">#{createtime},</if>
+            <if test="version != null ">#{version},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTolinkedUserInfo" parameterType="TolinkedUserInfo">
+        update tolinked_user_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userid != null  and userid != ''">userid = #{userid},</if>
+            <if test="nickname != null  and nickname != ''">nickname = #{nickname},</if>
+            <if test="sex != null  and sex != ''">sex = #{sex},</if>
+            <if test="provice != null  and provice != ''">provice = #{provice},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="health != null  and health != ''">health = #{health},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="createtime != null ">createtime = #{createtime},</if>
+            <if test="version != null ">version = #{version},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTolinkedUserInfoById" parameterType="String">
+        delete from tolinked_user_info where id = #{id}
+    </delete>
+
+    <delete id="deleteTolinkedUserInfoByIds" parameterType="String">
+        delete from tolinked_user_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

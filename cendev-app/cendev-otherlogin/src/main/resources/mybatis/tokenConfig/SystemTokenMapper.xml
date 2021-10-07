@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.otherlogin.tokenConfig.mapper.SystemTokenMapper">
+
+    <resultMap type="SystemToken" id="SystemTokenResult">
+        <result property="id" column="id"/>
+        <result property="systemName" column="system_name"/>
+        <result property="time" column="time"/>
+        <result property="descript" column="descript"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="selectSystemTokenVo">
+        select id, system_name, time, descript, version from system_token
+    </sql>
+
+    <select id="selectSystemTokenList" parameterType="SystemToken" resultMap="SystemTokenResult">
+        <include refid="selectSystemTokenVo"/>
+        <where>
+            <if test="systemName != null  and systemName != ''">and system_name like concat('%', #{systemName}, '%')
+            </if>
+            <if test="time != null  and time != ''">and time like concat('%', #{time}, '%')</if>
+            <if test="descript != null  and descript != ''">and descript like concat('%', #{descript}, '%')</if>
+            <if test="version != null ">and version like concat('%', #{version}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectSystemTokenById" parameterType="String" resultMap="SystemTokenResult">
+        <include refid="selectSystemTokenVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSystemToken" parameterType="SystemToken" useGeneratedKeys="true" keyProperty="id">
+        insert into system_token
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="systemName != null  and systemName != ''">system_name,</if>
+            <if test="time != null  and time != ''">time,</if>
+            <if test="descript != null  and descript != ''">descript,</if>
+            <if test="version != null ">version,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="systemName != null  and systemName != ''">#{systemName},</if>
+            <if test="time != null  and time != ''">#{time},</if>
+            <if test="descript != null  and descript != ''">#{descript},</if>
+            <if test="version != null ">#{version},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSystemToken" parameterType="SystemToken">
+        update system_token
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="systemName != null  and systemName != ''">system_name = #{systemName},</if>
+            <if test="time != null  and time != ''">time = #{time},</if>
+            <if test="descript != null  and descript != ''">descript = #{descript},</if>
+            <if test="version != null ">version = #{version},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSystemTokenById" parameterType="String">
+        delete from system_token where id = #{id}
+    </delete>
+
+    <delete id="deleteSystemTokenByIds" parameterType="String">
+        delete from system_token where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

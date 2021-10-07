@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.jouralQuery.mapper.ManagerLogMapper">
+
+    <resultMap type="ManagerLog" id="ManagerLogResult">
+        <result property="id"    column="id"    />
+        <result property="opUserName"    column="op_user_name"    />
+        <result property="opUserId"    column="op_user_id"    />
+        <result property="opTime"    column="op_time"    />
+        <result property="opUserType"    column="op_user_type"    />
+        <result property="opType"    column="op_type"    />
+        <result property="opModel"    column="op_model"    />
+        <result property="opContent"    column="op_content"    />
+        <result property="opIp"    column="op_ip"    />
+        <result property="opUrl"    column="op_url"    />
+        <result property="opLocation"    column="op_location"    />
+        <result property="method"    column="method"    />
+        <result property="requestMethod"    column="request_method"    />
+        <result property="status"    column="status"    />
+        <result property="msg"    column="msg"    />
+    </resultMap>
+
+    <sql id="selectManagerLogVo">
+        select id, op_user_name, op_user_id, op_time, op_user_type, op_type, op_model, op_content, op_ip, op_url, op_location, method, request_method, status, msg from manager_log
+    </sql>
+
+    <select id="selectManagerLogList" parameterType="ManagerLog" resultMap="ManagerLogResult">
+        <include refid="selectManagerLogVo"/>
+        <where>
+            <if test="opUserName != null  and opUserName != ''"> and op_user_name like  '%' ||  #{opUserName} || '%'</if>
+            <if test="opUserId != null  and opUserId != ''"> and op_user_id = #{opUserId}</if>
+            <if test="opTime != null "> and op_time = #{opTime}</if>
+            <if test="opUserType != null  and opUserType != ''"> and op_user_type = #{opUserType}</if>
+            <if test="opType != null  and opType != ''"> and op_type = #{opType}</if>
+            <if test="opModel != null  and opModel != ''"> and op_model = #{opModel}</if>
+            <if test="opContent != null  and opContent != ''"> and op_content = #{opContent}</if>
+            <if test="opIp != null  and opIp != ''"> and op_ip = #{opIp}</if>
+            <if test="opUrl != null  and opUrl != ''"> and op_url = #{opUrl}</if>
+            <if test="opLocation != null  and opLocation != ''"> and op_location = #{opLocation}</if>
+            <if test="method != null  and method != ''"> and method = #{method}</if>
+            <if test="requestMethod != null  and requestMethod != ''"> and request_method = #{requestMethod}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="msg != null  and msg != ''"> and msg = #{msg}</if>
+
+            <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
+                and op_time &gt;= to_DATE(#{beginTime},'yyyy-mm-dd')
+            </if>
+            <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
+                and op_time &lt;= to_DATE(#{endTime},'yyyy-mm-dd')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectManagerLogById" parameterType="String" resultMap="ManagerLogResult">
+        <include refid="selectManagerLogVo"/>
+        where id = #{id}
+    </select>
+    <select id="selectTodayUserSum" parameterType="String"  resultType="Integer">
+       SELECT
+            COUNT (DISTINCT OP_USER_ID)
+        FROM
+            MANAGER_LOG
+        where
+        OP_TYPE = 'LOGIN'
+        AND OP_USER_TYPE = 'PERSONAL'
+       <![CDATA[  AND  op_time >= to_date (#{startTime,jdbcType=VARCHAR}, 'yyyy-mm-dd' ) ]]>
+       <![CDATA[  AND  op_time <= to_date (#{endTime,jdbcType=VARCHAR}, 'yyyy-mm-dd hh24:mi:ss' ) ]]>
+    </select>
+
+    <select id="selectTodayOrganSum" parameterType="String"  resultType="Integer">
+       SELECT
+            COUNT (DISTINCT OP_USER_ID)
+        FROM
+            MANAGER_LOG
+        where
+        OP_TYPE = 'LOGIN'
+        AND OP_USER_TYPE = 'ORGAN'
+       <![CDATA[  AND  op_time >= to_date (#{startTime,jdbcType=VARCHAR}, 'yyyy-mm-dd' ) ]]>
+       <![CDATA[  AND  op_time <= to_date (#{endTime,jdbcType=VARCHAR}, 'yyyy-mm-dd hh24:mi:ss' ) ]]>
+    </select>
+
+    <insert id="insertManagerLog" parameterType="ManagerLog" useGeneratedKeys="false" keyProperty="id">
+        insert into manager_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="opUserName != null  and opUserName != ''">op_user_name,</if>
+            <if test="opUserId != null  and opUserId != ''">op_user_id,</if>
+            <if test="opTime != null ">op_time,</if>
+            <if test="opUserType != null  and opUserType != ''">op_user_type,</if>
+            <if test="opType != null  and opType != ''">op_type,</if>
+            <if test="opModel != null  and opModel != ''">op_model,</if>
+            <if test="opContent != null  and opContent != ''">op_content,</if>
+            <if test="opIp != null  and opIp != ''">op_ip,</if>
+            <if test="opUrl != null  and opUrl != ''">op_url,</if>
+            <if test="opLocation != null  and opLocation != ''">op_location,</if>
+            <if test="method != null  and method != ''">method,</if>
+            <if test="requestMethod != null  and requestMethod != ''">request_method,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="msg != null  and msg != ''">msg,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="opUserName != null  and opUserName != ''">#{opUserName},</if>
+            <if test="opUserId != null  and opUserId != ''">#{opUserId},</if>
+            <if test="opTime != null ">#{opTime},</if>
+            <if test="opUserType != null  and opUserType != ''">#{opUserType},</if>
+            <if test="opType != null  and opType != ''">#{opType},</if>
+            <if test="opModel != null  and opModel != ''">#{opModel},</if>
+            <if test="opContent != null  and opContent != ''">#{opContent},</if>
+            <if test="opIp != null  and opIp != ''">#{opIp},</if>
+            <if test="opUrl != null  and opUrl != ''">#{opUrl},</if>
+            <if test="opLocation != null  and opLocation != ''">#{opLocation},</if>
+            <if test="method != null  and method != ''">#{method},</if>
+            <if test="requestMethod != null  and requestMethod != ''">#{requestMethod},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="msg != null  and msg != ''">#{msg},</if>
+         </trim>
+    </insert>
+
+    <update id="updateManagerLog" parameterType="ManagerLog">
+        update manager_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="opUserName != null  and opUserName != ''">op_user_name = #{opUserName},</if>
+            <if test="opUserId != null  and opUserId != ''">op_user_id = #{opUserId},</if>
+            <if test="opTime != null ">op_time = #{opTime},</if>
+            <if test="opUserType != null  and opUserType != ''">op_user_type = #{opUserType},</if>
+            <if test="opType != null  and opType != ''">op_type = #{opType},</if>
+            <if test="opModel != null  and opModel != ''">op_model = #{opModel},</if>
+            <if test="opContent != null  and opContent != ''">op_content = #{opContent},</if>
+            <if test="opIp != null  and opIp != ''">op_ip = #{opIp},</if>
+            <if test="opUrl != null  and opUrl != ''">op_url = #{opUrl},</if>
+            <if test="opLocation != null  and opLocation != ''">op_location = #{opLocation},</if>
+            <if test="method != null  and method != ''">method = #{method},</if>
+            <if test="requestMethod != null  and requestMethod != ''">request_method = #{requestMethod},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="msg != null  and msg != ''">msg = #{msg},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteManagerLogById" parameterType="String">
+        delete from manager_log where id = #{id}
+    </delete>
+
+    <delete id="deleteManagerLogByIds" parameterType="String">
+        delete from manager_log where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

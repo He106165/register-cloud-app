@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.userManage.orgenUser.mapper.OrgenUserInfoMapper">
+
+    <resultMap type="OrgenUserInfo" id="OrgenUserInfoResult">
+        <result property="orgUserId"    column="org_user_id"    />
+        <result property="oegUserTpye"    column="oeg_user_tpye"    />
+        <result property="permanType"    column="perman_type"    />
+        <result property="enterpriseName"    column="enterprise_name"    />
+        <result property="englishName"    column="english_name"    />
+        <result property="legalName"    column="legal_name"    />
+        <result property="legalCardType"    column="legal_card_type"    />
+        <result property="legalIdnumber"    column="legal_idnumber"    />
+        <result property="permanMobile"    column="perman_mobile"    />
+        <result property="hostpersionName"    column="hostpersion_name"    />
+        <result property="hostpersionEmail"    column="hostpersion_email"    />
+        <result property="hostpersionTelephone"    column="hostpersion_telephone"    />
+        <result property="country"    column="country"    />
+        <result property="province"    column="province"    />
+        <result property="address"    column="address"    />
+        <result property="consulateName"    column="consulate_name"    />
+        <result property="consulateId"    column="consulate_id"    />
+        <result property="authlevel"    column="authlevel"    />
+        <result property="ispass"    column="ispass"    />
+        <result property="statu"    column="statu"    />
+        <result property="remark"    column="remark"    />
+        <result property="avatarUrl"    column="avatar_url"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="version"    column="version"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <sql id="selectOrgenUserInfoVo">
+        select org_user_id, oeg_user_tpye, perman_type, enterprise_name, english_name, legal_name, legal_card_type, legal_idnumber, perman_mobile, hostpersion_name, hostpersion_email, hostpersion_telephone, country, province, address, consulate_name, consulate_id, authlevel, ispass, statu, remark, avatar_url, create_time, create_by, update_time, update_by, version, del_flag from orgen_user_info
+    </sql>
+
+    <select id="selectOrgenUserInfoList" parameterType="OrgenUserInfo" resultMap="OrgenUserInfoResult">
+        <include refid="selectOrgenUserInfoVo"/>
+        <where>
+            del_flag = 0
+            <if test="oegUserTpye != null  and oegUserTpye != ''"> and oeg_user_tpye = #{oegUserTpye}</if>
+            <if test="permanType != null  and permanType != ''"> and perman_type = #{permanType}</if>
+            <if test="enterpriseName != null  and enterpriseName != ''"> and enterprise_name like  '%' ||  #{enterpriseName} || '%'</if>
+            <if test="englishName != null  and englishName != ''"> and english_name like  '%' ||  #{englishName} || '%'</if>
+            <if test="legalName != null  and legalName != ''"> and legal_name like  '%' ||  #{legalName} || '%'</if>
+            <if test="legalCardType != null  and legalCardType != ''"> and legal_card_type = #{legalCardType}</if>
+            <if test="legalIdnumber != null  and legalIdnumber != ''"> and legal_idnumber = #{legalIdnumber}</if>
+            <if test="permanMobile != null  and permanMobile != ''"> and perman_mobile = #{permanMobile}</if>
+            <if test="hostpersionName != null  and hostpersionName != ''"> and hostpersion_name like  '%' ||  #{hostpersionName} || '%'</if>
+            <if test="hostpersionEmail != null  and hostpersionEmail != ''"> and hostpersion_email = #{hostpersionEmail}</if>
+            <if test="hostpersionTelephone != null  and hostpersionTelephone != ''"> and hostpersion_telephone = #{hostpersionTelephone}</if>
+            <if test="country != null  and country != ''"> and country = #{country}</if>
+            <if test="province != null  and province != ''"> and province = #{province}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="consulateName != null  and consulateName != ''"> and consulate_name like  '%' ||  #{consulateName} || '%'</if>
+            <if test="consulateId != null  and consulateId != ''"> and consulate_id = #{consulateId}</if>
+            <if test="authlevel != null  and authlevel != ''"> and authlevel = #{authlevel}</if>
+            <if test="ispass != null "> and ispass = #{ispass}</if>
+            <if test="statu != null  and statu != ''"> and statu = #{statu}</if>
+            <if test="avatarUrl != null  and avatarUrl != ''"> and avatar_url = #{avatarUrl}</if>
+            <if test="version != null "> and version = #{version}</if>
+        </where>
+    </select>
+
+    <select id="selectOrgenUserInfoById" parameterType="String" resultMap="OrgenUserInfoResult">
+        <include refid="selectOrgenUserInfoVo"/>
+        where org_user_id = #{orgUserId}
+    </select>
+    <select id="selectAuth" resultType="java.lang.String">
+        SELECT AUTHLEVEL from ORGEN_USER_INFO where LEGAL_NAME = #{legalName,jdbcType=VARCHAR} AND LEGAL_IDNUMBER=#{legalIdnumber,jdbcType=VARCHAR}
+    </select>
+    <select id="selectNewAddOrgenSum" parameterType="String" resultType="int">
+        SELECT
+            COUNT (org_user_id)
+        FROM
+           ORGEN_USER_INFO
+        where
+       <![CDATA[  CREATE_TIME >= to_date (#{startTime,jdbcType=VARCHAR}, 'yyyy-mm-dd' ) ]]>
+       <![CDATA[  AND  CREATE_TIME <= to_date (#{endTime,jdbcType=VARCHAR}, 'yyyy-mm-dd' ) ]]>
+    </select>
+
+    <select id="selectOrgenPersonSum" resultType="int">
+        SELECT
+         COUNT (DISTINCT org_user_id)
+        FROM
+            ORGEN_USER_INFO
+    </select>
+    <insert id="insertOrgenUserInfo" parameterType="OrgenUserInfo" useGeneratedKeys="true" keyProperty="orgUserId">
+        insert into orgen_user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="oegUserTpye != null  and oegUserTpye != ''">oeg_user_tpye,</if>
+            <if test="permanType != null  and permanType != ''">perman_type,</if>
+            <if test="enterpriseName != null  and enterpriseName != ''">enterprise_name,</if>
+            <if test="englishName != null  and englishName != ''">english_name,</if>
+            <if test="legalName != null  and legalName != ''">legal_name,</if>
+            <if test="legalCardType != null  and legalCardType != ''">legal_card_type,</if>
+            <if test="legalIdnumber != null  and legalIdnumber != ''">legal_idnumber,</if>
+            <if test="permanMobile != null  and permanMobile != ''">perman_mobile,</if>
+            <if test="hostpersionName != null  and hostpersionName != ''">hostpersion_name,</if>
+            <if test="hostpersionEmail != null  and hostpersionEmail != ''">hostpersion_email,</if>
+            <if test="hostpersionTelephone != null  and hostpersionTelephone != ''">hostpersion_telephone,</if>
+            <if test="country != null  and country != ''">country,</if>
+            <if test="province != null  and province != ''">province,</if>
+            <if test="address != null  and address != ''">address,</if>
+            <if test="consulateName != null  and consulateName != ''">consulate_name,</if>
+            <if test="consulateId != null  and consulateId != ''">consulate_id,</if>
+            <if test="authlevel != null  and authlevel != ''">authlevel,</if>
+            <if test="ispass != null ">ispass,</if>
+            <if test="statu != null  and statu != ''">statu,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="avatarUrl != null  and avatarUrl != ''">avatar_url,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="version != null ">version,</if>
+            <if test="delFlag != null ">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="oegUserTpye != null  and oegUserTpye != ''">#{oegUserTpye},</if>
+            <if test="permanType != null  and permanType != ''">#{permanType},</if>
+            <if test="enterpriseName != null  and enterpriseName != ''">#{enterpriseName},</if>
+            <if test="englishName != null  and englishName != ''">#{englishName},</if>
+            <if test="legalName != null  and legalName != ''">#{legalName},</if>
+            <if test="legalCardType != null  and legalCardType != ''">#{legalCardType},</if>
+            <if test="legalIdnumber != null  and legalIdnumber != ''">#{legalIdnumber},</if>
+            <if test="permanMobile != null  and permanMobile != ''">#{permanMobile},</if>
+            <if test="hostpersionName != null  and hostpersionName != ''">#{hostpersionName},</if>
+            <if test="hostpersionEmail != null  and hostpersionEmail != ''">#{hostpersionEmail},</if>
+            <if test="hostpersionTelephone != null  and hostpersionTelephone != ''">#{hostpersionTelephone},</if>
+            <if test="country != null  and country != ''">#{country},</if>
+            <if test="province != null  and province != ''">#{province},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="consulateName != null  and consulateName != ''">#{consulateName},</if>
+            <if test="consulateId != null  and consulateId != ''">#{consulateId},</if>
+            <if test="authlevel != null  and authlevel != ''">#{authlevel},</if>
+            <if test="ispass != null ">#{ispass},</if>
+            <if test="statu != null  and statu != ''">#{statu},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="avatarUrl != null  and avatarUrl != ''">#{avatarUrl},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="delFlag != null ">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOrgenUserInfo" parameterType="OrgenUserInfo">
+        update orgen_user_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="oegUserTpye != null  and oegUserTpye != ''">oeg_user_tpye = #{oegUserTpye},</if>
+            <if test="permanType != null  and permanType != ''">perman_type = #{permanType},</if>
+            <if test="enterpriseName != null  and enterpriseName != ''">enterprise_name = #{enterpriseName},</if>
+            <if test="englishName != null  and englishName != ''">english_name = #{englishName},</if>
+            <if test="legalName != null  and legalName != ''">legal_name = #{legalName},</if>
+            <if test="legalCardType != null  and legalCardType != ''">legal_card_type = #{legalCardType},</if>
+            <if test="legalIdnumber != null  and legalIdnumber != ''">legal_idnumber = #{legalIdnumber},</if>
+            <if test="permanMobile != null  and permanMobile != ''">perman_mobile = #{permanMobile},</if>
+            <if test="hostpersionName != null  and hostpersionName != ''">hostpersion_name = #{hostpersionName},</if>
+            <if test="hostpersionEmail != null  and hostpersionEmail != ''">hostpersion_email = #{hostpersionEmail},</if>
+            <if test="hostpersionTelephone != null  and hostpersionTelephone != ''">hostpersion_telephone = #{hostpersionTelephone},</if>
+            <if test="country != null  and country != ''">country = #{country},</if>
+            <if test="province != null  and province != ''">province = #{province},</if>
+            <if test="address != null  and address != ''">address = #{address},</if>
+            <if test="consulateName != null  and consulateName != ''">consulate_name = #{consulateName},</if>
+            <if test="consulateId != null  and consulateId != ''">consulate_id = #{consulateId},</if>
+            <if test="authlevel != null  and authlevel != ''">authlevel = #{authlevel},</if>
+            <if test="ispass != null ">ispass = #{ispass},</if>
+            <if test="statu != null  and statu != ''">statu = #{statu},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="avatarUrl != null  and avatarUrl != ''">avatar_url = #{avatarUrl},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="version != null ">version = #{version},</if>
+            <if test="delFlag != null ">del_flag = #{delFlag},</if>
+        </trim>
+        where org_user_id = #{orgUserId}
+    </update>
+    <update id="updateAuthLevel">
+        update ORGEN_USER_INFO set AUTHLEVEL = '3' where  LEGAL_NAME = #{legalName,jdbcType=VARCHAR} AND LEGAL_IDNUMBER=#{legalIdnumber,jdbcType=VARCHAR}
+    </update>
+    <update id="updateStatus">
+        update ORGEN_USER_LOGIN set STATUS = '01' where OEG_USER_ID = #{oegUserId,jdbcType=VARCHAR}
+    </update>
+    <update id="orgenAuthentication">
+        update orgen_user_info set AUTHLEVEL = '3' where org_user_id = #{orgUserId,jdbcType=VARCHAR}
+    </update>
+    <update id="federationApprove">
+        update ORGEN_USER_INFO set ISPASS = '1' where ORG_USER_ID = #{orgUserId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateSta">
+        update ORGEN_USER_LOGIN set STATUS = '00' where OEG_USER_ID = #{oegUserId,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="deleteOrgenUserInfoById" parameterType="String">
+        delete from orgen_user_info where org_user_id = #{orgUserId}
+    </delete>
+
+    <delete id="deleteOrgenUserInfoByIds" parameterType="String">
+        delete from orgen_user_info where org_user_id in
+        <foreach item="orgUserId" collection="array" open="(" separator="," close=")">
+            #{orgUserId}
+        </foreach>
+    </delete>
+
+</mapper>

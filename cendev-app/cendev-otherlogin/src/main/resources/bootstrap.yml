@@ -1,0 +1,106 @@
+server:
+  port: 8012
+# 日志配置
+logging:
+  level:
+    com.censoft: debug
+    org.springframework: warn
+spring:
+  application:
+    name: cendev-otherlogin
+  cloud:
+    config:
+      fail-fast: true
+      name: ${spring.application.name}
+      profile: ${spring.profiles.active}
+      discovery:
+        enabled: true
+        service-id: cendev-config
+  profiles:
+    active: dev
+    include: durid,redis
+  devtools:
+    restart:
+      enabled: true
+  main:
+    allow-bean-definition-overriding: true
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  servlet:
+    multipart:
+      maxFileSize: 5MB  #单位必须大写MB或不写(即为B)
+      maxRequestSize: 10MB
+
+
+feign:
+  hystrix:
+    enabled: true
+
+eureka:
+  client: #客户端注册进eureka服务列表内
+    service-url:
+      #defaultZone: http://eureka.cloud.xg.com:7001/eureka
+      #defaultZone: http://192.168.4.201:7002/eureka/
+      defaultZone: http://192.168.4.198:7001/eureka/,http://192.168.4.201:7002/eureka/
+  instance:
+    instance-id: ${spring.application.name}:${server.port}
+    prefer-ip-address: true     #访问路径可以显示IP地址
+#暴露监控端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+
+# MyBatis
+mybatis:
+  # 搜索指定包别名
+  type-aliases-package: com.censoft.otherlogin.orgenUser,com.censoft.otherlogin.tokenConfig,com.censoft.otherlogin.linkedin,com.censoft.otherlogin.Alipay
+  # 配置mapper的扫描，找到所有的mapper.xml映射文件
+  mapper-locations: classpath*:mybatis/**/*Mapper.xml
+  # 加载全局的配置文件
+  #configLocation: classpath:mybatis/mybatis-config.xml
+
+mapper:
+  not-empty: true
+  identity: ORACLE
+
+# PageHelper分页插件
+pagehelper:
+  helperDialect: oracle
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+#ribbon 不若离eureka 使用
+ribbon:
+  eureka:
+    enabled: true
+
+alipayUrl:
+  #  alipayCurrentUrl: redirect:http://localhost:8080/
+  #  alipayErrorUrl: redirect:http://localhost:8080
+  #  alipayunUserUrl: redirect:http://localhost:8080/otherUserInfo
+  #  checkAliLoginUrl: redirect:http://localhost:9527/otherlogin/info/chenck
+#  alipayCurrentUrl: redirect:http://192.168.4.198:8080/
+#  alipayErrorUrl: redirect:http://192.168.4.198:8080
+#  alipayunUserUrl: redirect:http://192.168.4.198:8080/otherUserInfo
+#  checkAliLoginUrl: redirect:http://192.168.4.198:9527/otherlogin/info/chenck
+#  alipayCurrentUrl: redirect:http://localhost:8080/
+#  alipayErrorUrl: redirect:http://localhost:8080
+#  alipayunUserUrl: redirect:http://localhost:8080/otherUserInfo
+#  checkAliLoginUrl: redirect:http://localhost:9527/otherlogin/info/chenck
+#  bindingalipayUserUrl: redirect:http://localhost:8080/bangdingsf
+#  bindingalipayUserErrorUrl: redirect:http://localhost:8080/bangdingsf?Error=error
+#  bindingalipayUserAlipayErrorUrl: redirect:http://localhost:8080/bangdingsf?Error=alierror
+
+
+  alipayCurrentUrl: redirect:http://register.censoft.com.cn/
+  alipayErrorUrl: redirect:http://register.censoft.com.cn
+  alipayunUserUrl: redirect:http://register.censoft.com.cn/otherUserInfo
+#  checkAliLoginUrl: redirect:http://registerApi.censoft.com.cn/otherlogin/info/chenck
+  checkAliLoginUrl: redirect:http://registerAPI.censoft.com.cn/otherlogin/info/chenck
+  bindingalipayUserUrl: redirect:http://register.censoft.com.cn/bangdingsf
+  bindingalipayUserErrorUrl: redirect:http://register.censoft.com.cn/bangdingsf?Error=error
+  bindingalipayUserAlipayErrorUrl: redirect:http://register.censoft.com.cn/bangdingsf?Error=alierror

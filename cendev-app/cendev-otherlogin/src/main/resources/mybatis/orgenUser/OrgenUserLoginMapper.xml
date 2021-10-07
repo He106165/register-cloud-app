@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.otherlogin.orgenUser.mapper.OrgenUserLoginMapper">
+
+    <resultMap type="OrgenUserLogin" id="OrgenUserLoginResult">
+        <result property="id"    column="id"    />
+        <result property="oegUserId"    column="oeg_user_id"    />
+        <result property="name"    column="name"    />
+        <result property="password"    column="password"    />
+        <result property="unifiedsocialcreditcode"    column="unifiedsocialcreditcode"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="version"    column="version"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="depermentCode"    column="deperment_code"    />
+        <result property="hostPersionEmail"    column="hostpersion_email"    />
+    </resultMap>
+
+    <resultMap type="OrgenUserInfo" id="OrgenUserInfoResult">
+        <result property="userId"    column="org_user_id"    />
+        <result property="oegUserTpye"    column="oeg_user_tpye"    />
+        <result property="permanType"    column="perman_type"    />
+        <result property="enterpriseName"    column="enterprise_name"    />
+        <result property="englishName"    column="english_name"    />
+        <result property="legalName"    column="legal_name"    />
+        <result property="legalCardType"    column="legal_card_type"    />
+        <result property="legalIdnumber"    column="legal_idnumber"    />
+        <result property="permanMobile"    column="perman_mobile"    />
+        <result property="hostpersionName"    column="hostpersion_name"    />
+        <result property="hostpersionEmail"    column="hostpersion_email"    />
+        <result property="hostpersionTelephone"    column="hostpersion_telephone"    />
+        <result property="country"    column="country"    />
+        <result property="province"    column="province"    />
+        <result property="address"    column="address"    />
+        <result property="consulateName"    column="consulate_name"    />
+        <result property="consulateId"    column="consulate_id"    />
+        <result property="authlevel"    column="authlevel"    />
+        <result property="ispass"    column="ispass"    />
+        <result property="statu"    column="statu"    />
+        <result property="remark"    column="remark"    />
+        <result property="avatarUrl"    column="avatar_url"    />
+        <result property="depermentCode"    column="deperment_code"    />
+        <result property="name"    column="name"    />
+        <result property="password"    column="password"    />
+        <result property="unifiedsocialcreditcode"    column="unifiedsocialcreditcode"    />
+    </resultMap>
+
+
+    <sql id="selectOrgenUserLoginVo">
+        select id, oeg_user_id, name, password, unifiedsocialcreditcode, status, create_time, create_by, update_time, update_by, version, del_flag, deperment_code from orgen_user_login
+    </sql>
+
+    <select id="selectOrgenUserLoginList" parameterType="OrgenUserLogin" resultMap="OrgenUserLoginResult">
+        <include refid="selectOrgenUserLoginVo"/>
+        <where>
+            <if test="oegUserId != null  and oegUserId != ''"> and oeg_user_id = #{oegUserId}</if>
+            <if test="name != null  and name != ''"> and name like  '%' ||  #{name} || '%'</if>
+            <if test="password != null  and password != ''"> and password = #{password}</if>
+            <if test="unifiedsocialcreditcode != null  and unifiedsocialcreditcode != ''"> and unifiedsocialcreditcode = #{unifiedsocialcreditcode}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="version != null "> and version = #{version}</if>
+            <if test="depermentCode != null  and depermentCode != ''"> and deperment_code = #{depermentCode}</if>
+        </where>
+    </select>
+
+    <select id="selectOrgenUserLoginById" parameterType="String" resultMap="OrgenUserLoginResult">
+        <include refid="selectOrgenUserLoginVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertOrgenUserLogin" parameterType="OrgenUserLogin" useGeneratedKeys="true" keyProperty="id">
+        insert into orgen_user_login
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="oegUserId != null  and oegUserId != ''">oeg_user_id,</if>
+            <if test="name != null  and name != ''">name,</if>
+            <if test="password != null  and password != ''">password,</if>
+            <if test="unifiedsocialcreditcode != null  and unifiedsocialcreditcode != ''">unifiedsocialcreditcode,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="version != null ">version,</if>
+            <if test="delFlag != null ">del_flag,</if>
+            <if test="depermentCode != null  and depermentCode != ''">deperment_code,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="oegUserId != null  and oegUserId != ''">#{oegUserId},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="password != null  and password != ''">#{password},</if>
+            <if test="unifiedsocialcreditcode != null  and unifiedsocialcreditcode != ''">#{unifiedsocialcreditcode},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="delFlag != null ">#{delFlag},</if>
+            <if test="depermentCode != null  and depermentCode != ''">#{depermentCode},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOrgenUserLogin" parameterType="OrgenUserLogin">
+        update orgen_user_login
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="oegUserId != null  and oegUserId != ''">oeg_user_id = #{oegUserId},</if>
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="password != null  and password != ''">password = #{password},</if>
+            <if test="unifiedsocialcreditcode != null  and unifiedsocialcreditcode != ''">unifiedsocialcreditcode = #{unifiedsocialcreditcode},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="version != null ">version = #{version},</if>
+            <if test="delFlag != null ">del_flag = #{delFlag},</if>
+            <if test="depermentCode != null  and depermentCode != ''">deperment_code = #{depermentCode},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOrgenUserLoginById" parameterType="String">
+        delete from orgen_user_login where id = #{id}
+    </delete>
+
+    <delete id="deleteOrgenUserLoginByIds" parameterType="String">
+        delete from orgen_user_login where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <select id="login" parameterType="OrgenUserLogin" resultMap="OrgenUserInfoResult">
+    select o.org_user_id , o.oeg_user_tpye, o.perman_type, o.enterprise_name, o.english_name, o.legal_name, o.legal_card_type, o.legal_idnumber, o.perman_mobile, o.hostpersion_name, o.hostpersion_email, o.hostpersion_telephone, o.country, o.province, o.address, o.consulate_name, o.consulate_id, o.authlevel, o.remark, o.avatar_url,  o.version ,l.deperment_code,l.name,l.password,l.unifiedsocialcreditcode from orgen_user_info o
+    left join ORGEN_USER_LOGIN l on o.ORG_USER_ID= l.OEG_USER_ID
+        <where>
+            <if test="depermentCode != null  and depermentCode != ''"> and l.deperment_code = #{depermentCode}</if>
+            <if test="name != null  and name != ''"> and l.name = #{name}</if>
+            <if test="hostPersionEmail != null  and hostPersionEmail != ''"> and l.hostpersion_email = #{hostPersionEmail}</if>
+            <if test="unifiedsocialcreditcode != null  and unifiedsocialcreditcode != ''"> and l.unifiedsocialcreditcode = #{unifiedsocialcreditcode}</if>
+        </where>
+        and o.ispass = 1
+        and o.DEL_FLAG = 0
+        and o.statu = 1
+        and l.status = '00'
+        and ROWNUM &lt;=  1
+    </select>
+
+</mapper>

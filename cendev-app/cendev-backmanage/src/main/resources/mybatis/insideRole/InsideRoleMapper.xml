@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.insideUserManage.insideRole.mapper.InsideRoleMapper">
+
+    <resultMap type="InsideRole" id="InsideRoleResult">
+        <result property="roleId"    column="role_id"    />
+        <result property="roleName"    column="role_name"    />
+        <result property="roleKey"    column="role_key"    />
+        <result property="sort"    column="sort"    />
+        <result property="roleStatus"    column="role_status"    />
+        <result property="remark"    column="remark"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="version"    column="version"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="systemList"    column="system_list"    />
+    </resultMap>
+
+    <sql id="selectInsideRoleVo">
+        select role_id, role_name, role_key, sort, role_status, remark, create_time, create_by, update_time, update_by, version, del_flag,system_list from inside_role
+    </sql>
+
+    <select id="selectInsideRoleList" parameterType="InsideRole" resultMap="InsideRoleResult">
+        <include refid="selectInsideRoleVo"/>
+        <where>
+            del_flag = 0
+            <if test="roleName != null  and roleName != ''"> and role_name like  '%' ||  #{roleName} || '%'</if>
+            <if test="roleKey != null  and roleKey != ''"> and role_key = #{roleKey}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+            <if test="roleStatus != null  and roleStatus != ''"> and role_status = #{roleStatus}</if>
+            <if test="version != null "> and version = #{version}</if>
+        </where>
+    </select>
+
+    <select id="selectInsideRoleById" parameterType="String" resultMap="InsideRoleResult">
+        select role_id, role_name, role_key, sort, role_status, remark, create_time, create_by, update_time, update_by, version, del_flag,system_list from inside_role
+        where role_id = #{roleId}
+    </select>
+
+
+    <select id="selectInsideRoleListByRoles" parameterType="String" resultMap="InsideRoleResult">
+        select role_id, role_name, role_key, sort, role_status, remark, create_time, create_by, update_time, update_by, version, del_flag,system_list from inside_role
+        where role_id in
+        <foreach item="insideRole" collection="array" open="(" separator="," close=")">
+            #{insideRole}
+        </foreach>
+    </select>
+
+
+    <insert id="insertInsideRole" parameterType="InsideRole" useGeneratedKeys="true" keyProperty="roleId">
+        insert into inside_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roleId != null  and roleId != ''">role_id,</if>
+            <if test="roleName != null  and roleName != ''">role_name,</if>
+            <if test="roleKey != null  and roleKey != ''">role_key,</if>
+            <if test="sort != null ">sort,</if>
+            <if test="roleStatus != null  and roleStatus != ''">role_status,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="version != null ">version,</if>
+            <if test="delFlag != null ">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roleId != null  and roleId != ''">#{roleId},</if>
+            <if test="roleName != null  and roleName != ''">#{roleName},</if>
+            <if test="roleKey != null  and roleKey != ''">#{roleKey},</if>
+            <if test="sort != null ">#{sort},</if>
+            <if test="roleStatus != null  and roleStatus != ''">#{roleStatus},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="delFlag != null ">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateInsideRoleSystemConfide" parameterType="InsideRole">
+        update inside_role
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roleName != null  and roleName != ''">role_name = #{roleName},</if>
+            <if test="roleKey != null  and roleKey != ''">role_key = #{roleKey},</if>
+            <if test="sort != null ">sort = #{sort},</if>
+            <if test="roleStatus != null  and roleStatus != ''">role_status = #{roleStatus},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="version != null ">version = #{version},</if>
+            system_list = #{systemList},
+            <if test="delFlag != null ">del_flag = #{delFlag},</if>
+        </trim>
+        where role_id = #{roleId}
+    </update>
+
+    <update id="updateInsideRole" parameterType="InsideRole">
+        update inside_role
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roleName != null  and roleName != ''">role_name = #{roleName},</if>
+            <if test="roleKey != null  and roleKey != ''">role_key = #{roleKey},</if>
+            <if test="sort != null ">sort = #{sort},</if>
+            <if test="roleStatus != null  and roleStatus != ''">role_status = #{roleStatus},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="version != null ">version = #{version},</if>
+            <if test="systemList != null  and systemList != ''">system_list = #{systemList},</if>
+            <if test="delFlag != null ">del_flag = #{delFlag},</if>
+        </trim>
+        where role_id = #{roleId}
+    </update>
+
+    <delete id="deleteInsideRoleById" parameterType="String">
+        delete from inside_role where role_id = #{roleId}
+    </delete>
+
+    <delete id="deleteInsideRoleByIds" parameterType="String">
+        delete from inside_role where role_id in
+        <foreach item="roleId" collection="array" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+    </delete>
+
+</mapper>

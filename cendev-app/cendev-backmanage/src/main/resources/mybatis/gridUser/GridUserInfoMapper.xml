@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.userManage.gridUser.mapper.GridUserInfoMapper">
+
+    <resultMap type="GridUserInfo" id="GridUserInfoResult">
+        <result property="id"    column="id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="userId"    column="user_id"    />
+        <result property="loginName"    column="login_name"    />
+        <result property="phone"    column="phone"    />
+        <result property="email"    column="email"    />
+        <result property="password"    column="password"    />
+        <result property="name"    column="name"    />
+        <result property="cardType"    column="card_type"    />
+        <result property="cardNo"    column="card_no"    />
+        <result property="avatarUrl"    column="avatar_url"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="version"    column="version"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="gridName"    column="grid_name"    />
+    </resultMap>
+
+    <sql id="selectGridUserInfoVo">
+        select id, user_name, phone, email, password, name, card_type, card_no, avatar_url, status, remark, create_time, create_by, update_time, update_by, version, del_flag, grid_name from grid_user_info
+    </sql>
+
+    <select id="selectGridUserInfoList" parameterType="GridUserInfo" resultMap="GridUserInfoResult">
+        <include refid="selectGridUserInfoVo"/>
+        <where>
+            del_flag = 0
+            <if test="userName != null  and userName != ''"> and user_name like  '%' ||  #{userName} || '%'</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="password != null  and password != ''"> and password = #{password}</if>
+            <if test="name != null  and name != ''"> and name like  '%' ||  #{name} || '%'</if>
+            <if test="cardType != null  and cardType != ''"> and card_type = #{cardType}</if>
+            <if test="cardNo != null  and cardNo != ''"> and card_no = #{cardNo}</if>
+            <if test="avatarUrl != null  and avatarUrl != ''"> and avatar_url = #{avatarUrl}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="version != null "> and version = #{version}</if>
+            <if test="gridName != null  and gridName != ''"> and grid_name like  '%' ||  #{gridName} || '%'</if>
+        </where>
+    </select>
+
+    <select id="selectGridUserInfoById" parameterType="Long" resultMap="GridUserInfoResult">
+        <include refid="selectGridUserInfoVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertGridUserInfo" parameterType="GridUserInfo">
+        insert into grid_user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            <if test="userName != null  and userName != ''">user_name,</if>
+            <if test="phone != null  and phone != ''">phone,</if>
+            <if test="email != null  and email != ''">email,</if>
+            <if test="password != null  and password != ''">password,</if>
+            <if test="name != null  and name != ''">name,</if>
+            <if test="cardType != null  and cardType != ''">card_type,</if>
+            <if test="cardNo != null  and cardNo != ''">card_no,</if>
+            <if test="avatarUrl != null  and avatarUrl != ''">avatar_url,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="version != null ">version,</if>
+            <if test="delFlag != null ">del_flag,</if>
+            <if test="gridName != null  and gridName != ''">grid_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            seq_griduserId.nextval,
+            <if test="userName != null  and userName != ''">#{userName},</if>
+            <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="email != null  and email != ''">#{email},</if>
+            <if test="password != null  and password != ''">#{password},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="cardType != null  and cardType != ''">#{cardType},</if>
+            <if test="cardNo != null  and cardNo != ''">#{cardNo},</if>
+            <if test="avatarUrl != null  and avatarUrl != ''">#{avatarUrl},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="delFlag != null ">#{delFlag},</if>
+            <if test="gridName != null  and gridName != ''">#{gridName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGridUserInfo" parameterType="GridUserInfo">
+        update grid_user_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userName != null  and userName != ''">user_name = #{userName},</if>
+            <if test="phone != null  and phone != ''">phone = #{phone},</if>
+            <if test="email != null  and email != ''">email = #{email},</if>
+            <if test="password != null  and password != ''">password = #{password},</if>
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="cardType != null  and cardType != ''">card_type = #{cardType},</if>
+            <if test="cardNo != null  and cardNo != ''">card_no = #{cardNo},</if>
+            <if test="avatarUrl != null  and avatarUrl != ''">avatar_url = #{avatarUrl},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="version != null ">version = #{version},</if>
+            <if test="delFlag != null ">del_flag = #{delFlag},</if>
+            <if test="gridName != null  and gridName != ''">grid_name = #{gridName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGridUserInfoById" parameterType="Long">
+        delete from grid_user_info where id = #{id}
+    </delete>
+
+    <delete id="deleteGridUserInfoByIds" parameterType="String">
+        delete from grid_user_info where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getGridUserByName" parameterType="String"  resultMap="GridUserInfoResult">
+        select id as user_id, user_name as login_name, phone, email, password, name, card_type, card_no, grid_name from grid_user_info
+        where user_name =  #{userName}
+        and del_flag = 0
+        and status = 1
+        and ROWNUM &lt;= 1
+    </select>
+
+    <select id="getGridUserById" parameterType="Long" resultType="Map">
+        select c.id , c.user_name as login_name , c.phone, c.email, c.name as user_name, c.card_type, c.card_no,c.grid_name from grid_user_info c
+        where id = #{id}
+    </select>
+
+</mapper>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.systemUrl.mapper.SystemUrlMapper">
+
+    <resultMap type="SystemUrl" id="SystemUrlResult">
+        <result property="id" column="id"/>
+        <result property="address" column="address"/>
+        <result property="remark" column="remark"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="version" column="version"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="userType" column="user_type"/>
+        <result property="systemName" column="system_name"/>
+        <result property="imageUrl" column="image_url"/>
+    </resultMap>
+
+    <sql id="selectSystemUrlVo">
+        select id, address, remark,  version, del_flag, user_type, system_name, image_url from system_url
+    </sql>
+
+    <select id="selectSystemUrlList" parameterType="SystemUrl" resultMap="SystemUrlResult">
+        <include refid="selectSystemUrlVo"/>
+        <where>
+            del_flag = 0
+            <if test="address != null  and address != ''">and address = #{address}</if>
+            <if test="version != null ">and version = #{version}</if>
+            <if test="userType != null  and userType != ''">and user_type like  '%' || #{userType}  || '%'</if>
+            <if test="systemName != null  and systemName != ''">and system_name like  #{systemName} || '%'</if>
+            <if test="imageUrl != null  and imageUrl != ''">and image_url = #{imageUrl}</if>
+        </where>
+    </select>
+
+    <select id="selectSystemUrlById" parameterType="String" resultMap="SystemUrlResult">
+        <include refid="selectSystemUrlVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSystemUrl" useGeneratedKeys="false" keyProperty="id">
+        insert into system_url
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="address != null  and address != ''">address,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="version != null ">version,</if>
+            <if test="delFlag != null ">del_flag,</if>
+            <if test="userType != null  and userType != ''">user_type,</if>
+            <if test="systemName != null  and systemName != ''">system_name,</if>
+            <if test="imageUrl != null  and imageUrl != ''">image_url,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="delFlag != null ">#{delFlag},</if>
+            <if test="userType != null  and userType != ''">#{userType},</if>
+            <if test="systemName != null  and systemName != ''">#{systemName},</if>
+            <if test="imageUrl != null  and imageUrl != ''">#{imageUrl},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSystemUrl">
+        update system_url
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="address != null  and address != ''">address = #{address},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="delFlag != null ">del_flag = #{delFlag},</if>
+            <if test="userType != null  and userType != ''">user_type = #{userType},</if>
+            <if test="systemName != null  and systemName != ''">system_name = #{systemName},</if>
+            <if test="imageUrl != null  and imageUrl != ''">image_url = #{imageUrl},</if>
+            version = version + 1
+        </trim>
+        where id = #{id} and version = #{version}
+    </update>
+
+    <update id="deleteSystemUrlById" parameterType="String">
+        update system_url
+        <trim prefix="SET" suffixOverrides=",">
+        <if test="updateTime != null  and updateTime != ''">update_time = #{updateTime},</if>
+        <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+        del_flag = 1
+        </trim>
+       where id = #{id}
+    </update>
+
+    <update id="deleteSystemUrlByIds" parameterType="String">
+        update system_url set del_flag = 1 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

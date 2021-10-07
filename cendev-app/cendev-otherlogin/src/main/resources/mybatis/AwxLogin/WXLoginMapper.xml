@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.otherlogin.AwxLogin.mapper.WXLoginMapper">
+
+    <resultMap id="PersonalUserInfoResult" type="com.censoft.otherlogin.Alipay.domain.PersonalUserInfo">
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="cardType" column="card_type"/>
+        <result property="cardNo" column="card_no"/>
+        <result property="nationality" column="nationality"/>
+        <result property="dateOfBirth" column="date_of_birth"/>
+        <result property="gender" column="gender"/>
+        <result property="email" column="email"/>
+        <result property="phone" column="phone"/>
+        <result property="avatarUrl" column="avatar_url"/>
+        <result property="authlevel" column="authlevel"/>
+        <result property="remark" column="remark"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="version" column="version"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="password" column="password"/>
+    </resultMap>
+    <!--用户通过微信登录过，向微信表添加信息-->
+    <insert id="insertWxinfo">
+      insert into WECHAT_USER_INFO (ID,NICK_NAME,SEX,PROVICE,USER_TYPE) VALUES  (#{unionid},#{nickname},#{sex},#{province},'00')
+    </insert>
+    <update id="updateWechatInfo">
+        update WECHAT_USER_INFO set USER_ID=#{userId} where ID=#{unionid}
+    </update>
+    <update id="updateLoginWechat">
+        update PERSONAL_USER_LOGIN set WECHAR_ID=#{unionid} where USER_ID=#{userId}
+    </update>
+
+    <!--根据 unionid查询 该用户是否 通过微信登陆过-->
+    <select id="selectWxInfo" resultType="java.lang.Boolean">
+        select count(1) from WECHAT_USER_INFO where id=#{unionid}
+    </select>
+    <!--根据unionid 查询 该用户是否绑定填写了个人信息-->
+    <select id="selectUserId" resultType="java.lang.Boolean">
+        select count(USER_ID) from WECHAT_USER_INFO where id=#{unionid}
+    </select>
+    <select id="queryUserId" resultType="java.lang.String">
+        select USER_ID from WECHAT_USER_INFO where ID=#{unionid}
+    </select>
+    <select id="selectWechatUserInfo" resultMap="PersonalUserInfoResult">
+    SELECT
+	a.USER_ID,
+	a.USER_NAME,
+	a.CARD_TYPE,
+	a.CARD_NO,
+	a.AUTHLEVEL,
+	a.NATIONALITY,
+	a.DATE_OF_BIRTH,
+	a.GENDER,
+	a.EMAIL,
+	a.PHONE,
+	a.NICK_NAME,
+    b.PASSWORD
+    FROM
+	PERSONAL_USER_INFO a
+	left join PERSONAL_USER_LOGIN b on  a.USER_ID = b.USER_ID
+    WHERE
+	a.USER_ID = #{s}
+    </select>
+    <select id="queryUnionid" resultType="java.lang.Boolean">
+        select count(1) from WECHAT_USER_INFO where id = #{unionid}
+    </select>
+    <select id="selectNicename" resultType="java.lang.String">
+        select NICK_NAME from WECHAT_USER_INFO where id = #{weChatUnionid}
+    </select>
+    <!--向info表中插入个人信息-->
+    <insert id="insertPersonInfo">
+        insert into personal_user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null  and userId != ''">USER_ID,</if>
+            <if test="userName != null  and userName != ''">user_name,</if>
+            <if test="cardType != null  and cardType != ''">card_type,</if>
+            <if test="cardNo != null  and cardNo != ''">card_no,</if>
+            <if test="nationality != null  and nationality != ''">nationality,</if>
+            <if test="email != null  and email != ''">email,</if>
+            <if test="phone != null  and phone != ''">phone,</if>
+            <if test="nickName != null  and nickName != ''">NICK_NAME,</if>
+            create_time,
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="authLevel != null  and authLevel != ''">AUTHLEVEL,</if>
+            <if test=" activeFlag != null and  activeFlag != ''">ACTIVE_FLAG,</if>
+            update_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null  and userId != ''">#{userId},</if>
+            <if test="userName != null  and userName != ''">#{userName},</if>
+            <if test="cardType != null  and cardType != ''">#{cardType},</if>
+            <if test="cardNo != null  and cardNo != ''">#{cardNo},</if>
+            <if test="nationality != null  and nationality != ''">#{nationality},</if>
+            <if test="email != null  and email != ''">#{email},</if>
+            <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="nickName != null  and nickName != ''">#{nickName},</if>
+            SYSDATE,
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="authLevel != null  and authLevel != ''">#{authLevel},</if>
+            <if test=" activeFlag != null and  activeFlag != ''">#{activeFlag},</if>
+            SYSDATE
+        </trim>
+    </insert>
+    <insert id="insertPersonLogin">
+        INSERT INTO PERSONAL_USER_LOGIN (
+        <if test=" id != null and  id != ''">ID,</if>
+        <if test=" userId != null and  userId != ''">USER_ID,</if>
+        <if test=" password != null and  password != ''">PASSWORD,</if>
+        <if test=" cardNo != null and cardNo != ''">IDNUMBER,</if>
+        <if test=" phone != null and phone != ''">PHONE,</if>
+        <if test=" phoneIscheck != null and phoneIscheck != ''">PHONE_ISCHECK,</if>
+        <if test=" createBy != null  and createBy != ''">create_by,</if>
+        <if test=" updateBy != null  and updateBy != ''">update_by,</if>
+        <if test=" wechar_id != null  and wechar_id != ''">wechar_id,</if>
+        create_time,
+        update_time
+        )
+        VALUES(
+        <if test=" id != null and  id != ''">#{id},</if>
+        <if test=" userId != null and  userId != ''">#{userId},</if>
+        <if test=" password != null and  password != ''">#{password},</if>
+        <if test=" cardNo != null and cardNo != ''">#{cardNo},</if>
+        <if test=" phone != null and phone != ''">#{phone},</if>
+        <if test=" phoneIscheck != null and phoneIscheck != ''">#{phoneIscheck},</if>
+        <if test=" createBy != null  and createBy != ''">#{createBy},</if>
+        <if test=" updateBy != null  and updateBy != ''">#{updateBy},</if>
+        <if test=" wechar_id != null  and wechar_id != ''">#{wechar_id},</if>
+        SYSDATE,
+        SYSDATE
+        )
+    </insert>
+    <insert id="updateUserId">
+        UPDATE WECHAT_USER_INFO SET
+	USER_ID = #{userId} WHERE ID = #{id}
+
+    </insert>
+    <insert id="insertWxsinfo">
+        insert into WECHAT_USER_INFO (ID,NICK_NAME) VALUES  (#{weChatUnionid},#{nickName})
+    </insert>
+</mapper>

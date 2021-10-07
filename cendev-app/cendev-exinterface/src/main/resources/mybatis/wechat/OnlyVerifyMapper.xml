@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.weChat.mapper.OnlyVerifyMapper">
+    <select id="countPhone" resultType="java.lang.Integer">
+        SELECT COUNT(PHONE) FROM PERSONAL_USER_LOGIN WHERE phone = #{phone,jdbcType=VARCHAR} and PHONE_ISCHECK = '1'
+    </select>
+    <select id="countEmail" resultType="java.lang.Integer">
+        SELECT COUNT(email) FROM PERSONAL_USER_LOGIN WHERE email = #{email,jdbcType=VARCHAR} and Email_ISCHECK = '1'
+    </select>
+    <select id="countCardNo" resultType="java.lang.Integer">
+        SELECT COUNT(idNumber) FROM PERSONAL_USER_LOGIN WHERE idNumber = #{idNumber,jdbcType=VARCHAR}
+    </select>
+    <select id="countUnifiedsocialcreditcode" resultType="java.lang.Integer">
+        SELECT COUNT(UNIFIEDSOCIALCREDITCODE) FROM ORGEN_USER_LOGIN WHERE unifiedsocialcreditcode = #{unifiedsocialcreditcode,jdbcType=VARCHAR}
+    </select>
+    <select id="countEmailCode" resultType="java.lang.Integer">
+      SELECT COUNT(HOSTPERSION_EMAIL) FROM ORGEN_USER_LOGIN WHERE HOSTPERSION_EMAIL = #{hostpersonemail,jdbcType=VARCHAR}
+    </select>
+</mapper>

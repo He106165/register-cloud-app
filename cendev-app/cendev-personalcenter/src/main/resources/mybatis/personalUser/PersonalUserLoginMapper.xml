@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.personalcenter.personalUser.mapper.PersonalUserLoginMapper">
+
+    <resultMap type="PersonalUserLogin" id="PersonalUserLoginResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="name"    column="name"    />
+        <result property="phoneIscheck"    column="phone_ischeck"    />
+        <result property="phone"    column="phone"    />
+        <result property="emailIscheck"    column="email_ischeck"    />
+        <result property="email"    column="email"    />
+        <result property="password"    column="password"    />
+        <result property="idnumber"    column="idnumber"    />
+        <result property="alipayId"    column="alipay_id"    />
+        <result property="wecharId"    column="wechar_id"    />
+        <result property="tolinkedId"    column="tolinked_id"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="version"    column="version"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <sql id="selectPersonalUserLoginVo">
+        select id, user_id, name, phone_ischeck, phone, email_ischeck, email, password, idnumber, alipay_id, wechar_id, tolinked_id, status, create_time, create_by, update_time, update_by, version, del_flag from personal_user_login
+    </sql>
+
+    <select id="selectPersonalUserLoginList" parameterType="PersonalUserLogin" resultMap="PersonalUserLoginResult">
+        <include refid="selectPersonalUserLoginVo"/>
+        <where>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="name != null  and name != ''"> and name like  '%' ||  #{name} || '%'</if>
+            <if test="phoneIscheck != null "> and phone_ischeck = #{phoneIscheck}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="emailIscheck != null "> and email_ischeck = #{emailIscheck}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="password != null  and password != ''"> and password = #{password}</if>
+            <if test="idnumber != null  and idnumber != ''"> and idnumber = #{idnumber}</if>
+            <if test="alipayId != null  and alipayId != ''"> and alipay_id = #{alipayId}</if>
+            <if test="wecharId != null  and wecharId != ''"> and wechar_id = #{wecharId}</if>
+            <if test="tolinkedId != null  and tolinkedId != ''"> and tolinked_id = #{tolinkedId}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="version != null "> and version = #{version}</if>
+        </where>
+    </select>
+
+
+
+    <select id="selectPersonalUserLoginById" parameterType="String" resultMap="PersonalUserLoginResult">
+        <include refid="selectPersonalUserLoginVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertPersonalUserLogin" parameterType="PersonalUserLogin" useGeneratedKeys="true" keyProperty="id">
+        insert into personal_user_login
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null  and userId != ''">user_id,</if>
+            <if test="name != null  and name != ''">name,</if>
+            <if test="phoneIscheck != null ">phone_ischeck,</if>
+            <if test="phone != null  and phone != ''">phone,</if>
+            <if test="emailIscheck != null ">email_ischeck,</if>
+            <if test="email != null  and email != ''">email,</if>
+            <if test="password != null  and password != ''">password,</if>
+            <if test="idnumber != null  and idnumber != ''">idnumber,</if>
+            <if test="alipayId != null  and alipayId != ''">alipay_id,</if>
+            <if test="wecharId != null  and wecharId != ''">wechar_id,</if>
+            <if test="tolinkedId != null  and tolinkedId != ''">tolinked_id,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="version != null ">version,</if>
+            <if test="delFlag != null ">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null  and userId != ''">#{userId},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="phoneIscheck != null ">#{phoneIscheck},</if>
+            <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="emailIscheck != null ">#{emailIscheck},</if>
+            <if test="email != null  and email != ''">#{email},</if>
+            <if test="password != null  and password != ''">#{password},</if>
+            <if test="idnumber != null  and idnumber != ''">#{idnumber},</if>
+            <if test="alipayId != null  and alipayId != ''">#{alipayId},</if>
+            <if test="wecharId != null  and wecharId != ''">#{wecharId},</if>
+            <if test="tolinkedId != null  and tolinkedId != ''">#{tolinkedId},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="delFlag != null ">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePersonalUserLogin" parameterType="PersonalUserLogin">
+        update personal_user_login
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null  and userId != ''">user_id = #{userId},</if>
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="phoneIscheck != null ">phone_ischeck = #{phoneIscheck},</if>
+            <if test="phone != null  and phone != ''">phone = #{phone},</if>
+            <if test="emailIscheck != null ">email_ischeck = #{emailIscheck},</if>
+            <if test="email != null  and email != ''">email = #{email},</if>
+            <if test="password != null  and password != ''">password = #{password},</if>
+            <if test="idnumber != null  and idnumber != ''">idnumber = #{idnumber},</if>
+            <if test="alipayId != null  and alipayId != ''">alipay_id = #{alipayId},</if>
+            <if test="wecharId != null  and wecharId != ''">wechar_id = #{wecharId},</if>
+            <if test="tolinkedId != null  and tolinkedId != ''">tolinked_id = #{tolinkedId},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="version != null ">version = #{version},</if>
+            <if test="delFlag != null ">del_flag = #{delFlag},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePersonalUserLoginById" parameterType="String">
+        delete from personal_user_login where id = #{id}
+    </delete>
+
+    <delete id="deletePersonalUserLoginByIds" parameterType="String">
+        delete from personal_user_login where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <update id="updateLoginupdataContentWay" parameterType="PersonalUserLogin">
+        update personal_user_login
+        <set>
+            <if test="phoneIscheck != null ">phone_ischeck = #{phoneIscheck},</if>
+            <if test="phone != null  and phone != ''">phone = #{phone},</if>
+            <if test="emailIscheck != null ">email_ischeck = #{emailIscheck},</if>
+            <if test="email != null  and email != ''">email = #{email}</if>
+        </set>
+        <where>
+            user_id = #{userId}
+        </where>
+
+    </update>
+</mapper>

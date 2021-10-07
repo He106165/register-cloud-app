@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.systemManage.systemDataConfig.mapper.JoinSystemDeployMapper">
+    
+    <resultMap type="JoinSystemDeploy" id="JoinSystemDeployResult">
+        <result property="joinsysId"    column="joinsys_id"    />
+        <result property="proParamArray"    column="pro_param_array"    />
+        <result property="orgParamArray"    column="org_param_array"    />
+        <result property="empowerBy"    column="empower_by"    />
+        <result property="empowerTime"    column="empower_time"    />
+        <result property="id"    column="id"    />
+    </resultMap>
+
+    <sql id="selectJoinSystemDeployVo">
+        select joinsys_id, pro_param_array, org_param_array, empower_by, empower_time, id from join_system_deploy
+    </sql>
+
+    <select id="selectJoinSystemDeployList" parameterType="JoinSystemDeploy" resultMap="JoinSystemDeployResult">
+        <include refid="selectJoinSystemDeployVo"/>
+        <where>  
+            <if test="joinsysId != null  and joinsysId != ''"> and joinsys_id = #{joinsysId}</if>
+            <if test="proParamArray != null  and proParamArray != ''"> and pro_param_array = #{proParamArray}</if>
+            <if test="orgParamArray != null  and orgParamArray != ''"> and org_param_array = #{orgParamArray}</if>
+            <if test="empowerBy != null  and empowerBy != ''"> and empower_by = #{empowerBy}</if>
+            <if test="empowerTime != null "> and empower_time = #{empowerTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectJoinSystemDeployById" parameterType="String" resultMap="JoinSystemDeployResult">
+        <include refid="selectJoinSystemDeployVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertJoinSystemDeploy" parameterType="JoinSystemDeploy" useGeneratedKeys="true" keyProperty="id">
+        insert into join_system_deploy
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="joinsysId != null  and joinsysId != ''">joinsys_id,</if>
+            <if test="proParamArray != null  and proParamArray != ''">pro_param_array,</if>
+            <if test="orgParamArray != null  and orgParamArray != ''">org_param_array,</if>
+            <if test="empowerBy != null  and empowerBy != ''">empower_by,</if>
+            <if test="empowerTime != null ">empower_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="joinsysId != null  and joinsysId != ''">#{joinsysId},</if>
+            <if test="proParamArray != null  and proParamArray != ''">#{proParamArray},</if>
+            <if test="orgParamArray != null  and orgParamArray != ''">#{orgParamArray},</if>
+            <if test="empowerBy != null  and empowerBy != ''">#{empowerBy},</if>
+            <if test="empowerTime != null ">#{empowerTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateJoinSystemDeploy" parameterType="JoinSystemDeploy">
+        update join_system_deploy
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="joinsysId != null  and joinsysId != ''">joinsys_id = #{joinsysId},</if>
+            <if test="proParamArray != null  and proParamArray != ''">pro_param_array = #{proParamArray},</if>
+            <if test="orgParamArray != null  and orgParamArray != ''">org_param_array = #{orgParamArray},</if>
+            <if test="empowerBy != null  and empowerBy != ''">empower_by = #{empowerBy},</if>
+            <if test="empowerTime != null ">empower_time = #{empowerTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteJoinSystemDeployById" parameterType="String">
+        delete from join_system_deploy where id = #{id}
+    </delete>
+
+    <delete id="deleteJoinSystemDeployByIds" parameterType="String">
+        delete from join_system_deploy where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getUserListDateByDB" parameterType="String" resultType="HashMap">
+        select COLUMN_NAME as label,COMMENTS as value from all_col_comments where owner=#{dbName} and table_name =#{tableName}
+    </select>
+
+    <select id="selectJoinSystemDeployBySystem" parameterType="String" resultMap="JoinSystemDeployResult">
+        <include refid="selectJoinSystemDeployVo"/>
+        where joinsys_id = #{joinsysId}
+    </select>
+    
+</mapper>

@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.userregister.dao.InformationMainMapper">
+
+    <resultMap type="PersonalUserInfo" id="PersonalUserInfoResult">
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="cardType" column="card_type"/>
+        <result property="cardNo" column="card_no"/>
+        <result property="nationality" column="nationality"/>
+        <result property="dateOfBirth" column="date_of_birth"/>
+        <result property="gender" column="gender"/>
+        <result property="email" column="email"/>
+        <result property="phone" column="phone"/>
+        <result property="avatarUrl" column="avatar_url"/>
+        <result property="status" column="status"/>
+        <result property="authlevel" column="authlevel"/>
+        <result property="remark" column="remark"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="version" column="version"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="nickName" column="nick_name"/>
+    </resultMap>
+    <resultMap id="PersonalUserLoginResult" type="com.censoft.userregister.domain.PersonalUserLogin">
+        <result property="id" column="id"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="name" column="name"/>
+        <result property="email" column="email"/>
+        <result property="phone" column="phone"/>
+        <result property="idnumber" column="idnumber"/>
+        <result property="password" column="password"/>
+        <result property="alipayId" column="alipay_id"/>
+        <result property="wecharId" column="wechar_id"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="version" column="version"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+
+    <resultMap type="PersonalExtendInfo" id="PersonalExtendInfoResult">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="nation" column="nation"/>
+        <result property="healthStatus" column="health_status"/>
+        <result property="marriageNew" column="marriage_new"/>
+        <result property="nativePlace" column="native_place"/>
+        <result property="placeOfBirth" column="place_of_birth"/>
+        <result property="political" column="political"/>
+        <result property="lastScjool" column="last_scjool"/>
+        <result property="remark" column="remark"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="version" column="version"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+    <resultMap type="PersonalAbroafdstudyInfo" id="PersonalAbroafdstudyInfoResult">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="abroadCountry" column="abroad_country"/>
+        <result property="abroadType" column="abroad_type"/>
+        <result property="abroadUniversity" column="abroad_university"/>
+        <result property="nativeClass" column="native_class"/>
+        <result property="major" column="major"/>
+        <result property="grade" column="grade"/>
+        <result property="startTime" column="start_time"/>
+        <result property="finishTime" column="finish_time"/>
+        <result property="webUrl" column="web_url"/>
+        <result property="remark" column="remark"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="version" column="version"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+
+    <resultMap type="com.censoft.system.domain.SysDictData" id="SysDictDataResult">
+        <id     property="dictCode"   column="dict_code"   />
+        <result property="dictSort"   column="dict_sort"   />
+        <result property="dictLabel"  column="dict_label"  />
+        <result property="dictValue"  column="dict_value"  />
+        <result property="dictType"   column="dict_type"   />
+        <result property="cssClass"   column="css_class"   />
+        <result property="listClass"  column="list_class"  />
+        <result property="isDefault"  column="is_default"  />
+        <result property="status"     column="status"      />
+        <result property="createBy"   column="create_by"   />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy"   column="update_by"   />
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+    <sql id="selectDictDataVo">
+        select dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, remark
+		from sys_dict_data
+    </sql>
+    <!--查询基本信息-->
+    <select id="queryInfo" resultType="com.censoft.userregister.domain.PersonalUserInfo"
+            resultMap="PersonalUserInfoResult">
+           select user_id, user_name, card_type, card_no, nationality, date_of_birth, gender, email, phone, avatar_url, status, authlevel, remark, create_time, create_by, update_time, update_by, version, del_flag, nick_name
+           from personal_user_info
+            where user_id = #{userId}
+    </select>
+    <!--查询用户绑定基本信息-->
+    <select id="selectUserInfo" resultType="java.lang.Integer">
+         select count(user_ID)from PERSONAL_EXTEND_INFO where USER_ID = #{userId,jdbcType=VARCHAR}
+    </select>
+    <!--查询用户是否填写扩展信息-->
+    <select id="queryExtendInfo" resultType="com.censoft.userregister.domain.PersonalExtendInfo"
+            resultMap="PersonalExtendInfoResult">
+            select id, user_id, nation, health_status, marriage_new, native_place, place_of_birth, political, last_scjool, remark, create_time, create_by, update_time, update_by, version, del_flag from personal_extend_info
+            where user_id = #{userId,jdbcType=VARCHAR}
+    </select>
+
+    <!--修改基本信息-->
+    <update id="updateInfo" parameterType="com.censoft.userregister.domain.PersonalUserInfo">
+        update personal_user_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userName != null  and userName != ''">user_name = #{userName},</if>
+            <if test="cardType != null  and cardType != ''">card_type = #{cardType},</if>
+            <if test="cardNo != null  and cardNo != ''">card_no = #{cardNo},</if>
+            <if test="nationality != null  and nationality != ''">nationality = #{nationality},</if>
+            <if test="dateOfBirth != null ">date_of_birth = #{dateOfBirth},</if>
+            <if test="gender != null  and gender != ''">gender = #{gender},</if>
+            <if test="email != null  and email != ''">email = #{email},</if>
+            <if test="phone != null  and phone != ''">phone = #{phone},</if>
+            <if test="nickName != null  and nickName != ''">nick_name = #{nickName},</if>
+            <if test="authlevel != null  and authlevel != ''">AUTHLEVEL = #{authlevel},</if>
+            <if test="isLabourReal != null and isLabourReal != '' ">IS_LABOUR_REAL = #{isLabourReal}</if>
+        </trim>
+        where user_id = #{userId,jdbcType=VARCHAR}
+    </update>
+    <!--新增扩展信息-->
+    <insert id="save" parameterType="com.censoft.userregister.domain.PersonalExtendInfo">
+        insert into personal_extend_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="userId != null  and userId != ''">user_id,</if>
+            <if test="nation != null  and nation != ''">nation,</if>
+            <if test="healthStatus != null  and healthStatus != ''">health_status,</if>
+            <if test="marriageNew != null  and marriageNew != ''">marriage_new,</if>
+            <if test="nativePlace != null  and nativePlace != ''">native_place,</if>
+            <if test="placeOfBirth != null  and placeOfBirth != ''">place_of_birth,</if>
+            <if test="political != null  and political != ''">political,</if>
+            <if test="lastScjool != null  and lastScjool != ''">last_scjool,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="version != null ">version,</if>
+            <if test="delFlag != null ">del_flag,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="userId != null  and userId != ''">#{userId},</if>
+            <if test="nation != null  and nation != ''">#{nation},</if>
+            <if test="healthStatus != null  and healthStatus != ''">#{healthStatus},</if>
+            <if test="marriageNew != null  and marriageNew != ''">#{marriageNew},</if>
+            <if test="nativePlace != null  and nativePlace != ''">#{nativePlace},</if>
+            <if test="placeOfBirth != null  and placeOfBirth != ''">#{placeOfBirth},</if>
+            <if test="political != null  and political != ''">#{political},</if>
+            <if test="lastScjool != null  and lastScjool != ''">#{lastScjool},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="delFlag != null ">#{delFlag},</if>
+        </trim>
+    </insert>
+    <!--修改扩展信息-->
+    <update id="update" parameterType="com.censoft.userregister.domain.PersonalExtendInfo">
+        update personal_extend_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null  and userId != ''">user_id = #{userId},</if>
+            <if test="nation != null  and nation != ''">nation = #{nation},</if>
+            <if test="healthStatus != null  and healthStatus != ''">health_status = #{healthStatus},</if>
+            <if test="marriageNew != null  and marriageNew != ''">marriage_new = #{marriageNew},</if>
+            <if test="nativePlace != null  and nativePlace != ''">native_place = #{nativePlace},</if>
+            <if test="placeOfBirth != null  and placeOfBirth != ''">place_of_birth = #{placeOfBirth},</if>
+            <if test="political != null  and political != ''">political = #{political},</if>
+            <if test="lastScjool != null  and lastScjool != ''">last_scjool = #{lastScjool},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where user_id = #{userId,jdbcType=VARCHAR}
+    </update>
+    <!--新增留学经历-->
+    <insert id="insertAbroafdstudyInfo" parameterType="com.censoft.userregister.domain.PersonalAbroafdstudyInfo">
+        insert into personal_abroafdstudy_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="userId != null  and userId != ''">user_id,</if>
+            <if test="abroadCountry != null  and abroadCountry != ''">abroad_country,</if>
+            <if test="abroadType != null  and abroadType != ''">abroad_type,</if>
+            <if test="abroadUniversity != null  and abroadUniversity != ''">abroad_university,</if>
+            <if test="nativeClass != null  and nativeClass != ''">native_class,</if>
+            <if test="major != null  and major != ''">major,</if>
+            <if test="grade != null  and grade != ''">grade,</if>
+            <if test="startTime != null ">start_time,</if>
+            <if test="finishTime != null ">finish_time,</if>
+            <if test="webUrl != null  and webUrl != ''">web_url,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="version != null ">version,</if>
+            <if test="delFlag != null ">del_flag,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="userId != null  and userId != ''">#{userId},</if>
+            <if test="abroadCountry != null  and abroadCountry != ''">#{abroadCountry},</if>
+            <if test="abroadType != null  and abroadType != ''">#{abroadType},</if>
+            <if test="abroadUniversity != null  and abroadUniversity != ''">#{abroadUniversity},</if>
+            <if test="nativeClass != null  and nativeClass != ''">#{nativeClass},</if>
+            <if test="major != null  and major != ''">#{major},</if>
+            <if test="grade != null  and grade != ''">#{grade},</if>
+            <if test="startTime != null ">#{startTime},</if>
+            <if test="finishTime != null ">#{finishTime},</if>
+            <if test="webUrl != null  and webUrl != ''">#{webUrl},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="delFlag != null ">#{delFlag},</if>
+        </trim>
+    </insert>
+    <!--查询留学经历-->
+    <select id="queryAbroafdstudyInfo" resultType="com.censoft.userregister.domain.PersonalAbroafdstudyInfo"
+            resultMap="PersonalAbroafdstudyInfoResult">
+        select id, user_id, abroad_country, abroad_type, abroad_university, native_class, major, grade, start_time, finish_time, web_url, remark, create_time, create_by, update_time, update_by, version, del_flag from personal_abroafdstudy_info
+        where user_id = #{userId,jdbcType=VARCHAR}
+    </select>
+    <select id="queryAbroafdstudyInfoById" resultType="com.censoft.userregister.domain.PersonalAbroafdstudyInfo"
+            resultMap="PersonalAbroafdstudyInfoResult">
+select id, user_id, abroad_country, abroad_type, abroad_university, native_class, major, grade, start_time, finish_time, web_url, remark, create_time, create_by, update_time, update_by, version, del_flag from personal_abroafdstudy_info
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAuth" resultType="java.lang.String">
+        SELECT AUTHLEVEL from PERSONAL_USER_INFO where USER_NAME = #{userName,jdbcType=VARCHAR} AND CARD_NO=#{cardNo,jdbcType=VARCHAR} AND DEL_FLAG='0'
+    </select>
+    <!--修改留学经历-->
+    <update id="updateAbroafdstudyInfo" parameterType="com.censoft.userregister.domain.PersonalAbroafdstudyInfo">
+        update personal_abroafdstudy_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null  and userId != ''">user_id = #{userId},</if>
+            <if test="abroadCountry != null  and abroadCountry != ''">abroad_country = #{abroadCountry},</if>
+            <if test="abroadType != null  and abroadType != ''">abroad_type = #{abroadType},</if>
+            <if test="abroadUniversity != null  and abroadUniversity != ''">abroad_university = #{abroadUniversity},
+            </if>
+            <if test="nativeClass != null  and nativeClass != ''">native_class = #{nativeClass},</if>
+            <if test="major != null  and major != ''">major = #{major},</if>
+            <if test="grade != null  and grade != ''">grade = #{grade},</if>
+            <if test="startTime != null ">start_time = #{startTime},</if>
+            <if test="finishTime != null ">finish_time = #{finishTime},</if>
+            <if test="webUrl != null  and webUrl != ''">web_url = #{webUrl},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="delFlag != null ">del_flag = #{delFlag},</if>
+        </trim>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+    <!--修改实名认证等级-->
+    <update id="updateAuthLevel">
+        update PERSONAL_USER_INFO set AUTHLEVEL = '3',IS_LABOUR_REAL = '0' where  USER_NAME = #{userName,jdbcType=VARCHAR} AND CARD_NO=#{cardNo,jdbcType=VARCHAR} AND DEL_FLAG='0'
+    </update>
+    <update id="updateIsLabourReal">
+        update PERSONAL_USER_INFO set IS_LABOUR_REAL = '1' where  USER_NAME = #{userName,jdbcType=VARCHAR} AND CARD_NO=#{cardNo,jdbcType=VARCHAR} AND DEL_FLAG='0'
+    </update>
+    <!--删除留学经历-->
+    <delete id="deleteAbroafdstudyInfoById" parameterType="String">
+        delete from personal_abroafdstudy_info where id = #{id}
+    </delete>
+    <!--批量删除留学经历-->
+    <delete id="deleteAbroafdstudyInfoByIds" parameterType="String">
+        delete from personal_abroafdstudy_info where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <!--查询实名认证信息-->
+    <select id="queryRealNameInformation" resultType="list" resultMap="PersonalUserInfoResult">
+      SELECT USER_NAME,CARD_NO,AUTHLEVEL from PERSONAL_USER_INFO where USER_ID = #{userId,jdbcType=VARCHAR} AND DEL_FLAG='0'
+    </select>
+    <select id="selectCardInfo" resultMap="PersonalUserLoginResult">
+        select * from PERSONAL_USER_Login where IDNUMBER = #{cardNo,jdbcType=VARCHAR} AND DEL_FLAG = '0'
+    </select>
+    <select id="selectDictDataByType" resultMap="SysDictDataResult">
+        <include refid="selectDictDataVo"/>
+        where status = '0' and dict_type = #{dictType} order by dict_sort asc
+    </select>
+</mapper>

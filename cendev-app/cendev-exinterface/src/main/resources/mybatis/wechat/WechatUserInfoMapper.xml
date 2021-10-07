@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.weChat.mapper.WechatUserInfoMapper">
+
+    <resultMap type="WechatUserInfo" id="WechatUserInfoResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="nickName"    column="nick_name"    />
+        <result property="sex"    column="sex"    />
+        <result property="provice"    column="provice"    />
+        <result property="status"    column="status"    />
+        <result property="health"    column="health"    />
+        <result property="remark"    column="remark"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="version"    column="version"    />
+        <result property="userType"    column="user_type"    />
+    </resultMap>
+
+
+    <resultMap type="PersonalUserInfo" id="PersonalUserInfoResult">
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="cardType"    column="card_type"    />
+        <result property="cardNo"    column="card_no"    />
+        <result property="nationality"    column="nationality"    />
+        <result property="dateOfBirth"    column="date_of_birth"    />
+        <result property="gender"    column="gender"    />
+        <result property="email"    column="email"    />
+        <result property="phone"    column="phone"    />
+        <result property="version"    column="version"    />
+        <result property="name"    column="name"    />
+        <result property="password"    column="password"    />
+    </resultMap>
+
+    <sql id="selectWechatUserInfoVo">
+        select id, user_id, nick_name, sex, provice, status, health, remark, create_time, version, user_type from wechat_user_info
+    </sql>
+
+    <select id="selectWechatUserInfoList" parameterType="WechatUserInfo" resultMap="WechatUserInfoResult">
+        <include refid="selectWechatUserInfoVo"/>
+        <where>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="nickName != null  and nickName != ''"> and nick_name like  '%' ||  #{nickName} || '%'</if>
+            <if test="sex != null  and sex != ''"> and sex = #{sex}</if>
+            <if test="provice != null  and provice != ''"> and provice = #{provice}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="health != null  and health != ''"> and health = #{health}</if>
+            <if test="version != null "> and version = #{version}</if>
+            <if test="userType != null  and userType != ''"> and user_type = #{userType}</if>
+        </where>
+    </select>
+
+    <select id="selectWechatUserInfoById" parameterType="String" resultMap="WechatUserInfoResult">
+        <include refid="selectWechatUserInfoVo"/>
+        where id = #{id} and user_type = "01"
+    </select>
+
+    <select id="selectWechatUserInfoByIdAndUserType" parameterType="String" resultMap="WechatUserInfoResult">
+        <include refid="selectWechatUserInfoVo"/>
+        where id = #{id} and user_type = #{userType}
+    </select>
+
+
+
+    <insert id="insertWechatUserInfo" parameterType="WechatUserInfo">
+        insert into wechat_user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="userId != null  and userId != ''">user_id,</if>
+            <if test="nickName != null  and nickName != ''">nick_name,</if>
+            <if test="sex != null  and sex != ''">sex,</if>
+            <if test="provice != null  and provice != ''">provice,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="health != null  and health != ''">health,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="version != null ">version,</if>
+            <if test="userType != null  and userType != ''">user_type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="userId != null  and userId != ''">#{userId},</if>
+            <if test="nickName != null  and nickName != ''">#{nickName},</if>
+            <if test="sex != null  and sex != ''">#{sex},</if>
+            <if test="provice != null  and provice != ''">#{provice},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="health != null  and health != ''">#{health},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="userType != null  and userType != ''">#{userType},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWechatUserInfo" parameterType="WechatUserInfo">
+        update wechat_user_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null  and userId != ''">user_id = #{userId},</if>
+            <if test="nickName != null  and nickName != ''">nick_name = #{nickName},</if>
+            <if test="sex != null  and sex != ''">sex = #{sex},</if>
+            <if test="provice != null  and provice != ''">provice = #{provice},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="health != null  and health != ''">health = #{health},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="version != null ">version = #{version},</if>
+            <if test="userType != null  and userType != ''">user_type = #{userType},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteWechatUserInfoById" parameterType="String">
+        delete from wechat_user_info where id = #{id}
+    </delete>
+
+    <delete id="deleteWechatUserInfoByIds" parameterType="String">
+        delete from wechat_user_info where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="personallogin" parameterType="string" resultMap="PersonalUserInfoResult">
+        select u.user_id, u.user_name, u.card_type, u.card_no, u.nationality, u.date_of_birth, u.gender, u.email, u.phone,u.version from personal_user_info u
+        where u.user_id = #{userId}
+          and u.status = 1
+          and u.del_flag = 0
+          and ROWNUM &lt;=  1
+    </select>
+
+</mapper>

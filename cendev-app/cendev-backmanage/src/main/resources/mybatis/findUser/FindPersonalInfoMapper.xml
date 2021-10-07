@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.userManage.findUser.mapper.FindPersonalInfoMapper">
+
+    <resultMap type="com.censoft.userManage.findUser.domain.FindPersonalInfo" id="FindPersonalInfoResult">
+        <result property="id" column="id"/>
+        <result property="nationality" column="nationality"/>
+        <result property="userName" column="user_name"/>
+        <result property="cardType" column="card_type"/>
+        <result property="cardNo" column="card_no"/>
+        <result property="mobile" column="mobile"/>
+        <result property="email" column="email"/>
+        <result property="password" column="password"/>
+        <result property="fileUrl" column="file_url"/>
+        <result property="status" column="status"/>
+        <result property="remark" column="remark"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="version" column="version"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="reasonRejection" column="REASON_REJECTION"/>
+    </resultMap>
+
+    <sql id="selectFindPersonalInfoVo">
+        select id, nationality, user_name, card_type, card_no, mobile, email, password, file_url, status, remark, create_time, create_by, update_time, update_by, version, del_flag,reason_rejection from find_personal_info
+    </sql>
+
+    <select id="selectFindPersonalInfoList" parameterType="FindPersonalInfo" resultMap="FindPersonalInfoResult">
+        <include refid="selectFindPersonalInfoVo"/>
+        <where>
+            del_flag = 0
+            <if test="nationality != null  and nationality != ''">and nationality = #{nationality}</if>
+            <if test="userName != null  and userName != ''">and user_name like '%' || #{userName} || '%'</if>
+            <if test="cardType != null  and cardType != ''">and card_type = #{cardType}</if>
+            <if test="cardNo != null  and cardNo != ''">and card_no like '%' || #{cardNo} || '%'</if>
+            <if test="mobile != null  and mobile != ''">and mobile like '%' || #{mobile} || '%'</if>
+            <if test="email != null  and email != ''">and email = #{email}</if>
+            <if test="password != null  and password != ''">and password = #{password}</if>
+            <if test="fileUrl != null  and fileUrl != ''">and file_url = #{fileUrl}</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
+            <if test="reasonRejection != null  and reasonRejection != ''">and REASON_REJECTION = #{reasonRejection}</if>
+            <if test="version != null ">and version = #{version}</if>
+        </where>
+        ORDER BY STATUS
+    </select>
+
+    <select id="selectFindPersonalInfoById" parameterType="String" resultMap="FindPersonalInfoResult">
+        <include refid="selectFindPersonalInfoVo"/>
+        where id = #{id}
+    </select>
+    <select id="selectUserInfo" resultType="java.lang.Boolean">
+        select count(1) from PERSONAL_USER_INFO where USER_NAME=#{userName} and CARD_NO=#{cardNo}
+    </select>
+    <select id="selectFindPassword" resultType="java.lang.String">
+        select password from FIND_PERSONAL_INFO where USER_NAME = #{userName} and CARD_NO = #{cardNo} and STATUS = '0'
+    </select>
+
+    <insert id="insertFindPersonalInfo" parameterType="FindPersonalInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into find_personal_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="nationality != null  and nationality != ''">nationality,</if>
+            <if test="userName != null  and userName != ''">user_name,</if>
+            <if test="cardType != null  and cardType != ''">card_type,</if>
+            <if test="cardNo != null  and cardNo != ''">card_no,</if>
+            <if test="mobile != null  and mobile != ''">mobile,</if>
+            <if test="email != null  and email != ''">email,</if>
+            <if test="password != null  and password != ''">password,</if>
+            <if test="fileUrl != null  and fileUrl != ''">file_url,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="reasonRejection != null  and reasonRejection != ''">REASON_REJECTION,</if>
+            <if test="version != null ">version,</if>
+            <if test="delFlag != null ">del_flag,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="nationality != null  and nationality != ''">#{nationality},</if>
+            <if test="userName != null  and userName != ''">#{userName},</if>
+            <if test="cardType != null  and cardType != ''">#{cardType},</if>
+            <if test="cardNo != null  and cardNo != ''">#{cardNo},</if>
+            <if test="mobile != null  and mobile != ''">#{mobile},</if>
+            <if test="email != null  and email != ''">#{email},</if>
+            <if test="password != null  and password != ''">#{password},</if>
+            <if test="fileUrl != null  and fileUrl != ''">#{fileUrl},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="reasonRejection != null  and reasonRejection != ''">#{reasonRejection},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="delFlag != null ">#{delFlag},</if>
+        </trim>
+    </insert>
+
+
+    <update id="updateFindPersonalInfo" parameterType="FindPersonalInfo">
+        update find_personal_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="nationality != null  and nationality != ''">nationality = #{nationality},</if>
+            <if test="userName != null  and userName != ''">user_name = #{userName},</if>
+            <if test="cardType != null  and cardType != ''">card_type = #{cardType},</if>
+            <if test="cardNo != null  and cardNo != ''">card_no = #{cardNo},</if>
+            <if test="mobile != null  and mobile != ''">mobile = #{mobile},</if>
+            <if test="email != null  and email != ''">email = #{email},</if>
+            <if test="password != null  and password != ''">password = #{password},</if>
+            <if test="fileUrl != null  and fileUrl != ''">file_url = #{fileUrl},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="version != null ">version = #{version},</if>
+            <if test="delFlag != null ">del_flag = #{delFlag},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <update id="updatePersonalUserInfo">
+        UPDATE PERSONAL_USER_INFO set NATIONALITY =#{nationality},phone=#{mobile},email = #{email},update_Time=#{updateTime} where USER_NAME= #{userName} and CARD_NO = #{cardNo} and del_flag = 0
+    </update>
+    <update id="updatePersonalUserLogin">
+        UPDATE PERSONAL_USER_Login set PHONE_ISCHECK = '1',EMAIL_ISCHECK = '1', phone=#{mobile},email = #{email}, update_Time=#{updateTime}where IDNUMBER = #{cardNo} and DEL_FLAG = 0
+    </update>
+    <update id="updateFindStatus">
+        UPDATE find_personal_info set STATUS = '1' where USER_NAME= #{userName} and CARD_NO = #{cardNo} and ID = #{id} and DEL_FLAG = 0
+    </update>
+    <update id="inserBohui">
+         update find_personal_info set REASON_REJECTION = #{reasonRejection,jdbcType=VARCHAR},STATUS = '2' where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+
+    <delete id="deleteFindPersonalInfoById" parameterType="String">
+        delete from find_personal_info where id = #{id}
+    </delete>
+
+    <delete id="deleteFindPersonalInfoByIds" parameterType="String">
+        delete from find_personal_info where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

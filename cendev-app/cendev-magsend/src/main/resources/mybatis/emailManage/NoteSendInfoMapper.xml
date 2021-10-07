@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.sendMag.emailManage.mapper.NoteSendInfoMapper">
+
+    <resultMap type="NoteSendInfo" id="NoteSendInfoResult">
+        <result property="id"    column="id"    />
+        <result property="reveicePhone"    column="reveice_phone"    />
+        <result property="content"    column="content"    />
+        <result property="mesPlantime"    column="mes_plantime"    />
+    </resultMap>
+
+    <sql id="selectNoteSendInfoVo">
+        select id, reveice_phone, content, mes_plantime from note_send_info
+    </sql>
+
+    <select id="selectNoteSendInfoList" parameterType="NoteSendInfo" resultMap="NoteSendInfoResult">
+        <include refid="selectNoteSendInfoVo"/>
+        <where>
+            <if test="reveicePhone != null  and reveicePhone != ''"> and reveice_phone = #{reveicePhone}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="mesPlantime != null "> and mes_plantime = #{mesPlantime}</if>
+        </where>
+    </select>
+
+    <select id="selectNoteSendInfoById" parameterType="String" resultMap="NoteSendInfoResult">
+        <include refid="selectNoteSendInfoVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertNoteSendInfo" parameterType="NoteSendInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into note_send_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="reveicePhone != null  and reveicePhone != ''">reveice_phone,</if>
+            <if test="content != null  and content != ''">content,</if>
+            <if test="mesPlantime != null ">mes_plantime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="reveicePhone != null  and reveicePhone != ''">#{reveicePhone},</if>
+            <if test="content != null  and content != ''">#{content},</if>
+            <if test="mesPlantime != null ">#{mesPlantime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNoteSendInfo" parameterType="NoteSendInfo">
+        update note_send_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="reveicePhone != null  and reveicePhone != ''">reveice_phone = #{reveicePhone},</if>
+            <if test="content != null  and content != ''">content = #{content},</if>
+            <if test="mesPlantime != null ">mes_plantime = #{mesPlantime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNoteSendInfoById" parameterType="String">
+        delete from note_send_info where id = #{id}
+    </delete>
+
+    <delete id="deleteNoteSendInfoByIds" parameterType="String">
+        delete from note_send_info where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

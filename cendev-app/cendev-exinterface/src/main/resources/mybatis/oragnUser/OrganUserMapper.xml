@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.organUser.mapper.OrganUserInfoMapper">
+
+    <select id="checkUserSocialCodeAndDeptCode" resultType="int">
+     SELECT CASE WHEN un = 0 AND name = 0 THEN 0 ELSE 1
+     END FROM
+	(
+       SELECT nvl(COUNT(1),0) un from ORGEN_USER_LOGIN
+        WHERE
+        DEPERMENT_CODE = #{departmentCode}
+        and UNIFIEDSOCIALCREDITCODE =  #{unifiedSocialCredItCode}),
+        (
+       SELECT nvl(COUNT(1),0) name from ORGEN_USER_LOGIN
+        WHERE
+        DEPERMENT_CODE = #{departmentCode}
+        and name = #{userName})
+    </select>
+    <select id="checkUserNameAndDeptcode"  resultType="Map">
+        SELECT
+        <if test=" unifiedSocialCredItCode!=null and unifiedSocialCredItCode!='' ">
+            un,
+        </if>
+        hostEmail
+      FROM
+     <if test="unifiedSocialCredItCode!=null and unifiedSocialCredItCode!='' ">
+         (
+         SELECT nvl(COUNT(1),0) un from ORGEN_USER_LOGIN
+         WHERE
+         DEPERMENT_CODE = #{departmentCode}
+         and UNIFIEDSOCIALCREDITCODE =  #{unifiedSocialCredItCode}),
+         (
+         SELECT nvl(COUNT(1),0) hostEmail from ORGEN_USER_LOGIN
+         WHERE
+         HOSTPERSION_EMAIL = #{hostPersonEmail})
+     </if>
+        <if test="unifiedSocialCredItCode==null or unifiedSocialCredItCode=='' ">
+            (
+            SELECT nvl(COUNT(1),0) hostEmail from ORGEN_USER_LOGIN
+            WHERE
+            HOSTPERSION_EMAIL = #{hostPersonEmail})
+        </if>
+
+
+
+
+
+    </select>
+    <select id="checkUserOldNameAndDeptcode" resultType="Map">
+       SELECT * from ORGEN_USER_LOGIN
+        WHERE OEG_USER_ID = #{OEGUSERID}
+        <if test=" unifiedSocialCredItCode!=null and unifiedSocialCredItCode!=''  ">
+                and DEPERMENT_CODE = #{departmentCode}
+            and UNIFIEDSOCIALCREDITCODE = #{unifiedSocialCredItCode }
+        </if>
+
+        <if test=" hostPersonEmail!=null and hostPersonEmail!=''  ">
+            and HOSTPERSION_EMAIL = #{hostPersonEmail}
+        </if>
+
+    </select>
+
+    <insert id="insertOrganUserLogin">
+            INSERT INTO ORGEN_USER_LOGIN (
+            <if test=" id != null and  id != ''">
+                ID,
+            </if>
+            <if test=" organUserId != null and  organUserId != ''">
+                OEG_USER_ID,
+            </if>
+            <if test=" userName != null and  userName != ''">
+                NAME,
+            </if>
+            <if test=" unifiedSocialCredItCode != null and  unifiedSocialCredItCode != ''">
+                UNIFIEDSOCIALCREDITCODE,
+            </if>
+            <if test=" departmentCode != null and  departmentCode != ''">
+                DEPERMENT_CODE,
+            </if>
+
+            <if test=" password != null and  password != ''">
+                PASSWORD,
+            </if>
+            <if test=" hostPersonEmail != null and  hostPersonEmail != ''">
+                HOSTPERSION_EMAIL,
+            </if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="status != null  and status != ''">status,</if>
+            create_time,
+            update_time,
+            version
+            )
+            VALUES(
+                <if test=" id != null and  id != ''">
+                    #{id,jdbcType=VARCHAR},
+                </if>
+                <if test=" organUserId != null and  organUserId != ''">
+                    #{organUserId,jdbcType=VARCHAR},
+                </if>
+            <if test=" userName != null and  userName != ''">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test=" unifiedSocialCredItCode != null and  unifiedSocialCredItCode != ''">
+                #{unifiedSocialCredItCode,jdbcType=VARCHAR},
+            </if>
+            <if test=" departmentCode != null and  departmentCode != ''">
+                #{departmentCode,jdbcType=VARCHAR},
+            </if>
+            <if test=" password != null and  password != ''">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test=" hostPersonEmail != null and  hostPersonEmail != ''">
+                #{hostPersonEmail,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null  and createBy != ''">#{createBy,jdbcType=VARCHAR},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy,jdbcType=VARCHAR},</if>
+            <if test="status != null  and status != ''">#{status,jdbcType=VARCHAR},</if>
+            SYSDATE,
+            SYSDATE,
+            0
+            )
+    </insert>
+    <insert id="insertOrganUserInfo">
+        insert into ORGEN_USER_INFO (
+        <if test=" organUserId != null and  organUserId != ''">
+            ORG_USER_ID,
+        </if>
+        <if test="orgUserType != null  and orgUserType != ''">oeg_user_tpye,</if>
+        <if test="permanType != null  and permanType != ''">perman_type,</if>
+        <if test="enterPriseName != null  and enterPriseName != ''">ENTERPRISE_NAME,</if>
+        <if test="englishName != null  and englishName != ''">english_name,</if>
+        <if test="perManType != null  and perManType != ''">PERMAN_TYPE,</if>
+        <if test="perManLine != null  and perManLine != ''">PERMAN_LINE,</if>
+        <if test="legalName != null  and legalName != ''">legal_name,</if>
+        <if test="legalCardType != null  and legalCardType != ''">legal_card_type,</if>
+        <if test="legalIdNumber != null  and legalIdNumber != ''">LEGAL_IDNUMBER,</if>
+        <if test="perManMobile != null  and perManMobile != ''">PERMAN_MOBILE,</if>
+        <if test="hostPersonName != null  and hostPersonName != ''">hostpersion_name,</if>
+        <if test="hostPersonEmail != null  and hostPersonEmail != ''">hostpersion_email,</if>
+        <if test="hostPersonTelephone != null  and hostPersonTelephone != ''">hostpersion_telephone,</if>
+        <if test="country != null  and country != ''">country,</if>
+        <if test="province != null  and province != ''">province,</if>
+        <if test="address != null  and address != ''">address,</if>
+        <if test="consulateName != null  and consulateName != ''">CONSULATE_NAME,</if>
+        <if test="consulateId != null  and consulateId != ''">CONSULATE_ID,</if>
+        <if test="ispass != null ">ispass,</if>
+        <if test="statu != null  and statu != ''">statu,</if>
+        create_time,
+        <if test="createBy != null  and createBy != ''">create_by,</if>
+        <if test="updateBy != null  and updateBy != ''">update_by,</if>
+        <if test=" activeFlag != null and  activeFlag != ''">
+            ACTIVE_FLAG,
+        </if>
+        <if test=" unifiedSocialCredItCode != null and  unifiedSocialCredItCode != ''">
+            UNIFIEDSOCIALCREDITCODE,
+        </if>
+        update_time,
+        version
+
+        )
+        VALUES (
+        <if test=" organUserId != null and  organUserId != ''">
+            #{organUserId,jdbcType=VARCHAR},
+        </if>
+        <if test="orgUserType != null  and orgUserType != ''">#{orgUserType},</if>
+        <if test="permanType != null  and permanType != ''">#{permanType},</if>
+        <if test="enterPriseName != null  and enterPriseName != ''">#{enterPriseName},</if>
+        <if test="englishName != null  and englishName != ''">#{englishName},</if>
+        <if test="perManType != null  and perManType != ''">#{perManType},</if>
+        <if test="perManLine != null  and perManLine != ''">#{perManLine},</if>
+        <if test="legalName != null  and legalName != ''">#{legalName},</if>
+        <if test="legalCardType != null  and legalCardType != ''">#{legalCardType},</if>
+        <if test="legalIdNumber != null  and legalIdNumber != ''">#{legalIdNumber},</if>
+        <if test="perManMobile != null  and perManMobile != ''">#{perManMobile},</if>
+        <if test="hostPersonName != null  and hostPersonName != ''">#{hostPersonName},</if>
+        <if test="hostPersonEmail != null  and hostPersonEmail != ''">#{hostPersonEmail},</if>
+        <if test="hostPersonTelephone != null  and hostPersonTelephone != ''">#{hostPersonTelephone},</if>
+        <if test="country != null  and country != ''">#{country},</if>
+        <if test="province != null  and province != ''">#{province},</if>
+        <if test="address != null  and address != ''">#{address},</if>
+        <if test="consulateName != null  and consulateName != ''">#{consulateName},</if>
+        <if test="consulateId != null  and consulateId != ''">#{consulateId},</if>
+        <if test="ispass != null ">#{ispass},</if>
+        <if test="statu != null  and statu != ''">#{statu},</if>
+        SYSDATE,
+        <if test="createBy != null  and createBy != ''">#{createBy},</if>
+        <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+        <if test=" activeFlag != null and  activeFlag != ''">
+            #{activeFlag},
+        </if>
+        <if test=" unifiedSocialCredItCode != null and  unifiedSocialCredItCode != ''">
+            #{unifiedSocialCredItCode,jdbcType=VARCHAR},
+        </if>
+        SYSDATE,
+        0
+        )
+    </insert>
+
+
+
+    <select id="organUserLogin" parameterType="Map" resultType="Map">
+        <if test="loginType == 'hostEmail'">
+            SELECT
+            OEG_USER_ID,'userName' as LOGINTYPE,password
+            FROM
+            ORGEN_USER_LOGIN
+            WHERE
+            HOSTPERSION_EMAIL = #{userName,jdbcType=VARCHAR}
+            AND PASSWORD = #{password,jdbcType=VARCHAR}
+            AND STATUS = #{status,jdbcType=VARCHAR}
+            AND DEL_FLAG = #{delFlag,jdbcType=NUMERIC}
+        </if>
+        <if test="loginType == 'unCode'">
+            SELECT
+            OEG_USER_ID,'uncode' as LOGINTYPE,password
+            FROM
+            ORGEN_USER_LOGIN
+            WHERE
+            UNIFIEDSOCIALCREDITCODE = #{userName,jdbcType=VARCHAR}
+            and DEPERMENT_CODE = #{departmentCode,jdbcType=VARCHAR}
+            AND PASSWORD = #{password,jdbcType=VARCHAR}
+            AND STATUS = #{status,jdbcType=VARCHAR}
+            AND DEL_FLAG = #{delFlag,jdbcType=NUMERIC}
+        </if>
+    </select>
+
+
+
+    <insert id="registeUserGroup" parameterType="java.util.List"  >
+
+        INSERT INTO ORGEN_USER_LOGIN (
+        <if test=" id != null and  id != ''">
+            ID,
+        </if>
+        <if test=" userId != null and  userId != ''">
+            USER_ID,
+        </if>
+        <if test=" stutendCode != null and  stutendCode != ''">
+            NAME,
+        </if>
+        <if test=" phoneIsCheck != null and  phoneIsCheck != ''">
+            PHONE_ISCHECK,
+        </if>
+        <if test=" phone != null and  phone != ''">
+            PHONE,
+        </if>
+        <if test=" emailIsCheck != null and  emailIsCheck != ''">
+            EMAIL_ISCHECK,
+        </if>
+        <if test=" email != null and  email != ''">
+            EMAIL,
+        </if>
+        <if test=" cardType != null and cardType == '00'">
+            IDNUMBER,
+        </if>
+        <if test=" password != null and  password != ''">
+            PASSWORD,
+        </if>
+        <if test="createBy != null  and createBy != ''">create_by,</if>
+        <if test="updateBy != null  and updateBy != ''">update_by,</if>
+        create_time,
+        update_time
+        )
+        <foreach item="item" index="index" collection="list" separator="union all">
+              (
+                  SELECT
+            <if test=" item.id != null and  item.id != ''">
+                #{item.id},
+            </if>
+            <if test=" item.userId != null and  item.userId != ''">
+                #{item.userId},
+            </if>
+            <if test=" item.stutendCode != null and  item.stutendCode != ''">
+                #{item.stutendCode},
+            </if>
+            <if test=" item.phoneIsCheck != null and  item.phoneIsCheck != ''">
+                #{item.phoneIsCheck},
+            </if>
+            <if test=" item.phone != null and  item.phone != ''">
+                #{item.phone},
+            </if>
+            <if test=" item.emailIsCheck != null and  item.emailIsCheck != ''">
+                #{item.emailIsCheck},
+            </if>
+            <if test=" item.email != null and  item.email != ''">
+                #{item.email},
+            </if>
+            <if test=" item.cardType != null and item.cardType == '00'">
+                #{item.idNumber},
+            </if>
+            <if test=" item.password != null and  item.password != ''">
+                #{item.password},
+            </if>
+            <if test="item.createBy != null  and item.createBy != ''">#{createBy},</if>
+            <if test="item.updateBy != null  and item.updateBy != ''">#{updateBy},</if>
+            SYSDATE,
+            SYSDATE
+                  FROM DUAL
+              )
+        </foreach>
+    </insert>
+
+    <select id="showUserStatusGroup" parameterType="Map" resultType="Map">
+       SELECT
+	    #{userName} userName,
+        '存在' isExist,
+        (case when b.ACTIVE_FLAG ='00' then '激活'
+        ELSE '未激活' end)
+        AS isActive,
+        (case when A .STATUS ='00' and a.DEL_FLAG = '00' THEN '正常使用'
+        ELSE '不能正常使用' end)
+        AS isUse
+
+        FROM
+            ORGEN_USER_LOGIN A,
+            PERSONAL_USER_INFO b
+        WHERE
+            A .USER_ID = b.USER_ID
+        <if test="loginType == 'phone' ">
+            A .  PHONE = #{userName,jdbcType=VARCHAR}
+        </if>
+        <if test="loginType == 'email' ">
+            A .  EMAIL  = #{userName,jdbcType=VARCHAR}
+        </if>
+        <if test="loginType == 'idNumeber' ">
+            A . IDNUMBER  = #{userName,jdbcType=VARCHAR}
+        </if>
+        <if test="loginType == 'userName' ">
+            A . NAME = #{userName,jdbcType=VARCHAR}
+        </if>
+
+
+    </select>
+
+
+    <update id="updateOrganUserLogin">
+        UPDATE ORGEN_USER_LOGIN
+        SET
+
+        <if test=" userName != null and  userName != ''">
+            name = #{userName,jdbcType=VARCHAR},
+        </if>
+        <if test=" phoneIsCheck != null and  phoneIsCheck != ''">
+            DEPERMENT_CODE = #{departmentCode,jdbcType=VARCHAR},
+        </if>
+        VERSION = VERSION + 1
+        WHERE
+           OEG_USER_ID = #{OEGUSERID,jdbcType=VARCHAR}
+        AND VERSION = #{VLOGIN,jdbcType=INTEGER}
+
+    </update>
+    <update id="updateOrganUserInfo">
+        UPDATE ORGEN_USER_INFO
+            SET
+        <if test=" address != null and  address != ''">
+            ADDRESS= #{address,jdbcType=VARCHAR},
+        </if>
+        <if test=" province != null and  province != ''">
+            PROVINCE= #{province,jdbcType=VARCHAR},
+        </if>
+        <if test=" country != null and  country != ''">
+            COUNTRY= #{country,jdbcType=VARCHAR},
+        </if>
+        <if test=" hostPersonTelephone != null and  hostPersonTelephone != ''">
+            HOSTPERSION_TELEPHONE= #{hostPersonTelephone,jdbcType=VARCHAR},
+        </if>
+        <if test=" hostPersonEmail != null and  hostPersonEmail != ''">
+            HOSTPERSION_EMAIL= #{hostPersonEmail,jdbcType=VARCHAR},
+        </if>
+
+        <if test=" hostPersonName != null and  hostPersonName != ''">
+            HOSTPERSION_NAME= #{hostPersonName,jdbcType=VARCHAR},
+        </if>
+
+        <if test=" permanType != null and  permanType != ''">
+            PERMAN_TYPE= #{permanType,jdbcType=VARCHAR},
+
+        </if>
+        <if test=" perManMobile != null and  perManMobile != ''">
+            PERMAN_MOBILE= #{perManMobile,jdbcType=VARCHAR},
+        </if>
+        <if test=" enterPriseName != null and  enterPriseName != ''">
+            ENTERPRISE_NAME= #{enterPriseName,jdbcType=VARCHAR},
+        </if>
+
+        <if test=" englishName != null and  englishName != ''">
+            ENGLISH_NAME= #{englishName,jdbcType=VARCHAR},
+        </if>
+        <if test=" legalName != null and  legalName != ''">
+            LEGAL_NAME= #{legalName,jdbcType=VARCHAR},
+
+        </if>
+        <if test=" legalCardType != null and  legalCardType != ''">
+            LEGAL_CARD_TYPE= #{legalCardType,jdbcType=VARCHAR},
+
+        </if>
+        <if test=" legalIdNumber != null and  legalIdNumber != ''">
+            LEGAL_IDNUMBER= #{legalIdNumber,jdbcType=VARCHAR},
+        </if>
+        <if test=" consulateName != null and  consulateName != ''">
+            CONSULATE_NAME= #{consulateName,jdbcType=VARCHAR},
+        </if>
+        <if test=" consulateId != null and  consulateId != ''">
+            CONSULATE_ID= #{consulateId,jdbcType=VARCHAR},
+        </if>
+
+
+        version = version +1
+        where
+        ORG_USER_ID = #{OEGUSERID,jdbcType=VARCHAR}
+        AND VERSION = #{VINFO,jdbcType=INTEGER}
+
+    </update>
+    <update id="updateOrganUserSupply">
+      update ORGANUSER_SUPPLY_INFO SET
+        <if test=" unitType  != null and  phoneIsCheck != ''">
+            UNITTYPE= #{unitType ,jdbcType=VARCHAR},
+        </if>
+        <if test=" phoneIsCheck != null and  phoneIsCheck != ''">
+            REGADDRESS= #{regAddress ,jdbcType=VARCHAR},
+        </if>
+        <if test=" phoneIsCheck != null and  phoneIsCheck != ''">
+            REGAUTHORITY= #{regAuthority ,jdbcType=VARCHAR},
+        </if>
+        <if test=" phoneIsCheck != null and  phoneIsCheck != ''">
+            MAINBUSINESS= #{mainBussiness ,jdbcType=VARCHAR},
+        </if>
+        version = version +1
+        where
+            OEG_USER_ID = #{OEGUSERID,jdbcType=VARCHAR}
+        AND VERSION = #{VINFO,jdbcType=INTEGER}
+    </update>
+
+
+
+
+    <select id="selectOrganAllInfo" parameterType="Map" resultType="Map">
+        SELECT
+            A .OEG_USER_ID OEGUSERID,
+            NVL (A . VERSION, 0) vLogin,
+            NVL (b. VERSION, 0) vInfo,
+            NVL (c. VERSION, 0) vExt，
+        DEPERMENT_CODE OOLDDEPERMENT_CODE,
+        a.HOSTPERSION_EMAIL OOLDNAME,
+        UNIFIEDSOCIALCREDITCODE OOUNCODE
+        FROM
+            ORGEN_USER_LOGIN A
+        LEFT JOIN ORGEN_USER_INFO b ON A .OEG_USER_ID = b.ORG_USER_ID
+        LEFT JOIN ORGANUSER_SUPPLY_INFO c ON A .OEG_USER_ID = c.OEG_USER_ID
+        WHERE
+              1=1
+        <if test="oldunifiedSocialCredItCode != null and  oldunifiedSocialCredItCode != '' ">
+            and A .DEPERMENT_CODE = #{oldDepartmentCode,jdbcType=VARCHAR}
+            AND A .UNIFIEDSOCIALCREDITCODE = #{oldunifiedSocialCredItCode,jdbcType=VARCHAR}
+        </if>
+
+        <if test="oldhostEmail!= null and  oldhostEmail!= '' ">
+            AND A .HOSTPERSION_EMAIL = #{oldhostEmail,jdbcType=VARCHAR}
+        </if>
+
+
+
+    </select>
+
+
+    <!--NAME,
+    UNIFIEDSOCIALCREDITCODE,
+    LEGAL_NAME,
+    OEG_USER_TPYE,
+    PERMAN_TYPE,
+    ENTERPRISE_NAME,
+    ENGLISH_NAME,
+    LEGAL_NAME,
+    LEGAL_CARD_TYPE,
+    LEGAL_IDNUMBER,
+    PERMAN_MOBILE,
+    HOSTPERSION_NAME,
+    HOSTPERSION_EMAIL,
+    HOSTPERSION_TELEPHONE,
+    COUNTRY,
+    PROVINCE-->
+    <select id="getUserInfoByName" resultType="Map">
+        SELECT
+            ${params}
+        FROM
+            ORGEN_USER_LOGIN A
+        LEFT JOIN ORGEN_USER_INFO b ON A .OEG_USER_ID = b.ORG_USER_ID
+        WHERE
+            NAME = #{userName}
+        AND DEPERMENT_CODE = #{departmentCode}
+    </select>
+    <select id="getUserInfoByUncode" resultType="Map">
+SELECT
+            NAME,
+            UNIFIEDSOCIALCREDITCODE,
+            LEGAL_NAME,
+            OEG_USER_TPYE,
+            PERMAN_TYPE,
+            ENTERPRISE_NAME,
+            ENGLISH_NAME,
+            LEGAL_NAME,
+            LEGAL_CARD_TYPE,
+            LEGAL_IDNUMBER,
+            PERMAN_MOBILE,
+            HOSTPERSION_NAME,
+            HOSTPERSION_EMAIL,
+            HOSTPERSION_TELEPHONE,
+            COUNTRY,
+            PROVINCE
+        FROM
+            ORGEN_USER_LOGIN A
+        LEFT JOIN ORGEN_USER_INFO b ON A .OEG_USER_ID = b.ORG_USER_ID
+        WHERE
+            UNIFIEDSOCIALCREDITCODE = #{unifiedSocialCredItCode}
+        AND DEPERMENT_CODE = #{departmentCode}
+    </select>
+
+
+
+    <select id="getUserInfoByOrgId" resultType="Map">
+        SELECT
+            ${params}
+        FROM
+             ORGEN_USER_INFO
+        WHERE
+            ORG_USER_ID = #{oegUserId}
+
+    </select>
+
+
+    <update id="updateOrganUserInfoByUserID">
+        <selectKey keyProperty="version,ACTIVE_FLAG"  resultType="Map">
+            SELECT
+            ACTIVE_FLAG
+            FROM
+            ORGEN_USER_LOGIN
+            WHERE
+            OEG_USER_ID = #{OEG_USER_ID}
+        </selectKey>
+        <if test="ACTIVE_FLAG != '0'">
+            UPDATE ORGEN_USER_INFO set ACTIVE_FLAG = '0',VERSION = VERSION+1
+            WHERE OEG_USER_ID = #{OEG_USER_ID}
+        </if>
+        <if test="ACTIVE_FLAG == '0'">
+            select 1 from dual
+        </if>
+    </update>
+
+    <insert id="insertWEchartInfo">
+        INSERT into WECHAT_USER_INFO
+          (ID,USER_ID,CREATE_TIME,USER_TYPE)
+          VALUES (#{unionId},#{organUserId},SYSDATE,#{userType})
+    </insert>
+</mapper>

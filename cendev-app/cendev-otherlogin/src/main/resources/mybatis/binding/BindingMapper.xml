@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.otherlogin.binding.mapper.BingdingMapper">
+
+    <select id="checkAliUser" resultType="Map">
+        SELECT USER_ID,ALIPAY_ID,WECHAR_ID
+        from PERSONAL_USER_LOGIN
+        WHERE ALIPAY_ID = #{alipayID}
+    </select>
+    <select id="getPersonInfo" resultType="Map">
+        SELECT ALIPAY_ID,WECHAR_ID
+        from PERSONAL_USER_LOGIN
+        WHERE USER_ID = #{userId}
+    </select>
+
+    <select id="getOrganInfo" resultType="Map">
+        SELECT
+            id WECHAT_ID
+        FROM
+            WECHAT_USER_INFO
+        WHERE
+            USER_TYPE = '01'
+        AND USER_ID = #{userId}
+    </select>
+
+    <update id="delAlipayInfo">
+        UPDATE PERSONAL_USER_LOGIN set ALIPAY_ID = NULL
+        WHERE USER_ID = #{userId}
+    </update>
+
+    <update id="bindAlipayInfo">
+        UPDATE PERSONAL_USER_LOGIN set ALIPAY_ID = #{alipayID}
+        WHERE USER_ID = #{userId}
+    </update>
+    <update id="bindWeChatInfo">
+        UPDATE PERSONAL_USER_LOGIN set WECHAT_ID = #{wechatId}
+        WHERE USER_ID = #{userId}
+    </update>
+    <update id="delWeChatInfo">
+        UPDATE PERSONAL_USER_LOGIN set WECHAR_ID = NULL
+        WHERE USER_ID = #{userId}
+    </update>
+
+    <delete id="delWechatUserLogin">
+        DELETE FROM WECHAT_USER_INFO WHERE ID = #{WECHAT_ID}
+    </delete>
+</mapper>

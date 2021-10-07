@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.userregister.dao.OrgenLoginRegisterMapper">
+    <resultMap id="addSaveOrgenUserInfo" type="com.censoft.userregister.domain.OrgenUserInfo">
+        <id property="orgUserId" column="org_user_id"/>
+        <result property="oegUserTpye" column="oeg_user_tpye"/>
+        <result property="permanType" column="perman_type"/>
+        <result property="enterpriseName" column="enterprise_name"/>
+        <result property="englishName" column="english_name"/>
+        <result property="legalName" column="legal_name"/>
+        <result property="legalCardType" column="legal_card_type"/>
+        <result property="legalIdnumber" column="legal_idnumber"/>
+        <result property="permanMobile" column="perman_mobile"/>
+        <result property="hostpersionName" column="hostpersion_name"/>
+        <result property="hostpersionEmail" column="hostpersion_email"/>
+        <result property="hostpersionTelephone" column="hostpersion_telephone"/>
+        <result property="country" column="country"/>
+        <result property="province" column="province"/>
+        <result property="address" column="address"/>
+        <result property="consulateName" column="consulate_name"/>
+        <result property="consulateId" column="consulate_id"/>
+        <result property="authlevel" column="authlevel"/>
+        <result property="remark" column="remark"/>
+        <result property="avatarUrl" column="avatar_url"/>
+        <association property="orgenUserLogin" javaType="com.censoft.userregister.domain.OrgenUserLogin">
+            <id property="id" column="id"/>
+            <result property="oegUserId" column="oeg_user_id"/>
+            <result property="name" column="name"/>
+            <result property="password" column="password"/>
+            <result property="unifiedsocialcreditcode" column="unifiedsocialcreditcode"/>
+            <result property="status" column="status"/>
+            <result property="createTime" column="create_time"/>
+            <result property="createBy" column="create_by"/>
+            <result property="updateTime" column="update_time"/>
+            <result property="updateBy" column="update_by"/>
+            <result property="version" column="version"/>
+            <result property="delFlag" column="del_flag"/>
+            <result property="depermentCode" column="deperment_code"/>
+        </association>
+    </resultMap>
+
+
+    <sql id="selectOrgenUserLoginVo">
+        select id, oeg_user_id, name, password, unifiedsocialcreditcode, status, create_time, create_by, update_time, update_by, version, del_flag, deperment_code from orgen_user_login
+    </sql>
+
+    <insert id="addSaveOrgenUserInfo" parameterType="com.censoft.userregister.domain.OrgenUserLogin">
+insert into ORGEN_USER_LOGIN
+(ID, OEG_USER_ID, NAME, PASSWORD, UNIFIEDSOCIALCREDITCODE,STATUS, CREATE_TIME, CREATE_BY, UPDATE_TIME, UPDATE_BY, DEPERMENT_CODE,HOSTPERSION_EMAIL)
+ values
+ (
+ #{id,jdbcType=VARCHAR},
+ #{oegUserId,jdbcType=VARCHAR},
+ #{name,jdbcType=VARCHAR},
+ #{password,jdbcType=VARCHAR},
+ #{unifiedsocialcreditcode,jdbcType=VARCHAR},
+ #{status,jdbcType=VARCHAR},
+ #{createTime,jdbcType=TIMESTAMP},
+ #{createBy,jdbcType=VARCHAR},
+ #{updateTime,jdbcType=TIMESTAMP},
+ #{updateBy,jdbcType=VARCHAR},
+ #{depermentCode,jdbcType=VARCHAR},
+ #{hostpersionEmail,jdbcType=VARCHAR}
+ )
+</insert>
+    <update id="updateOrgenEmailPassword">
+        update  ORGEN_USER_LOGIN set password = #{password,jdbcType=VARCHAR},UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},UPDATE_BY = #{updateBy,jdbcType=VARCHAR}
+          where  HOSTPERSION_EMAIL = #{hostpersionEmail,jdbcType=VARCHAR}
+    </update>
+    <select id="orgenEmailCount" resultType="java.lang.Integer">
+        select count(HOSTPERSION_EMAIL) from ORGEN_USER_LOGIN where  HOSTPERSION_EMAIL = #{hostpersionEmail,jdbcType=VARCHAR}
+    </select>
+    <select id="valiIdType" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM ORGEN_USER_LOGIN WHERE UNIFIEDSOCIALCREDITCODE = #{unifiedsocialcreditcode,jdbcType=VARCHAR} AND DEPERMENT_CODE = #{depermentCode,jdbcType=VARCHAR}
+    </select>
+    <select id="orgenEmailPassCount" resultType="java.lang.Integer">
+        select count(HOSTPERSION_EMAIL) from ORGEN_USER_LOGIN where  HOSTPERSION_EMAIL = #{hostpersionEmail,jdbcType=VARCHAR}
+    </select>
+    <select id="selectUnifiedsocialcreditcode" resultType="java.lang.String">
+        select UNIFIEDSOCIALCREDITCODE from ORGEN_USER_LOGIN where HOSTPERSION_EMAIL = #{hostpersionEmail,jdbcType=VARCHAR}
+    </select>
+</mapper>

@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.censoft.cloud</groupId>
+        <artifactId>cendev-app</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>cendev-backmanage</artifactId>
+    <dependencies>
+
+        <!--配置中心客户端 -->
+        <!-- <dependency>
+             <groupId>org.springframework.cloud</groupId>
+             <artifactId>spring-cloud-starter-config</artifactId>
+         </dependency>-->
+        <!--eureka 客户端 -->
+
+        <!--实名认证包-->
+        <dependency>
+            <groupId>tacs-prod-sdk-1.0.0-SNAPSHOT</groupId>
+            <artifactId>tacs-prod-sdk-1.0.0-SNAPSHOT</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/tacs-prod-sdk-1.0.0-SNAPSHOT.jar</systemPath>
+        </dependency>
+
+        <!--CA登陆-->
+        <dependency>
+            <groupId>sca-cert-verify</groupId>
+            <artifactId>sca-cert-verify.jar</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/sca-cert-verify.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>mina-core-2.0.9</groupId>
+            <artifactId>mina-core-2.0.9</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/mina-core-2.0.9.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>SignClient4J-3.1-SSL</groupId>
+            <artifactId>SignClient4J-3.1-SSL</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/SignClient4J-3.1-SSL.jar</systemPath>
+        </dependency>
+
+        <!--CA认证Jar包-->
+        <!--<dependency>-->
+        <!--<groupId>bcpkix-jdk15on-158</groupId>-->
+        <!--<artifactId>bcpkix-jdk15on-158</artifactId>-->
+        <!--<version>1.0</version>-->
+        <!--<scope>system</scope>-->
+        <!--<systemPath>${project.basedir}/lib/bcpkix-jdk15on-158.jar</systemPath>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+        <!--<groupId>bcprov-ext-jdk15on-158</groupId>-->
+        <!--<artifactId>bcprov-ext-jdk15on-158</artifactId>-->
+        <!--<version>1.0</version>-->
+        <!--<scope>system</scope>-->
+        <!--<systemPath>${project.basedir}/lib/bcprov-ext-jdk15on-158.jar</systemPath>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+        <!--<groupId>httpclient-4.2.5</groupId>-->
+        <!--<artifactId>httpclient-4.2.5</artifactId>-->
+        <!--<version>1.0</version>-->
+        <!--<scope>system</scope>-->
+        <!--<systemPath>${project.basedir}/lib/httpclient-4.2.5.jar</systemPath>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+        <!--<groupId>httpcore-4.2.4</groupId>-->
+        <!--<artifactId>httpcore-4.2.4</artifactId>-->
+        <!--<version>1.0</version>-->
+        <!--<scope>system</scope>-->
+        <!--<systemPath>${project.basedir}/lib/httpcore-4.2.4.jar</systemPath>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+        <!--<groupId>httpmime-4.2.5</groupId>-->
+        <!--<artifactId>httpmime-4.2.5</artifactId>-->
+        <!--<version>1.0</version>-->
+        <!--<scope>system</scope>-->
+        <!--<systemPath>${project.basedir}/lib/httpmime-4.2.5.jar</systemPath>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+        <!--<groupId>mina-core-2.0.7</groupId>-->
+        <!--<artifactId>mina-core-2.0.7</artifactId>-->
+        <!--<version>1.0</version>-->
+        <!--<scope>system</scope>-->
+        <!--<systemPath>${project.basedir}/lib/mina-core-2.0.7.jar</systemPath>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+        <!--<groupId>SignClient4J-3.1-SSL</groupId>-->
+        <!--<artifactId>SignClient4J-3.1-SSL</artifactId>-->
+        <!--<version>1.0</version>-->
+        <!--<scope>system</scope>-->
+        <!--<systemPath>${project.basedir}/lib/SignClient4J-3.1-SSL.jar</systemPath>-->
+        <!--</dependency>-->
+
+
+
+        <!--json格式转换-->
+        <dependency>
+            <groupId>net.sf.json-lib</groupId>
+            <artifactId>json-lib</artifactId>
+            <version>2.4</version>
+            <classifier>jdk15</classifier>
+        </dependency>
+<!--        eureka客户端-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+<!--        熔断降级-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+        </dependency>
+<!--        服务间的调用-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+<!--        监控系统健康情况的工具-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <!--web 模块
+        必要的 ViewResolver，比如 ContentNegotiatingViewResolver 和 Bean-NameViewResolver。
+        将必要的 Converter、GenericConverter 和 Formatter 等 bean 注册到 IoC 容器。
+        添加一系列的 HttpMessageConverter 以便支持对 Web 请求和相应的类型转换。
+        自动配置和注册 MessageCodesResolver。
+         -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <!--排除tomcat依赖 ？-->
+                <exclusion>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                    <groupId>org.springframework.boot</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!--undertow容器 相对tomcat来说   具备更高的并发支持、以及内存和性能方面更优-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-undertow</artifactId>
+        </dependency>
+        <!--Oracle 数据包-->
+        <!-- https://mvnrepository.com/artifact/com.oracle.database.jdbc/ojdbc6 -->
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>11.2.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>${druid.version}</version>
+        </dependency>
+
+        <!-- 系统模块 -->
+        <dependency>
+            <groupId>com.censoft.cloud</groupId>
+            <artifactId>cendev-otherlogin-api</artifactId>
+            <version>4.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 系统模块 -->
+        <dependency>
+            <groupId>com.censoft.cloud</groupId>
+            <artifactId>cendev-system-api</artifactId>
+            <version>4.0.1-SNAPSHOT</version>
+        </dependency>
+        <!-- 日志模块 -->
+        <dependency>
+            <groupId>com.censoft.cloud</groupId>
+            <artifactId>cendev-common-oplog</artifactId>
+            <version>4.0.1-SNAPSHOT</version>
+        </dependency>
+        <!-- 权限模块 -->
+        <dependency>
+            <groupId>com.censoft.cloud</groupId>
+            <artifactId>cendev-common-auth</artifactId>
+            <version>4.0.1-SNAPSHOT</version>
+        </dependency>
+        <!-- redis模块 -->
+        <dependency>
+            <groupId>com.censoft.cloud</groupId>
+            <artifactId>cendev-common-redis</artifactId>
+            <version>4.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 获取系统信息 -->
+        <dependency>
+            <groupId>com.github.oshi</groupId>
+            <artifactId>oshi-core</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+
+        <!-- spring-boot-devtools -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional> <!-- 表示依赖不会传递 -->
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
+
+
+        <!-- oss -->
+        <dependency>
+            <groupId>com.qiniu</groupId>
+            <artifactId>qiniu-java-sdk</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.qcloud</groupId>
+            <artifactId>cos_api</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.censoft.cloud</groupId>
+            <artifactId>cendev-common-core</artifactId>
+            <version>4.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <fork>true</fork> <!-- 如果没有该配置，devtools不会生效 -->
+                    <includeSystemScope>true</includeSystemScope>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

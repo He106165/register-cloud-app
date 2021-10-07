@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.userregister.dao.OrgenInfoRegisterMapper">
+
+
+    <sql id="selectOrgenUserInfoVo">
+        select org_user_id, oeg_user_tpye, perman_type, enterprise_name, english_name, legal_name, legal_card_type, legal_idnumber, perman_mobile, hostpersion_name, hostpersion_email, hostpersion_telephone, country, province, address, consulate_name, consulate_id, authlevel, ispass, statu, remark, avatar_url, create_time, create_by, update_time, update_by, version, del_flag from orgen_user_info
+    </sql>
+
+    <insert id="addSaveOrgenUserInfo" parameterType="com.censoft.userregister.domain.OrgenUserInfo">
+        insert into orgen_user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orgUserId != null  and orgUserId != ''">org_user_id,</if>
+            <if test="oegUserTpye != null  and oegUserTpye != ''">oeg_user_tpye,</if>
+            <if test="permanType != null  and permanType != ''">perman_type,</if>
+            <if test="permanLine != null  and permanLine != ''">perman_line,</if>
+            <if test="enterpriseName != null  and enterpriseName != ''">enterprise_name,</if>
+            <if test="englishName != null  and englishName != ''">english_name,</if>
+            <if test="legalName != null  and legalName != ''">legal_name,</if>
+            <if test="legalCardType != null  and legalCardType != ''">legal_card_type,</if>
+            <if test="legalIdnumber != null  and legalIdnumber != ''">legal_idnumber,</if>
+            <if test="permanMobile != null  and permanMobile != ''">perman_mobile,</if>
+            <if test="hostpersionName != null  and hostpersionName != ''">hostpersion_name,</if>
+            <if test="hostpersionEmail != null  and hostpersionEmail != ''">hostpersion_email,</if>
+            <if test="hostpersionTelephone != null  and hostpersionTelephone != ''">hostpersion_telephone,</if>
+            <if test="country != null  and country != ''">country,</if>
+            <if test="province != null  and province != ''">province,</if>
+            <if test="address != null  and address != ''">address,</if>
+            <if test="consulateName != null  and consulateName != ''">consulate_name,</if>
+            <if test="consulateId != null  and consulateId != ''">consulate_id,</if>
+            <if test="authlevel != null  and authlevel != ''">authlevel,</if>
+            <if test="ispass != null ">ispass,</if>
+            <if test="statu != null  and statu != ''">statu,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="avatarUrl != null  and avatarUrl != ''">avatar_url,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="version != null ">version,</if>
+            <if test="delFlag != null ">del_flag,</if>
+            <if test="unifiedsocialcreditcode != null ">unifiedsocialcreditcode,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orgUserId != null  and orgUserId != ''">#{orgUserId},</if>
+            <if test="oegUserTpye != null  and oegUserTpye != ''">#{oegUserTpye},</if>
+            <if test="permanLine != null  and permanLine != ''">#{permanLine},</if>
+            <if test="permanType != null  and permanType != ''">#{permanType},</if>
+            <if test="enterpriseName != null  and enterpriseName != ''">#{enterpriseName},</if>
+            <if test="englishName != null  and englishName != ''">#{englishName},</if>
+            <if test="legalName != null  and legalName != ''">#{legalName},</if>
+            <if test="legalCardType != null  and legalCardType != ''">#{legalCardType},</if>
+            <if test="legalIdnumber != null  and legalIdnumber != ''">#{legalIdnumber},</if>
+            <if test="permanMobile != null  and permanMobile != ''">#{permanMobile},</if>
+            <if test="hostpersionName != null  and hostpersionName != ''">#{hostpersionName},</if>
+            <if test="hostpersionEmail != null  and hostpersionEmail != ''">#{hostpersionEmail},</if>
+            <if test="hostpersionTelephone != null  and hostpersionTelephone != ''">#{hostpersionTelephone},</if>
+            <if test="country != null  and country != ''">#{country},</if>
+            <if test="province != null  and province != ''">#{province},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="consulateName != null  and consulateName != ''">#{consulateName},</if>
+            <if test="consulateId != null  and consulateId != ''">#{consulateId},</if>
+            <if test="authlevel != null  and authlevel != ''">#{authlevel},</if>
+            <if test="ispass != null ">#{ispass},</if>
+            <if test="statu != null  and statu != ''">#{statu},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="avatarUrl != null  and avatarUrl != ''">#{avatarUrl},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="delFlag != null ">#{delFlag},</if>
+            <if test="unifiedsocialcreditcode != null ">#{unifiedsocialcreditcode},</if>
+        </trim>
+    </insert>
+    <select id="queryPerManType" resultType="java.util.Map">
+         SELECT DICT_LABEL AS "label" ,DICT_VALUE AS "values" FROM SYS_DICT_DATA WHERE DICT_TYPE = 'perMan_type' ORDER BY DICT_VALUE
+    </select>
+    <select id="queryperManLine" resultType="java.util.Map">
+         SELECT DICT_LABEL AS "label" ,DICT_VALUE AS "values" FROM SYS_DICT_DATA WHERE DICT_TYPE = 'perMan_line' ORDER BY DICT_LABEL
+    </select>
+    <select id="queryDepermentCode" resultType="java.util.Map">
+         SELECT DICT_LABEL AS "label" ,DICT_VALUE AS "values" FROM SYS_DICT_DATA WHERE DICT_TYPE = 'deperment_code' ORDER BY DICT_LABEL
+    </select>
+    <select id="queryConsulateInfo" resultType="java.util.Map">
+        SELECT DICT_LABEL AS "label" ,DICT_VALUE AS "values" FROM SYS_DICT_DATA WHERE DICT_TYPE = 'consulate_info' ORDER BY DICT_LABEL
+    </select>
+
+
+</mapper>

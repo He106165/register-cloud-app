@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.sendMag.emailManage.mapper.NoteSendLogMapper">
+
+    <resultMap type="NoteSendLog" id="NoteSendLogResult">
+        <result property="id"    column="id"    />
+        <result property="reveicePhone"    column="reveice_phone"    />
+        <result property="content"    column="content"    />
+        <result property="status"    column="status"    />
+        <result property="mesPlantime"    column="mes_plantime"    />
+    </resultMap>
+
+    <sql id="selectNoteSendLogVo">
+        select id, reveice_phone, content, status, mes_plantime from note_send_log
+    </sql>
+
+    <select id="selectNoteSendLogList" parameterType="NoteSendLog" resultMap="NoteSendLogResult">
+        <include refid="selectNoteSendLogVo"/>
+        <where>
+            <if test="reveicePhone != null  and reveicePhone != ''"> and reveice_phone = #{reveicePhone}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="mesPlantime != null "> and mes_plantime = #{mesPlantime}</if>
+        </where>
+    </select>
+
+    <select id="selectNoteSendLogById" parameterType="String" resultMap="NoteSendLogResult">
+        <include refid="selectNoteSendLogVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertNoteSendLog" parameterType="NoteSendLog" useGeneratedKeys="true" keyProperty="id">
+        insert into note_send_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="reveicePhone != null  and reveicePhone != ''">reveice_phone,</if>
+            <if test="content != null  and content != ''">content,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="mesPlantime != null ">mes_plantime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="reveicePhone != null  and reveicePhone != ''">#{reveicePhone},</if>
+            <if test="content != null  and content != ''">#{content},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="mesPlantime != null ">#{mesPlantime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNoteSendLog" parameterType="NoteSendLog">
+        update note_send_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="reveicePhone != null  and reveicePhone != ''">reveice_phone = #{reveicePhone},</if>
+            <if test="content != null  and content != ''">content = #{content},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="mesPlantime != null ">mes_plantime = #{mesPlantime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNoteSendLogById" parameterType="String">
+        delete from note_send_log where id = #{id}
+    </delete>
+
+    <delete id="deleteNoteSendLogByIds" parameterType="String">
+        delete from note_send_log where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

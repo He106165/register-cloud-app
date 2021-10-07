@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.systemManage.systemJointLog.mapper.JoinSystemRegisterlogMapper">
+
+    <resultMap type="JoinSystemRegisterlog" id="JoinSystemRegisterlogResult">
+        <result property="id" column="id"/>
+        <result property="joinsysCode" column="joinsys_code"/>
+        <result property="joinsysName" column="joinsys_name"/>
+        <result property="sysmethodId" column="sysmethod_id"/>
+        <result property="sysmethodName" column="sysmethod_name"/>
+        <result property="realm" column="realm"/>
+        <result property="parameter" column="parameter"/>
+        <result property="status" column="status"/>
+        <result property="opertionmes" column="opertionmes"/>
+        <result property="opertionTime" column="opertion_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectJoinSystemRegisterlogVo">
+        select id, joinsys_code, joinsys_name, sysmethod_id, sysmethod_name, realm, parameter, status, opertionmes, opertion_time, remark from join_system_registerlog
+    </sql>
+
+    <select id="selectJoinSystemRegisterlogList" parameterType="JoinSystemRegisterlog"
+            resultMap="JoinSystemRegisterlogResult">
+        <include refid="selectJoinSystemRegisterlogVo"/>
+        <where>
+            <if test="joinsysCode != null  and joinsysCode != ''">and joinsys_code = #{joinsysCode}</if>
+            <if test="joinsysName != null  and joinsysName != ''">and joinsys_name like '%' || #{joinsysName} || '%'
+            </if>
+            <if test="sysmethodId != null  and sysmethodId != ''">and sysmethod_id = #{sysmethodId}</if>
+            <if test="sysmethodName != null  and sysmethodName != ''">and sysmethod_name like '%' || #{sysmethodName} ||
+                '%'
+            </if>
+            <if test="realm != null  and realm != ''">and realm = #{realm}</if>
+            <if test="parameter != null  and parameter != ''">and parameter = #{parameter}</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
+            <if test="opertionmes != null  and opertionmes != ''">and opertionmes = #{opertionmes}</if>
+            <if test="opertionTime != null ">and opertion_time = #{opertionTime}</if>
+        </where>
+    </select>
+
+    <select id="selectJoinSystemRegisterlogById" parameterType="String" resultMap="JoinSystemRegisterlogResult">
+        <include refid="selectJoinSystemRegisterlogVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectJoinSystemInterfaceNum" resultType="java.util.Map">
+         SELECT
+        a.monthlist gg,
+        nvl( b.YJSUM, 0 ) AS value
+        FROM
+        (
+        SELECT
+        TO_CHAR( ADD_MONTHS( TO_DATE(  #{startTime}, 'yyyy-MM' ), ROWNUM - 1 ), 'yyyy-MM' ) AS monthlist
+        FROM
+       <![CDATA[ DUAL CONNECT BY ROWNUM <= months_between(
+        to_date( #{endTime}, 'yyyy-MM' ),
+        to_date(  #{startTime}, 'yyyy-MM' )) + 1]]>
+        ) a
+        LEFT JOIN (
+
+        SELECT
+        to_char( OPERTION_TIME, 'yyyy-mm' ) AS DATETIME,
+        sum( 1 ) AS YJSUM
+        FROM
+        JOIN_SYSTEM_REGISTERLOG
+        WHERE
+
+        OPERTION_TIME BETWEEN to_date( #{startTime}, 'yyyy-mm' )
+        AND to_date( #{endTime}, 'yyyy-mm' )
+        GROUP BY
+        to_char( OPERTION_TIME, 'yyyy-mm' )
+        ORDER BY
+        to_char( OPERTION_TIME, 'yyyy-mm' )
+        ) b ON a.monthlist = b.DATETIME
+        ORDER BY
+        a.monthlist
+    </select>
+
+
+    <insert id="insertJoinSystemRegisterlog" parameterType="JoinSystemRegisterlog">
+        insert into join_system_registerlog
+        (
+        <if test="joinsysCode != null  and joinsysCode != ''">joinsys_code,</if>
+        <if test="joinsysName != null  and joinsysName != ''">joinsys_name,</if>
+        <if test="sysmethodId != null  and sysmethodId != ''">sysmethod_id,</if>
+        <if test="sysmethodName != null  and sysmethodName != ''">sysmethod_name,</if>
+        <if test="realm != null  and realm != ''">realm,</if>
+        <if test="parameter != null  and parameter != ''">parameter,</if>
+        <if test="status != null  and status != ''">status,</if>
+        <if test="opertionmes != null  and opertionmes != ''">opertionmes,</if>
+        <if test="remark != null  and remark != ''">remark,</if>
+        opertion_time
+        )
+        values(
+        <if test="joinsysCode != null  and joinsysCode != ''">#{joinsysCode},</if>
+        <if test="joinsysName != null  and joinsysName != ''">#{joinsysName},</if>
+        <if test="sysmethodId != null  and sysmethodId != ''">#{sysmethodId},</if>
+        <if test="sysmethodName != null  and sysmethodName != ''">#{sysmethodName},</if>
+        <if test="realm != null  and realm != ''">#{realm},</if>
+        <if test="parameter != null  and parameter != ''">#{parameter},</if>
+        <if test="status != null  and status != ''">#{status},</if>
+        <if test="opertionmes != null  and opertionmes != ''">#{opertionmes},</if>
+        <if test="remark != null  and remark != ''">#{remark},</if>
+        #{opertionTime}
+        )
+
+    </insert>
+
+    <update id="updateJoinSystemRegisterlog" parameterType="JoinSystemRegisterlog">
+        update join_system_registerlog
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="joinsysCode != null  and joinsysCode != ''">joinsys_code = #{joinsysCode,jdbcType=VARCHAR},</if>
+            <if test="joinsysName != null  and joinsysName != ''">joinsys_name = #{joinsysName,jdbcType=VARCHAR},</if>
+            <if test="sysmethodId != null  and sysmethodId != ''">sysmethod_id = #{sysmethodId,jdbcType=VARCHAR},</if>
+            <if test="sysmethodName != null  and sysmethodName != ''">sysmethod_name =
+                #{sysmethodName,jdbcType=VARCHAR},
+            </if>
+            <if test="realm != null  and realm != ''">realm = #{realm,jdbcType=VARCHAR},</if>
+            <if test="parameter != null  and parameter != ''">parameter = #{parameter,jdbcType=VARCHAR},</if>
+            <if test="status != null  and status != ''">status = #{status,jdbcType=VARCHAR},</if>
+            <if test="opertionmes != null  and opertionmes != ''">opertionmes = #{opertionmes,jdbcType=VARCHAR},</if>
+            <if test="opertionTime != null ">opertion_time = #{opertionTime,jdbcType=TIMESTAMP },</if>
+            <if test="remark != null  and remark != ''">remark = #{remark,jdbcType=VARCHAR},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteJoinSystemRegisterlogById" parameterType="String">
+        delete from join_system_registerlog where id = #{id}
+    </delete>
+
+    <delete id="deleteJoinSystemRegisterlogByIds" parameterType="String">
+        delete from join_system_registerlog where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.sendMag.emailManage.mapper.MailSendInfoMapper">
+
+    <resultMap type="MailSendInfo" id="MailSendInfoResult">
+        <result property="id"    column="id"    />
+        <result property="reveiceEmail"    column="reveice_email"    />
+        <result property="theme"    column="theme"    />
+        <result property="content"    column="content"    />
+        <result property="sendEmail"    column="send_email"    />
+        <result property="sendTime"    column="send_time"    />
+    </resultMap>
+
+    <sql id="selectMailSendInfoVo">
+        select id, reveice_email, theme, content, send_email, send_time from mail_send_info
+    </sql>
+
+    <select id="selectMailSendInfoList" parameterType="MailSendInfo" resultMap="MailSendInfoResult">
+        <include refid="selectMailSendInfoVo"/>
+        <where>
+            <if test="reveiceEmail != null  and reveiceEmail != ''"> and reveice_email = #{reveiceEmail}</if>
+            <if test="theme != null  and theme != ''"> and theme = #{theme}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="sendEmail != null  and sendEmail != ''"> and send_email = #{sendEmail}</if>
+            <if test="sendTime != null "> and send_time = #{sendTime}</if>
+        </where>
+    </select>
+
+    <select id="selectMailSendInfoById" parameterType="String" resultMap="MailSendInfoResult">
+        <include refid="selectMailSendInfoVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertMailSendInfo" parameterType="MailSendInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into mail_send_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="reveiceEmail != null  and reveiceEmail != ''">reveice_email,</if>
+            <if test="theme != null  and theme != ''">theme,</if>
+            <if test="content != null  and content != ''">content,</if>
+            <if test="sendEmail != null  and sendEmail != ''">send_email,</if>
+            <if test="sendTime != null ">send_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="reveiceEmail != null  and reveiceEmail != ''">#{reveiceEmail},</if>
+            <if test="theme != null  and theme != ''">#{theme},</if>
+            <if test="content != null  and content != ''">#{content},</if>
+            <if test="sendEmail != null  and sendEmail != ''">#{sendEmail},</if>
+            <if test="sendTime != null ">#{sendTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMailSendInfo" parameterType="MailSendInfo">
+        update mail_send_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="reveiceEmail != null  and reveiceEmail != ''">reveice_email = #{reveiceEmail},</if>
+            <if test="theme != null  and theme != ''">theme = #{theme},</if>
+            <if test="content != null  and content != ''">content = #{content},</if>
+            <if test="sendEmail != null  and sendEmail != ''">send_email = #{sendEmail},</if>
+            <if test="sendTime != null ">send_time = #{sendTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMailSendInfoById" parameterType="String">
+        delete from mail_send_info where id = #{id}
+    </delete>
+
+    <delete id="deleteMailSendInfoByIds" parameterType="String">
+        delete from mail_send_info where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

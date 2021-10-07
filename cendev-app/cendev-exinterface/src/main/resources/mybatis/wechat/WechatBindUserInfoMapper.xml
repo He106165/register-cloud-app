@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.weChat.mapper.WechatBindUserInfoMapper">
+    <insert id="insertWechatBindUserInfo" parameterType="com.censoft.weChat.domain.WechatUserInfo">
+            insert into wechat_user_info
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="id != null  and id != ''">id,</if>
+                <if test="userId != null  and userId != ''">user_id,</if>
+                <if test="nickName != null  and nickName != ''">nick_name,</if>
+                <if test="sex != null  and sex != ''">sex,</if>
+                <if test="provice != null  and provice != ''">provice,</if>
+                <if test="status != null  and status != ''">status,</if>
+                <if test="health != null  and health != ''">health,</if>
+                <if test="remark != null  and remark != ''">remark,</if>
+                <if test="createTime != null ">create_time,</if>
+                <if test="version != null ">version,</if>
+                <if test="userType != null  and userType != ''">user_type,</if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="id != null  and id != ''">#{id},</if>
+                <if test="userId != null  and userId != ''">#{userId},</if>
+                <if test="nickName != null  and nickName != ''">#{nickName},</if>
+                <if test="sex != null  and sex != ''">#{sex},</if>
+                <if test="provice != null  and provice != ''">#{provice},</if>
+                <if test="status != null  and status != ''">#{status},</if>
+                <if test="health != null  and health != ''">#{health},</if>
+                <if test="remark != null  and remark != ''">#{remark},</if>
+                <if test="createTime != null ">#{createTime},</if>
+                <if test="version != null ">#{version},</if>
+                <if test="userType != null  and userType != ''">#{userType},</if>
+            </trim>
+
+    </insert>
+
+
+    <select id="countPhone" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(phone) from PERSONAL_USER_LOGIN where phone = #{phone,jdbcType=VARCHAR}
+    </select>
+    <select id="queryPassword" resultType="java.lang.String">
+        SELECT p.PASSWORD FROM PERSONAL_USER_LOGIN p WHERE p.phone = #{phone,jdbcType=VARCHAR}
+    </select>
+    <select id="countEmail" resultType="java.lang.Integer">
+        select count(email) from PERSONAL_USER_LOGIN where email = #{email,jdbcType=VARCHAR}
+    </select>
+    <select id="countCardNo" resultType="java.lang.Integer">
+        select count(idNumber) from PERSONAL_USER_LOGIN where idNumber = #{idNumber,jdbcType=VARCHAR}
+    </select>
+    <select id="selectUserInfo" resultType="java.lang.String">
+        select user_id from PERSONAL_USER_INFO where phone = #{phone,jdbcType=VARCHAR}
+    </select>
+    <select id="queryEmailPassword" resultType="java.lang.String">
+        SELECT p.PASSWORD FROM PERSONAL_USER_LOGIN p WHERE p.email = #{email,jdbcType=VARCHAR}
+    </select>
+    <select id="selectUserInfoByEmail" resultType="java.lang.String">
+        select user_id from PERSONAL_USER_INFO where email = #{email,jdbcType=VARCHAR}
+    </select>
+    <select id="queryCardNoPassword" resultType="java.lang.String">
+        SELECT p.PASSWORD FROM PERSONAL_USER_LOGIN p WHERE p.idNumber = #{idNumber,jdbcType=VARCHAR}
+    </select>
+    <select id="selectUserInfoByCardNo" resultType="java.lang.String">
+        select user_id from PERSONAL_USER_LOGIN where idNumber = #{idNumber,jdbcType=VARCHAR}
+    </select>
+    <select id="countUnifiedsocialcreditcode" resultType="java.lang.Integer">
+         select count(UNIFIEDSOCIALCREDITCODE) from ORGEN_USER_LOGIN where UNIFIEDSOCIALCREDITCODE = #{unifiedsocialcreditcode,jdbcType=VARCHAR}
+    </select>
+    <select id="queryUnifiedsocialcreditcodePassword" resultType="java.lang.String">
+        SELECT p.PASSWORD FROM ORGEN_USER_LOGIN p WHERE p.UNIFIEDSOCIALCREDITCODE = #{unifiedsocialcreditcode,jdbcType=VARCHAR}
+    </select>
+    <select id="selectUnifiedUserInfo" resultType="java.lang.String">
+        SELECT OEG_USER_ID a from ORGEN_USER_LOGIN  where UNIFIEDSOCIALCREDITCODE = #{unifiedsocialcreditcode,jdbcType=VARCHAR}
+    </select>
+    <select id="countOrgenEmail" resultType="java.lang.Integer">
+        select count(HOSTPERSION_EMAIL) from ORGEN_USER_LOGIN where HOSTPERSION_EMAIL = #{hostpersonEmail,jdbcType=VARCHAR}
+    </select>
+    <select id="emailPassword" resultType="java.lang.String">
+        SELECT p.PASSWORD FROM ORGEN_USER_LOGIN p WHERE p.HOSTPERSION_EMAIL = #{hostpersonEmail,jdbcType=VARCHAR}
+    </select>
+    <select id="selectemailP" resultType="java.lang.String">
+        SELECT OEG_USER_ID a from ORGEN_USER_LOGIN  where HOSTPERSION_EMAIL = #{hostpersonEmail,jdbcType=VARCHAR}
+    </select>
+    <select id="useName" resultType="java.lang.Boolean">
+        select count(1) from PERSONAL_USER_LOGIN where NAME=#{name,jdbcType=VARCHAR}
+    </select>
+    <select id="queryUseNamePaaword" resultType="java.lang.String">
+        SELECT p.PASSWORD FROM PERSONAL_USER_LOGIN p WHERE p.name = #{name,jdbcType=VARCHAR}
+    </select>
+    <select id="selectUserInfoByName" resultType="java.lang.String">
+        select user_id from PERSONAL_USER_LOGIN where NAME = #{name,jdbcType=VARCHAR}
+    </select>
+    <select id="countUnionId" resultType="java.lang.Boolean">
+       select count(1) from WECHAT_USER_INFO WHERE  id = #{unionId,jdbcType=VARCHAR} and USER_TYPE = '00'
+    </select>
+    <select id="countUnionIdOrg" resultType="java.lang.Boolean">
+        select count(1) from WECHAT_USER_INFO WHERE  id = #{unionId,jdbcType=VARCHAR} and USER_TYPE = '01'
+    </select>
+</mapper>

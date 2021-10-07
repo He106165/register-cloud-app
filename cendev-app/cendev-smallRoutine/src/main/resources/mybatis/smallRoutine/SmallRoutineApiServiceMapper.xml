@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.smallRoutine.mapper.SmallRoutineApiServiceMapper">
+        <resultMap type="BEducations" id="BOverseasEducationBaseResult">
+                <result property="id"    column="id"    />
+                <result property="country"    column="country"    />
+                <result property="schoolAddress"    column="school_address"    />
+                <result property="schoolProfile"    column="school_profile"    />
+        </resultMap>
+        <sql id="selectBOverseasEducationBaseVo">
+           select id, university_cn, university_en, badge, country, province, build_time, university_nature, school_address, website, education_section, quality_org, contact, contact_info, contact_email, university_class, is_contracted, school_profile, advantage_major, famous_firend, recruit_info from b_overseas_education_base
+         </sql>
+
+        <select id="findAllSchools" parameterType="String"   resultMap="BOverseasEducationBaseResult">
+                select e.id, e.country,e.school_address,e.school_profile  from b_overseas_education_base e
+                LEFT JOIN  B_OVERSEAS_EDUCATION_MAJOR r  on r.PID = e.id
+                LEFT JOIN B_OVERSEAS_EDUCATION_RANK k on k.PID = e.id
+                <where>
+                        <if test="id !=null and id !='' ">e.id =#{id}</if>
+                        <if test="address !=null and address !='' "> and e.COUNTRY =#{country}</if>
+                        <if test="info !=null and info !='' ">and r.MAJOR =#{info}</if>
+                        <if test="leave !=null and leave !='' ">and  k.RANK_GRADE =#{leave}</if>
+                </where>
+        </select>
+        <!--BOverseasEducationBaseResult-->
+        <select id="selectSchoolById" parameterType="String" resultMap="BOverseasEducationBaseResult">
+                select e.university_cn,e.university_en,e.school_profil from b_overseas_education_base where id = #{id}
+        </select>
+</mapper>

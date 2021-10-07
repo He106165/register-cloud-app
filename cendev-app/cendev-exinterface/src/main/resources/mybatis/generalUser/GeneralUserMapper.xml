@@ -1,0 +1,1031 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.generalUser.mapper.GeneralUserInfoMapper">
+    <resultMap type="com.censoft.generalUser.entity.PersonalUserInfoToRedis" id="PersonalUserToRedisResult">
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="nickName"    column="nick_name"    />
+        <result property="cardType"    column="card_type"    />
+        <result property="cardNo"    column="card_no"    />
+        <result property="nationality"    column="nationality"    />
+        <result property="dateOfBirth"    column="date_of_birth"    />
+        <result property="gender"    column="gender"    />
+        <result property="email"    column="email"    />
+        <result property="phone"    column="phone"    />
+        <result property="remark"    column="remark"    />
+        <result property="version"    column="version"    />
+        <result property="name"    column="name"    />
+        <result property="password"    column="password"    />
+        <result property="avatarUrl"    column="avatar_url"    />
+        <result property="authlevel"    column="authlevel"    />
+    </resultMap>
+
+
+
+    <select id="checkGeneralUser" resultType="Map">
+      SELECT
+        <if test="userName != null and userName != ''">
+            (
+            CASE
+            WHEN nNAME = 0
+            AND nidnumber = 0
+            AND nphone = 0
+            AND nemail = 0
+            THEN
+            0
+            ELSE
+            1
+            END
+            ) NAME,
+        </if>
+	(
+		CASE
+		WHEN phoneNAME = 0
+		AND phone = 0 THEN
+			0
+		ELSE
+			1
+		END
+	) phone,
+(
+		CASE
+		WHEN emailNAME = 0
+		AND email = 0 THEN
+			0
+		ELSE
+			1
+		END
+	) email,
+(
+		CASE
+		WHEN idnumberNAME = 0
+		AND idnumber = 0 THEN
+			0
+		ELSE
+			1
+		END
+	) idnumber
+
+FROM
+	(
+		SELECT
+			NVL (COUNT(1), 0) phoneNAME
+		FROM
+			PERSONAL_USER_LOGIN
+		WHERE
+			NAME = #{phone,jdbcType=VARCHAR}
+	),
+	(
+		SELECT
+			NVL (COUNT(1), 0) phone
+		FROM
+			PERSONAL_USER_LOGIN
+		WHERE
+			PHONE = #{phone,jdbcType=VARCHAR}
+		AND PHONE_ISCHECK = 1
+	)
+,
+(
+		SELECT
+			NVL (COUNT(1), 0) emailNAME
+		FROM
+			PERSONAL_USER_LOGIN
+		WHERE
+			NAME = #{email,jdbcType=VARCHAR}
+	),
+	(
+		SELECT
+			NVL (COUNT(1), 0) email
+		FROM
+			PERSONAL_USER_LOGIN
+		WHERE
+			email = #{email,jdbcType=VARCHAR}
+		AND email_ISCHECK = 1
+	)
+,
+(
+		SELECT
+			NVL (COUNT(1), 0) idNumberNAME
+		FROM
+			PERSONAL_USER_LOGIN
+		WHERE
+			NAME = #{idNumber,jdbcType=VARCHAR}
+	),
+	(
+		SELECT
+			NVL (COUNT(1), 0) idNumber
+		FROM
+			PERSONAL_USER_LOGIN
+		WHERE
+			idNumber = #{idNumber,jdbcType=VARCHAR}
+	)
+        <if test="userName != null and userName !=''">
+            ,(
+            SELECT
+            NVL (COUNT(1), 0) nNAME
+            FROM
+            PERSONAL_USER_LOGIN
+            WHERE
+            NAME = #{userName,jdbcType=VARCHAR}
+            ) ,
+            (
+            SELECT
+            NVL (COUNT(1), 0) nemail
+            FROM
+            PERSONAL_USER_LOGIN
+            WHERE
+            email = #{email,jdbcType=VARCHAR}
+            and EMAIL_ISCHECK = 1
+            ) ,
+            (
+            SELECT
+            NVL (COUNT(1), 0) nidNumber
+            FROM
+            PERSONAL_USER_LOGIN
+            WHERE
+            IDNUMBER = #{idNumber,jdbcType=VARCHAR}
+            ) ,
+            (
+            SELECT
+            NVL (COUNT(1), 0) nphone
+            FROM
+            PERSONAL_USER_LOGIN
+            WHERE
+            PHONE = #{phone,jdbcType=VARCHAR}
+            and PHONE_ISCHECK = 1
+            )
+        </if>
+    </select>
+    <select id="getGeneralUserInfoByidCard" resultType="Map">
+            SELECT
+               	A .USER_ID,
+                NVL (A . VERSION, 0) vLogin,
+                NVL (b. VERSION, 0) vInfo,
+                NVL (c. VERSION, 0) vExt,
+                b.PHONE as OOLDPHONE,
+                b.EMAIL as OOLDEMAIL
+            FROM
+               	PERSONAL_USER_LOGIN A
+                LEFT JOIN PERSONAL_USER_INFO b on A .USER_ID = b.USER_ID
+                LEFT JOIN PERSONAL_EXTEND_INFO c on  A .USER_ID = c.USER_ID
+            WHERE
+                 IDNUMBER = #{idNumber}
+    </select>
+
+    <select id="getUserInfoById" parameterType="String" resultMap="PersonalUserToRedisResult">
+        select u.user_id, u.user_name, u.card_type, u.card_no, u.authlevel, u.avatar_url,u.nick_name, u.nationality, u.date_of_birth, u.gender, u.email, u.phone, u.remark ,u.version ,i.name, i.password from personal_user_info u
+        left join  personal_user_login i on i.user_id=u.user_id
+        where u.user_id = #{userId}
+        and u.status = 1
+        and u.del_flag = 0
+    </select>
+
+
+
+    <select id="getGeneralUserInfoByUserId" resultType="Map">
+             SELECT
+               	A .USER_ID,
+                NVL (A . VERSION, 0) vLogin,
+                NVL (b. VERSION, 0) vInfo,
+                NVL (c. VERSION, 0) vExt,
+                A.PHONE as OOLDPHONE,
+                A.EMAIL as OOLDEMAIL,
+                A.ALIPAY_ID as OOLDALIPAY_ID,
+                A.WECHAR_ID as OOLDWECHAR_ID,
+                A.IDNUMBER as OOLDIDNUMBER,
+                A.NAME AS OOLDNAME,
+                A.PASSWORD,A.STATUS,A.DEL_FLAG,
+                b.gender,b.date_of_birth
+            FROM
+               	PERSONAL_USER_LOGIN A
+                LEFT JOIN PERSONAL_USER_INFO b on A .USER_ID = b.USER_ID
+                LEFT JOIN PERSONAL_EXTEND_INFO c on  A .USER_ID = c.USER_ID
+            WHERE
+                 A.USER_ID = #{userId}
+                 and A.status = '0'
+    </select>
+    <select id="getGeneralUserInfoByPhoneOrEmail" resultType="Map">
+      <if test="oldPhone != null and  oldPhone != ''">
+          SELECT
+          A.USER_ID,
+          A . VERSION vLogin,
+          b. VERSION vInfo,
+          c. VERSION vExt,
+          PHONE as OOLDPHONE,
+          EMAIL as OOLDEMAIL
+          FROM
+          PERSONAL_USER_LOGIN A,
+          PERSONAL_EXTEND_INFO b,
+          PERSONAL_EXTEND_INFO c
+          WHERE
+          A .USER_ID = b.USER_ID
+          AND A .USER_ID = c.USER_ID
+          and a.PHONE_ISCHECK = 1
+          AND phone = #{oldPhone}
+      </if>
+        <if test="oldPhone != null and  oldPhone != '' and oldEmail != null and  oldEmail != ''">
+            union ALL
+        </if>
+
+        <if test="oldEmail != null and  oldEmail != ''">
+            SELECT
+            A.USER_ID,
+            A . VERSION vLogin,
+            b. VERSION vInfo,
+            c. VERSION vExt,
+            PHONE as OOLDPHONE,
+            EMAIL as OOLDEMAIL
+            FROM
+            PERSONAL_USER_LOGIN A,
+            PERSONAL_EXTEND_INFO b,
+            PERSONAL_EXTEND_INFO c
+            WHERE
+            A .USER_ID = b.USER_ID
+            AND A .USER_ID = c.USER_ID
+            and a.EMAIL_ISCHECK = 1
+            AND email = #{oldEmail}</if>
+
+
+    </select>
+
+
+    <select id="checkUserPhone" resultType="int">
+       SELECT CASE WHEN
+            NAME = 0 AND
+        phone = 0 THEN 0 ELSE 1
+      END FROM
+            (
+            SELECT
+            NVL (COUNT(1), 0) NAME
+            FROM
+            PERSONAL_USER_LOGIN
+            WHERE
+            NAME = #{phone,jdbcType=VARCHAR}
+            ) ,
+	(
+		SELECT
+			NVL (COUNT(1), 0) phone
+		FROM
+			PERSONAL_USER_LOGIN
+		WHERE
+			PHONE = #{phone,jdbcType=VARCHAR}
+			and PHONE_ISCHECK = 1
+	)
+    </select>
+    <select id="checkUserEmail" resultType="int">
+          SELECT CASE WHEN
+            NAME = 0 AND
+         email = 0 THEN 0 ELSE 1
+        END FROM
+            (
+            SELECT
+            NVL (COUNT(1), 0) NAME
+            FROM
+            PERSONAL_USER_LOGIN
+            WHERE
+            NAME = #{email,jdbcType=VARCHAR}
+            ) ,
+	(
+		SELECT
+			NVL (COUNT(1), 0) email
+		FROM
+			PERSONAL_USER_LOGIN
+		WHERE
+			email = #{email,jdbcType=VARCHAR}
+			and EMAIL_ISCHECK = 1
+	)
+    </select>
+    <select id="checkUserName" resultType="int">
+        SELECT CASE WHEN NAME = 0 AND email = 0 and phone = 0 and  idNumber = 0 THEN 0 ELSE 1
+      END FROM
+	(
+		SELECT
+			NVL (COUNT(1), 0) NAME
+		FROM
+			PERSONAL_USER_LOGIN
+		WHERE
+			NAME = #{userName,jdbcType=VARCHAR}
+	) ,
+	(
+		SELECT
+			NVL (COUNT(1), 0) email
+		FROM
+			PERSONAL_USER_LOGIN
+		WHERE
+			email = #{email,jdbcType=VARCHAR}
+			and EMAIL_ISCHECK = 1
+	) ,
+	(
+		SELECT
+			NVL (COUNT(1), 0) idNumber
+		FROM
+			PERSONAL_USER_LOGIN
+		WHERE
+			 IDNUMBER = #{idNumber,jdbcType=VARCHAR}
+	) ,
+	(
+		SELECT
+			NVL (COUNT(1), 0) phone
+		FROM
+			PERSONAL_USER_LOGIN
+		WHERE
+			 PHONE = #{phone,jdbcType=VARCHAR}
+			 and PHONE_ISCHECK = 1
+	)
+    </select>
+    <select id="checkUserIDCard" resultType="int">
+         SELECT CASE WHEN
+         NAME = 0 AND
+         email = 0 THEN 0 ELSE 1
+      END FROM
+            (
+                SELECT
+                    NVL (COUNT(1), 0) NAME
+                FROM
+                    PERSONAL_USER_LOGIN
+                WHERE
+                    NAME = #{idNumber,jdbcType=VARCHAR}
+            ) ,
+            (
+                SELECT
+                    NVL (COUNT(1), 0) email
+                FROM
+                    PERSONAL_USER_LOGIN
+                WHERE
+                    IDNUMBER = #{idNumber,jdbcType=VARCHAR}
+            )
+    </select>
+    <select id="checkUserNickName" parameterType="String" resultType="int">
+     	SELECT COUNT(*) FROM PERSONAL_USER_INFO  WHERE STATUS = 1 AND DEL_FLAG = 0 AND NICK_NAME = #{nickname}
+    </select>
+
+    <insert id="insertPersionalUserLogin">
+            INSERT INTO PERSONAL_USER_LOGIN (
+            <if test=" id != null and  id != ''">
+                ID,
+            </if>
+            <if test=" userId != null and  userId != ''">
+                USER_ID,
+            </if>
+            <if test=" userName != null and  userName != ''">
+                NAME,
+            </if>
+            <if test=" phoneIsCheck != null and  phoneIsCheck != ''">
+                PHONE_ISCHECK,
+            </if>
+            <if test=" phone != null and  phone != ''">
+                PHONE,
+            </if>
+            <if test=" emailIsCheck != null and  emailIsCheck != ''">
+                EMAIL_ISCHECK,
+            </if>
+            <if test=" email != null and  email != ''">
+                EMAIL,
+            </if>
+            <if test=" idNumber != null and idNumber != ''">
+                IDNUMBER,
+            </if>
+            <if test=" password != null and  password != ''">
+                PASSWORD,
+            </if>
+            <if test=" unionId != null and  unionId != ''">
+                WECHAR_ID,
+            </if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            create_time,
+            update_time
+            )
+            VALUES(
+                <if test=" id != null and  id != ''">
+                    #{id},
+                </if>
+                <if test=" userId != null and  userId != ''">
+                    #{userId},
+                </if>
+            <if test=" userName != null and  userName != ''">
+                #{userName},
+            </if>
+            <if test=" phoneIsCheck != null and  phoneIsCheck != ''">
+                #{phoneIsCheck},
+            </if>
+            <if test=" phone != null and  phone != ''">
+                #{phone},
+            </if>
+            <if test=" emailIsCheck != null and  emailIsCheck != ''">
+                #{emailIsCheck},
+            </if>
+            <if test=" email != null and  email != ''">
+                #{email},
+            </if>
+            <if test=" idNumber != null and idNumber != ''">
+                #{idNumber},
+            </if>
+            <if test=" password != null and  password != ''">
+                #{password},
+            </if>
+            <if test=" unionId != null and  unionId != ''">
+                #{unionId},
+            </if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            SYSDATE,
+            SYSDATE
+            )
+    </insert>
+    <insert id="insertPersionalUserInfo">
+        insert into personal_user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null  and userId != ''">USER_ID,</if>
+            <if test="realName != null  and realName != ''">user_name,</if>
+            <if test="cardType != null  and cardType != ''">card_type,</if>
+            <if test="idNumber != null  and idNumber != ''">card_no,</if>
+            <if test="nationality != null  and nationality != ''">nationality,</if>
+            <if test="email != null  and email != ''">email,</if>
+            <if test="phone != null  and phone != ''">phone,</if>
+            <if test="nickName != null  and nickName != ''">nick_name,</if>
+            create_time,
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="authLevel != null  and authLevel != ''">AUTHLEVEL,</if>
+            <if test="IS_LABOUR_REAL != null  and IS_LABOUR_REAL != ''">IS_LABOUR_REAL,</if>
+            <if test="eP1 != null  and eP1 != ''">EP1,</if>
+            <if test="mc != null  and mc != ''">mc,</if>
+            <if test=" userName != null and  userName != ''">
+                EP2,
+            </if>
+            <if test=" activeFlag != null and  activeFlag != ''">
+                ACTIVE_FLAG,
+            </if>
+            <if test=" gender != null and  gender != ''">
+                gender,
+            </if>
+            <if test=" dateofbirth != null ">
+                date_of_birth,
+            </if>
+            update_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null  and userId != ''">#{userId},</if>
+            <if test="realName != null  and realName != ''">#{realName},</if>
+            <if test="cardType != null  and cardType != ''">#{cardType},</if>
+            <if test="idNumber != null  and idNumber != ''">#{idNumber},</if>
+            <if test="nationality != null  and nationality != ''">#{nationality},</if>
+            <if test="email != null  and email != ''">#{email},</if>
+            <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="nickName != null  and nickName != ''">#{nickName},</if>
+            SYSDATE,
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="authLevel != null  and authLevel != ''">#{authLevel},</if>
+            <if test="IS_LABOUR_REAL != null  and IS_LABOUR_REAL != ''">#{IS_LABOUR_REAL},</if>
+            <if test="eP1 != null  and eP1 != ''">#{eP1},</if>
+            <if test="mc != null  and mc != ''">#{mc},</if>
+            <if test=" userName != null and  userName != ''">
+                #{userName},
+            </if>
+            <if test=" activeFlag != null and  activeFlag != ''">
+                #{activeFlag},
+            </if>
+            <if test=" gender != null and  gender != ''">
+                #{gender},
+            </if>
+            <if test=" dateofbirth != null ">
+               #{dateofbirth},
+            </if>
+            SYSDATE
+        </trim>
+    </insert>
+    <insert id="insertPersionalUserExt">
+        INSERT INTO PERSONAL_EXTEND_INFO (
+            <if test=" id != null and  id != ''">
+                ID,
+            </if>
+            <if test=" userId != null and  userId != ''">
+                USER_ID,
+            </if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            create_time,
+            update_time
+        )
+        VALUES(
+        <if test=" id != null and  id != ''">
+            #{id},
+        </if>
+        <if test=" userId != null and  userId != ''">
+            #{userId},
+        </if>
+        <if test="createBy != null  and createBy != ''">#{createBy},</if>
+        <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+        SYSDATE,
+        SYSDATE
+        )
+    </insert>
+
+
+    <select id="generalUserLogin" parameterType="Map" resultType="Map">
+
+        <if test="loginType == 'phone' ">
+            SELECT
+            USER_ID,phone,email,idnumber,password,status,del_flag,
+            'phone' as loginType
+            FROM
+            PERSONAL_USER_LOGIN
+            WHERE
+            PHONE = #{userName,jdbcType=VARCHAR}
+            and PHONE_ISCHECK = 1
+            AND PASSWORD = #{password,jdbcType=VARCHAR}
+            AND STATUS = #{status,jdbcType=VARCHAR}
+            AND DEL_FLAG = #{delFlag,jdbcType=NUMERIC}
+        </if>
+        <if test="loginType == 'email' ">
+            SELECT
+            USER_ID,phone,email,idnumber,password,status,del_flag,
+            'email' as loginType
+            FROM
+            PERSONAL_USER_LOGIN
+            WHERE
+            EMAIL  = #{userName,jdbcType=VARCHAR}
+            and EMAIL_ISCHECK = 1
+            AND PASSWORD = #{password,jdbcType=VARCHAR}
+            AND STATUS = #{status,jdbcType=VARCHAR}
+            AND DEL_FLAG = #{delFlag,jdbcType=NUMERIC}
+        </if>
+        <if test="loginType == 'idNumber' ">
+            SELECT
+            USER_ID,phone,email,idnumber,password,status,del_flag,
+            'idNumber' as loginType
+            FROM
+            PERSONAL_USER_LOGIN
+            WHERE
+            IDNUMBER  = #{userName,jdbcType=VARCHAR}
+            AND PASSWORD = #{password,jdbcType=VARCHAR}
+            AND STATUS = #{status,jdbcType=VARCHAR}
+            AND DEL_FLAG = #{delFlag,jdbcType=NUMERIC}
+        </if>
+        <if test="loginType == 'userName' ">
+            SELECT
+            USER_ID,phone,email,idnumber,password,status,del_flag,
+            'userName' as loginType
+            FROM
+            PERSONAL_USER_LOGIN
+            WHERE
+            NAME  = #{userName,jdbcType=VARCHAR}
+            AND PASSWORD = #{password,jdbcType=VARCHAR}
+            AND STATUS = #{status,jdbcType=VARCHAR}
+            AND DEL_FLAG = #{delFlag,jdbcType=NUMERIC}
+        </if>
+
+
+    </select>
+
+
+
+    <insert id="registeUserGroup" parameterType="java.util.List">
+
+        insert all
+        <foreach collection="list" item="item">
+
+            into PERSONAL_USER_LOGIN(
+            <if test=" item.id != null and  item.id != ''">
+                ID,
+            </if>
+            <if test=" item.userId != null and  item.userId != ''">
+                USER_ID,
+            </if>
+            <if test=" item.stutendCode != null and  item.stutendCode != ''">
+                NAME,
+            </if>
+            <if test=" item.phoneIsCheck != null and  item.phoneIsCheck != ''">
+                PHONE_ISCHECK,
+            </if>
+            <if test=" item.phone != null and  item.phone != ''">
+                PHONE,
+            </if>
+            <if test=" item.emailIsCheck != null and  item.emailIsCheck != ''">
+                EMAIL_ISCHECK,
+            </if>
+            <if test=" item.email != null and  item.email != ''">
+                EMAIL,
+            </if>
+
+            <if test=" item.idNumber != null and item.idNumber != ''">
+                IDNUMBER,
+            </if>
+            <if test=" item.password != null and  item.password != ''">
+                PASSWORD,
+            </if>
+            <if test="item.createBy != null  and item.createBy != ''">create_by,</if>
+            <if test="item.updateBy != null  and item.updateBy != ''">update_by,</if>
+            create_time,
+            update_time)
+            values (
+            <if test=" item.id != null and  item.id != ''">
+                #{item.id},
+            </if>
+            <if test=" item.userId != null and  item.userId != ''">
+                #{item.userId},
+            </if>
+            <if test=" item.stutendCode != null and  item.stutendCode != ''">
+                #{item.stutendCode},
+            </if>
+            <if test=" item.phoneIsCheck != null and  item.phoneIsCheck != ''">
+                #{item.phoneIsCheck},
+            </if>
+            <if test=" item.phone != null and  item.phone != ''">
+                #{item.phone},
+            </if>
+            <if test=" item.emailIsCheck != null and  item.emailIsCheck != ''">
+                #{item.emailIsCheck},
+            </if>
+            <if test=" item.email != null and  item.email != ''">
+                #{item.email},
+            </if>
+
+            <if test=" item.idNumber != null and item.idNumber != ''">
+                #{item.idNumber},
+            </if>
+            <if test=" item.password != null and  item.password != ''">
+                #{item.password},
+            </if>
+            <if test="item.createBy != null  and item.createBy != ''">#{item.createBy},</if>
+            <if test="item.updateBy != null  and item.updateBy != ''">#{item.updateBy},</if>
+            SYSDATE,
+            SYSDATE
+            )
+        </foreach>
+        select 1 from dual
+    </insert>
+
+    <select id="showUserStatusGroup" parameterType="Map" resultType="Map">
+     <foreach collection="list" item="item" index="index" >
+         <if test="index != 0">
+             union
+         </if>
+         select
+         #{item.userName,jdbcType=VARCHAR} userName,
+         '存在' isExist,
+         (
+         CASE
+         WHEN b.ACTIVE_FLAG = '0' THEN
+         '激活'
+         ELSE
+         '未激活'
+         END
+         ) AS isActive,
+         (
+         CASE
+         WHEN A .STATUS = '0'
+         AND A .DEL_FLAG = '0' THEN
+         '正常使用'
+         ELSE
+         '不能正常使用'
+         END
+         ) AS isUse
+         from (
+         <if test="item.loginType == 'idNumber' ">
+             (
+             SELECT
+             USER_ID,
+             DEL_FLAG,
+             STATUS
+             FROM
+             PERSONAL_USER_LOGIN
+             WHERE
+             IDNUMBER = #{item.userName,jdbcType=VARCHAR}
+             UNION
+             SELECT
+             USER_ID,
+             DEL_FLAG,
+             STATUS
+             FROM
+             PERSONAL_USER_LOGIN
+             WHERE
+             NAME = #{item.userName,jdbcType=VARCHAR}
+             ) A
+             LEFT JOIN PERSONAL_USER_INFO b ON A .USER_ID = b.USER_ID
+         </if>
+
+         <if test="item.loginType == 'phone' ">
+             (
+             SELECT
+             USER_ID,
+             DEL_FLAG,
+             STATUS
+             FROM
+             PERSONAL_USER_LOGIN
+             WHERE
+             PHONE = #{item.userName,jdbcType=VARCHAR}
+             and PHONE_ISCHECK = 1
+             UNION
+             SELECT
+             USER_ID,
+             DEL_FLAG,
+             STATUS
+             FROM
+             PERSONAL_USER_LOGIN
+             WHERE
+             NAME = #{item.userName,jdbcType=VARCHAR}
+             ) A
+             LEFT JOIN PERSONAL_USER_INFO b ON A .USER_ID = b.USER_ID
+         </if>
+            <if test="item.loginType == 'email' ">
+                (
+                SELECT
+                USER_ID,
+                DEL_FLAG,
+                STATUS
+                FROM
+                PERSONAL_USER_LOGIN
+                WHERE
+                    EMAIL  = #{item.userName,jdbcType=VARCHAR}
+                and EMAIL_ISCHECK = 1
+                UNION
+                SELECT
+                USER_ID,
+                DEL_FLAG,
+                STATUS
+                FROM
+                PERSONAL_USER_LOGIN
+                WHERE
+                NAME = #{item.userName,jdbcType=VARCHAR}
+                ) A
+                LEFT JOIN PERSONAL_USER_INFO b ON A .USER_ID = b.USER_ID
+
+            </if>
+             <if test="item.loginType == 'userName' ">
+                 (
+                 SELECT
+                 USER_ID,
+                 DEL_FLAG,
+                 STATUS
+                 FROM
+                 PERSONAL_USER_LOGIN
+                 WHERE
+                 NAME = #{item.userName,jdbcType=VARCHAR}
+                 ) A
+                 LEFT JOIN PERSONAL_USER_INFO b ON A .USER_ID = b.USER_ID
+             </if>
+         )
+        </foreach>
+
+
+
+    </select>
+
+
+    <update id="updateGeneralUserLogin">
+       UPDATE PERSONAL_USER_LOGIN
+        SET
+        <if test=" idNumber != null and  idNumber != ''">
+            IDNUMBER = #{idNumber},
+        </if>
+        <if test=" phone != null and  phone != ''">
+            PHONE = #{phone},
+        </if>
+        <if test=" email != null and  email != ''">
+            EMAIL = #{email},
+        </if>
+        <if test=" phoneIsCheck != null and  phoneIsCheck != ''">
+            PHONE_ISCHECK = #{phoneIsCheck},
+        </if>
+        <if test=" emailIsCheck != null and  emailIsCheck != ''">
+            EMAIL_ISCHECK = #{emailIsCheck},
+        </if>
+         VERSION = VERSION + 1
+        WHERE
+            USER_ID = #{USER_ID,jdbcType=VARCHAR}
+        AND VERSION = #{VLOGIN,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateGeneralUserInfo">
+        UPDATE PERSONAL_USER_INFO set
+        <if test="idNumber != null  and idNumber != ''">CARD_NO = #{idNumber},</if>
+        <if test=" nationality != null and  nationality != ''">
+            NATIONALITY= #{nationality},
+        </if>
+
+        <if test=" gender != null and  gender != ''">
+            GENDER= #{gender},
+        </if>
+        <if test=" email != null and  email != ''">
+            EMAIL= #{email},
+        </if>
+        <if test=" phone != null and  phone != ''">
+            PHONE= #{phone},
+        </if>
+        <if test=" eP1 != null and  eP1 != ''">
+            EP1= #{eP1},
+        </if>
+        <if test=" ovestuId != null and  ovestuId != ''">
+            EP2= #{ovestuId},
+        </if>
+        <if test=" mc != null and  mc != ''">
+            mc= #{mc},
+        </if>
+        VERSION = VERSION + 1
+        WHERE
+          USER_ID = #{USER_ID,jdbcType=VARCHAR}
+        AND VERSION = #{VINFO,jdbcType=INTEGER}
+    </update>
+
+
+
+    <update id="updateGeneralUserExtra">
+        UPDATE PERSONAL_EXTEND_INFO set
+
+        <if test=" maritalStatus != null and  maritalStatus != ''">
+            MARRIAGE_NEW = #{maritalStatus},
+        </if>
+        <if test=" politicsStatus != null and  politicsStatus != ''">
+            POLITICAL= #{politicsStatus},
+        </if>
+        <if test=" lastDegree != null and  lastDegree != ''">
+            LAST_SCJOOL= #{lastDegree},
+        </if>
+        <if test=" birthplace != null and  birthplace != ''">
+            PLACE_OF_BIRTH = #{birthplace},
+        </if>
+        VERSION = VERSION + 1
+        WHERE
+          USER_ID = #{USER_ID,jdbcType=VARCHAR}
+        AND VERSION = #{VEXT,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="getUserinfoNoPassword" resultType="Map">
+        SELECT
+           ${params}
+        FROM
+            PERSONAL_USER_LOGIN A
+        LEFT JOIN PERSONAL_USER_INFO b ON A .USER_ID = b.USER_ID
+
+        <if test="idNumber !=null and idNumber != ''">
+            WHERE
+              IDNUMBER = #{idNumber}
+        </if>
+        <if test="email !=null and email != ''">
+            WHERE
+               a.email = #{email}
+        </if>
+        <if test="phone !=null and phone != ''">
+            WHERE
+              a.phone = #{phone}
+        </if>
+        <if test="userName !=null and userName != ''">
+            WHERE
+              name = #{userName}
+        </if>
+
+    </select>
+
+
+    <insert id="registeUserInfoGroup"  parameterType="java.util.List">
+
+        insert all
+        <foreach collection="list" item="item">
+
+          into PERSONAL_USER_INFO(
+            <if test="item.userId != null  and item.userId != ''">USER_ID,</if>
+            <if test="item.realName != null  and item.realName != ''">user_name,</if>
+            <if test="item.cardType != null  and item.cardType != ''">card_type,</if>
+            <if test="item.idNumber != null  and item.idNumber != ''">card_no,</if>
+            <if test="item.nationality != null  and item.nationality != ''">NATIONALITY,</if>
+            <if test="item.email != null  and item.email != ''">email,</if>
+            <if test="item.phone != null  and item.phone != ''">phone,</if>
+            create_time,
+            <if test="item.createBy != null  and item.createBy != ''">create_by,</if>
+            <if test="item.updateBy != null  and item.updateBy != ''">update_by,</if>
+            <if test="item.eP1 != null  and item.eP1 != ''">EP1,</if>
+            <if test="item.authLevel != null  and item.authLevel != ''">AUTHLEVEL,</if>
+            <if test="item.IS_LABOUR_REAL != null  and item.IS_LABOUR_REAL != ''">IS_LABOUR_REAL,</if>
+            <if test=" item.stutendCode != null and  item.stutendCode != ''">
+                EP2,
+            </if>
+            <if test=" item.activeFlag != null and  item.activeFlag != ''">
+                ACTIVE_FLAG,
+            </if>
+            <if test=" item.gender != null and  item.gender != ''">
+                gender,
+            </if>
+            <if test=" item.dateofbirth != null ">
+                date_of_birth,
+            </if>
+            update_time
+            )
+            values (
+            <if test="item.userId != null  and item.userId != ''">#{item.userId},</if>
+            <if test="item.realName != null  and item.realName != ''">#{item.realName},</if>
+            <if test="item.cardType != null  and item.cardType != ''">#{item.cardType},</if>
+            <if test="item.idNumber != null  and item.idNumber != ''">#{item.idNumber},</if>
+            <if test="item.nationality != null  and item.nationality != ''">#{item.nationality},</if>
+            <if test="item.email != null  and item.email != ''">#{item.email},</if>
+            <if test="item.phone != null  and item.phone != ''">#{item.phone},</if>
+            SYSDATE,
+            <if test="item.createBy != null  and item.createBy != ''">#{item.createBy},</if>
+            <if test="item.updateBy != null  and item.updateBy != ''">#{item.updateBy},</if>
+            <if test="item.eP1 != null  and item.eP1 != ''">#{item.eP1},</if>
+            <if test="item.authLevel != null  and item.authLevel != ''">#{item.authLevel},</if>
+            <if test="item.IS_LABOUR_REAL != null  and item.IS_LABOUR_REAL != ''">#{item.IS_LABOUR_REAL},</if>
+            <if test=" item.stutendCode != null and  item.stutendCode != ''">
+                #{item.stutendCode},
+            </if>
+            <if test=" item.activeFlag != null and  item.activeFlag != ''">
+                #{item.activeFlag},
+            </if>
+            <if test=" item.gender != null and  item.gender != ''">
+                #{item.gender},
+            </if>
+            <if test=" item.dateofbirth != null">
+                #{item.dateofbirth},
+            </if>
+
+            SYSDATE
+            )
+        </foreach>
+        select 1 from dual
+    </insert>
+
+
+    <select id="getUserInfoByUserId" resultType="Map">
+        SELECT
+           ${params}
+        FROM
+          PERSONAL_USER_INFO
+        WHERE
+	       USER_ID = #{userId}
+    </select>
+    <select id="getUserInfoByUserIdNoPram" resultType="Map">
+        SELECT
+           *
+        FROM
+          PERSONAL_USER_INFO
+        WHERE
+	       USER_ID = #{userId}
+    </select>
+
+
+
+    <update id="updateGeneralUserInfoByUserId">
+        <selectKey keyProperty="version,ACTIVE_FLAG"  resultType="Map">
+            select ACTIVE_FLAG from PERSONAL_USER_INFO  WHERE USER_ID =#{USER_ID}
+        </selectKey>
+        <if test="ACTIVE_FLAG != '0'">
+            UPDATE PERSONAL_USER_INFO set ACTIVE_FLAG = '0',VERSION = VERSION+1
+            WHERE USER_ID = #{USER_ID}
+        </if>
+        <if test="ACTIVE_FLAG == '0'">
+            select 1 from dual
+        </if>
+    </update>
+
+
+    <insert id="insertWEchartInfo">
+        INSERT into WECHAT_USER_INFO
+          (ID,USER_ID,CREATE_TIME,USER_TYPE)
+          VALUES (#{unionId},#{userId},SYSDATE,#{userType})
+    </insert>
+
+
+    <insert id="registeUserExtGroup" parameterType="java.util.List">
+
+        insert all
+        <foreach collection="list" item="item">
+
+            into PERSONAL_EXTEND_INFO(
+            <if test=" item.id != null and  item.id != ''">
+                ID,
+            </if>
+            <if test=" item.userId != null and  item.userId != ''">
+                USER_ID,
+            </if>
+            <if test="item.createBy != null  and item.createBy != ''">create_by,</if>
+            <if test="item.updateBy != null  and item.updateBy != ''">update_by,</if>
+            create_time,
+            update_time)
+            values (
+            <if test=" item.id != null and  item.id != ''">
+                #{item.id},
+            </if>
+            <if test=" item.userId != null and  item.userId != ''">
+                #{item.userId},
+            </if>
+            <if test="item.createBy != null  and item.createBy != ''">#{item.createBy},</if>
+            <if test="item.updateBy != null  and item.updateBy != ''">#{item.updateBy},</if>
+            SYSDATE,
+            SYSDATE
+            )
+        </foreach>
+        select 1 from dual
+    </insert>
+
+
+    <select id="checkUserIDnumber" resultType="int" parameterType="Map">
+        select count(1) from PERSONAL_USER_LOGIN WHERE IDNUMBER = #{idNumber}
+    </select>
+
+</mapper>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.demo.mapper.UserMapper">
+
+    <resultMap type="User" id="UserResult">
+        <result property="id"   column="id"    />
+        <result property="name"  column="name"    />
+        <result property="gender"  column="gender"    />
+    </resultMap>
+
+    <sql id="selectUser">
+        select id, name, gender from "USER"
+    </sql>
+
+   <select id="selectAll" resultType="User">
+       <include refid="selectUser"/>
+
+  select id,name, gender from "USER"
+</select>
+
+    <select id="getOne" parameterType="int" resultType="User">
+        select  * from "USER" where id = #{id}
+    </select>
+    <insert id="add" parameterType="User">
+  insert into  "USER" (
+        <if test="id != null  and id != ''">id,</if>
+                       name, gender)
+  values (
+        <if test="id != null  and id != ''">#{id},</if>
+          #{name}, #{gender})
+</insert>
+   <update id="update" parameterType="User">
+       update "USER" set name=#{name,jdbcType=VARCHAR},gender=#{gender,jdbcType=VARCHAR} where id=#{id}
+   </update>
+    <delete id="delete" parameterType="int">
+        delete from "USER" where id = #{id}
+    </delete>
+
+
+
+</mapper>

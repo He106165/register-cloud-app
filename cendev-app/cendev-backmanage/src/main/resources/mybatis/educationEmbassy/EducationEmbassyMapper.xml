@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.educationEmbassy.mapper.EducationEmbassyMapper">
+
+    <resultMap type="com.censoft.educationEmbassy.domain.EducationEmbassy" id="EducationEmbassyResult">
+        <result property="id" column="id"/>
+        <result property="edCode" column="ed_code"/>
+        <result property="edName" column="ed_name"/>
+        <result property="edNationCode" column="ed_nation_code"/>
+        <result property="statu" column="statu"/>
+        <result property="remark" column="remark"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="version" column="version"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="edBak1" column="ed_bak1"/>
+        <result property="edBak2" column="ed_bak2"/>
+    </resultMap>
+
+    <sql id="selectEducationEmbassyVo">
+        select id, ed_code, ed_name, ed_nation_code, statu, remark, create_time, create_by, update_time, update_by, version, del_flag, ed_bak1, ed_bak2 from education_embassy
+    </sql>
+    <sql id="selectEducationEmbassyVo1">
+        select id, ed_code, ed_name, ed_nation_code from education_embassy
+    </sql>
+
+    <select id="selectEducationEmbassyList" parameterType="EducationEmbassy" resultMap="EducationEmbassyResult">
+        <include refid="selectEducationEmbassyVo"/>
+        <where>
+            <if test="edCode != null  and edCode != ''">and ed_code = #{edCode}</if>
+            <if test="edName != null  and edName != ''">and ed_name like '%' || #{edName} || '%'</if>
+            <if test="edNationCode != null  and edNationCode != ''">and ed_nation_code = #{edNationCode}</if>
+            <if test="statu != null  and statu != ''">and statu = #{statu}</if>
+            <if test="version != null ">and version = #{version}</if>
+            <if test="edBak1 != null  and edBak1 != ''">and ed_bak1 = #{edBak1}</if>
+            <if test="edBak2 != null  and edBak2 != ''">and ed_bak2 = #{edBak2}</if>
+        </where>
+    </select>
+
+
+
+    <select id="selectEducationEmbassyById" parameterType="String" resultMap="EducationEmbassyResult">
+        <include refid="selectEducationEmbassyVo"/>
+        where id = #{id}
+    </select>
+    <select id="selectEducationEmbassyList1" resultType="map" >
+        <include refid="selectEducationEmbassyVo1"/>
+        <where>
+            <if test="edCode != null  and edCode != ''">and ed_code = #{edCode}</if>
+            <if test="edName != null  and edName != ''">and ed_name like '%' || #{edName} || '%'</if>
+            <if test="edNationCode != null  and edNationCode != ''">and ed_nation_code = #{edNationCode}</if>
+        </where>
+    </select>
+
+    <insert id="insertEducationEmbassy" parameterType="EducationEmbassy" useGeneratedKeys="false" keyProperty="id">
+        insert into education_embassy
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="edCode != null  and edCode != ''">ed_code,</if>
+            <if test="edName != null  and edName != ''">ed_name,</if>
+            <if test="edNationCode != null  and edNationCode != ''">ed_nation_code,</if>
+            <if test="statu != null  and statu != ''">statu,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="version != null ">version,</if>
+            <if test="delFlag != null ">del_flag,</if>
+            <if test="edBak1 != null  and edBak1 != ''">ed_bak1,</if>
+            <if test="edBak2 != null  and edBak2 != ''">ed_bak2,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="edCode != null  and edCode != ''">#{edCode},</if>
+            <if test="edName != null  and edName != ''">#{edName},</if>
+            <if test="edNationCode != null  and edNationCode != ''">#{edNationCode},</if>
+            <if test="statu != null  and statu != ''">#{statu},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="delFlag != null ">#{delFlag},</if>
+            <if test="edBak1 != null  and edBak1 != ''">#{edBak1},</if>
+            <if test="edBak2 != null  and edBak2 != ''">#{edBak2},</if>
+        </trim>
+    </insert>
+
+    <update id="updateEducationEmbassy" parameterType="EducationEmbassy">
+        update education_embassy
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="edCode != null  and edCode != ''">ed_code = #{edCode},</if>
+            <if test="edName != null  and edName != ''">ed_name = #{edName},</if>
+            <if test="edNationCode != null  and edNationCode != ''">ed_nation_code = #{edNationCode},</if>
+            <if test="statu != null  and statu != ''">statu = #{statu},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="version != null ">version = #{version},</if>
+            <if test="delFlag != null ">del_flag = #{delFlag},</if>
+            <if test="edBak1 != null  and edBak1 != ''">ed_bak1 = #{edBak1},</if>
+            <if test="edBak2 != null  and edBak2 != ''">ed_bak2 = #{edBak2},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteEducationEmbassyById" parameterType="String">
+        delete from education_embassy where id = #{id}
+    </delete>
+
+    <delete id="deleteEducationEmbassyByIds" parameterType="String">
+        delete from education_embassy where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

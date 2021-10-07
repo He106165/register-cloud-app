@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.systemManage.systemRegister.mapper.JoinSystemInfoMapper">
+
+    <resultMap type="JoinSystemInfo" id="JoinSystemInfoResult">
+        <result property="joinsysId"    column="joinsys_id"    />
+        <result property="joinsysCode"    column="joinsys_code"    />
+        <result property="joinsysName"    column="joinsys_name"    />
+        <result property="realmPlace"    column="realm_place"    />
+        <result property="returnUrl"    column="return_url"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="version"    column="version"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <sql id="selectJoinSystemInfoVo">
+        select joinsys_id, joinsys_code, joinsys_name, realm_place, return_url, status, remark, create_time, create_by, update_time, update_by, version, del_flag from join_system_info
+    </sql>
+
+    <select id="selectJoinSystemInfoList" parameterType="JoinSystemInfo" resultMap="JoinSystemInfoResult">
+        <include refid="selectJoinSystemInfoVo"/>
+        <where>
+            del_flag = 0
+            <if test="joinsysCode != null  and joinsysCode != ''"> and joinsys_code = #{joinsysCode}</if>
+            <if test="joinsysName != null  and joinsysName != ''"> and joinsys_name like  '%' ||  #{joinsysName} || '%'</if>
+            <if test="realmPlace != null  and realmPlace != ''"> and realm_place = #{realmPlace}</if>
+            <if test="returnUrl != null  and returnUrl != ''"> and return_url = #{returnUrl}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="version != null "> and version = #{version}</if>
+        </where>
+    </select>
+
+    <select id="selectJoinSystemDataConfigInfoList" parameterType="JoinSystemInfo" resultMap="JoinSystemInfoResult">
+        select  i.joinsys_id, i.joinsys_code, i.joinsys_name, i.realm_place, i.return_url,  d.org_param_array AS STATUS ,d.pro_param_array as remark from join_system_info i
+        LEFT JOIN JOIN_SYSTEM_DEPLOY d on d.JOINSYS_ID = i.JOINSYS_ID
+        <where>
+            <if test="joinsysCode != null  and joinsysCode != ''"> and i.joinsys_code = #{joinsysCode}</if>
+            <if test="joinsysName != null  and joinsysName != ''"> and i.joinsys_name like  '%' ||  #{joinsysName} || '%'</if>
+            <if test="realmPlace != null  and realmPlace != ''"> and i.realm_place = #{realmPlace}</if>
+            <if test="returnUrl != null  and returnUrl != ''"> and i.return_url = #{returnUrl}</if>
+        </where>
+    </select>
+
+
+
+    <select id="selectJoinSystemInfoById" parameterType="String" resultMap="JoinSystemInfoResult">
+        <include refid="selectJoinSystemInfoVo"/>
+        where joinsys_id = #{joinsysId}
+    </select>
+
+    <insert id="insertJoinSystemInfo" parameterType="JoinSystemInfo" useGeneratedKeys="true" keyProperty="joinsysId">
+        insert into join_system_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="joinsysId != null  and joinsysId != ''">joinsys_id,</if>
+            <if test="joinsysCode != null  and joinsysCode != ''">joinsys_code,</if>
+            <if test="joinsysName != null  and joinsysName != ''">joinsys_name,</if>
+            <if test="realmPlace != null  and realmPlace != ''">realm_place,</if>
+            <if test="returnUrl != null  and returnUrl != ''">return_url,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="version != null ">version,</if>
+            <if test="delFlag != null ">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="joinsysId != null  and joinsysId != ''">#{joinsysId},</if>
+            <if test="joinsysCode != null  and joinsysCode != ''">#{joinsysCode},</if>
+            <if test="joinsysName != null  and joinsysName != ''">#{joinsysName},</if>
+            <if test="realmPlace != null  and realmPlace != ''">#{realmPlace},</if>
+            <if test="returnUrl != null  and returnUrl != ''">#{returnUrl},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="delFlag != null ">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateJoinSystemInfo" parameterType="JoinSystemInfo">
+        update join_system_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="joinsysCode != null  and joinsysCode != ''">joinsys_code = #{joinsysCode},</if>
+            <if test="joinsysName != null  and joinsysName != ''">joinsys_name = #{joinsysName},</if>
+            <if test="realmPlace != null  and realmPlace != ''">realm_place = #{realmPlace},</if>
+            <if test="returnUrl != null  and returnUrl != ''">return_url = #{returnUrl},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="version != null ">version = #{version},</if>
+            <if test="delFlag != null ">del_flag = #{delFlag},</if>
+        </trim>
+        where joinsys_id = #{joinsysId}
+    </update>
+
+    <delete id="deleteJoinSystemInfoById" parameterType="String">
+        delete from join_system_info where joinsys_id = #{joinsysId}
+    </delete>
+
+    <delete id="deleteJoinSystemInfoByIds" parameterType="String">
+        delete from join_system_info where joinsys_id in
+        <foreach item="joinsysId" collection="array" open="(" separator="," close=")">
+            #{joinsysId}
+        </foreach>
+    </delete>
+
+    <select id="checkSystemName" parameterType="String" resultType="Integer">
+        select count (*) from join_system_info where joinsys_name=#{systemName}
+    </select>
+
+    <select id="checkSystemCode" parameterType="String" resultType="Integer">
+        select count (*) from join_system_info where joinsys_code=#{systemCode} and  STATUS = '1'
+    </select>
+
+    <select id="getSystemDataConfig" parameterType="String" resultMap="JoinSystemInfoResult">
+        select  i.joinsys_id, i.joinsys_code, i.joinsys_name, i.realm_place, i.return_url,  d.org_param_array AS STATUS ,d.pro_param_array as remark from join_system_info i
+        LEFT JOIN JOIN_SYSTEM_DEPLOY d on d.JOINSYS_ID = i.JOINSYS_ID
+        where i.JOINSYS_CODE =#{systemCode}
+    </select>
+
+    <select id="getSystemRetUrl" parameterType="String" resultType="String">
+         select    return_url  from  join_system_info
+         where  JOINSYS_CODE =#{systemCode}
+         and ROWNUM &lt;=  1
+    </select>
+</mapper>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.smallRoutine.mapper.BOverseasEducationBaseMapper">
+
+    <resultMap type="BOverseasEducationBase" id="BOverseasEducationBaseResult">
+        <result property="id"    column="id"    />
+        <result property="universityCn"    column="university_cn"    />
+        <result property="universityEn"    column="university_en"    />
+        <result property="badge"    column="badge"    />
+        <result property="country"    column="country"    />
+        <result property="province"    column="province"    />
+        <result property="buildTime"    column="build_time"    />
+        <result property="universityNature"    column="university_nature"    />
+        <result property="schoolAddress"    column="school_address"    />
+        <result property="website"    column="website"    />
+        <result property="educationSection"    column="education_section"    />
+        <result property="qualityOrg"    column="quality_org"    />
+        <result property="contact"    column="contact"    />
+        <result property="contactInfo"    column="contact_info"    />
+        <result property="contactEmail"    column="contact_email"    />
+        <result property="universityClass"    column="university_class"    />
+        <result property="isContracted"    column="is_contracted"    />
+        <result property="schoolProfile"    column="school_profile"    />
+        <result property="advantageMajor"    column="advantage_major"    />
+        <result property="famousFirend"    column="famous_firend"    />
+        <result property="recruitInfo"    column="recruit_info"    />
+    </resultMap>
+
+    <sql id="selectBOverseasEducationBaseVo">
+        select id, university_cn, university_en, badge, country, province, build_time, university_nature, school_address, website, education_section, quality_org, contact, contact_info, contact_email, university_class, is_contracted, school_profile, advantage_major, famous_firend, recruit_info from b_overseas_education_base
+    </sql>
+
+    <select id="selectBOverseasEducationBaseList" parameterType="BOverseasEducationBase" resultMap="BOverseasEducationBaseResult">
+        <include refid="selectBOverseasEducationBaseVo"/>
+        <where>
+            <if test="universityCn != null "> and university_cn = #{universityCn}</if>
+            <if test="universityEn != null "> and university_en = #{universityEn}</if>
+            <if test="badge != null "> and badge = #{badge}</if>
+            <if test="country != null "> and country = #{country}</if>
+            <if test="province != null "> and province = #{province}</if>
+            <if test="buildTime != null "> and build_time = #{buildTime}</if>
+            <if test="universityNature != null "> and university_nature = #{universityNature}</if>
+            <if test="schoolAddress != null "> and school_address = #{schoolAddress}</if>
+            <if test="website != null "> and website = #{website}</if>
+            <if test="educationSection != null "> and education_section = #{educationSection}</if>
+            <if test="qualityOrg != null "> and quality_org = #{qualityOrg}</if>
+            <if test="contact != null "> and contact = #{contact}</if>
+            <if test="contactInfo != null "> and contact_info = #{contactInfo}</if>
+            <if test="contactEmail != null "> and contact_email = #{contactEmail}</if>
+            <if test="universityClass != null "> and university_class = #{universityClass}</if>
+            <if test="isContracted != null "> and is_contracted = #{isContracted}</if>
+            <if test="schoolProfile != null "> and school_profile = #{schoolProfile}</if>
+            <if test="advantageMajor != null "> and advantage_major = #{advantageMajor}</if>
+            <if test="famousFirend != null "> and famous_firend = #{famousFirend}</if>
+            <if test="recruitInfo != null "> and recruit_info = #{recruitInfo}</if>
+        </where>
+    </select>
+
+    <select id="selectBOverseasEducationBaseById" parameterType="String" resultMap="BOverseasEducationBaseResult">
+        <include refid="selectBOverseasEducationBaseVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBOverseasEducationBase" parameterType="BOverseasEducationBase">
+        insert into b_overseas_education_base
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="universityCn != null ">university_cn,</if>
+            <if test="universityEn != null ">university_en,</if>
+            <if test="badge != null ">badge,</if>
+            <if test="country != null ">country,</if>
+            <if test="province != null ">province,</if>
+            <if test="buildTime != null ">build_time,</if>
+            <if test="universityNature != null ">university_nature,</if>
+            <if test="schoolAddress != null ">school_address,</if>
+            <if test="website != null ">website,</if>
+            <if test="educationSection != null ">education_section,</if>
+            <if test="qualityOrg != null ">quality_org,</if>
+            <if test="contact != null ">contact,</if>
+            <if test="contactInfo != null ">contact_info,</if>
+            <if test="contactEmail != null ">contact_email,</if>
+            <if test="universityClass != null ">university_class,</if>
+            <if test="isContracted != null ">is_contracted,</if>
+            <if test="schoolProfile != null ">school_profile,</if>
+            <if test="advantageMajor != null ">advantage_major,</if>
+            <if test="famousFirend != null ">famous_firend,</if>
+            <if test="recruitInfo != null ">recruit_info,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="universityCn != null ">#{universityCn},</if>
+            <if test="universityEn != null ">#{universityEn},</if>
+            <if test="badge != null ">#{badge},</if>
+            <if test="country != null ">#{country},</if>
+            <if test="province != null ">#{province},</if>
+            <if test="buildTime != null ">#{buildTime},</if>
+            <if test="universityNature != null ">#{universityNature},</if>
+            <if test="schoolAddress != null ">#{schoolAddress},</if>
+            <if test="website != null ">#{website},</if>
+            <if test="educationSection != null ">#{educationSection},</if>
+            <if test="qualityOrg != null ">#{qualityOrg},</if>
+            <if test="contact != null ">#{contact},</if>
+            <if test="contactInfo != null ">#{contactInfo},</if>
+            <if test="contactEmail != null ">#{contactEmail},</if>
+            <if test="universityClass != null ">#{universityClass},</if>
+            <if test="isContracted != null ">#{isContracted},</if>
+            <if test="schoolProfile != null ">#{schoolProfile},</if>
+            <if test="advantageMajor != null ">#{advantageMajor},</if>
+            <if test="famousFirend != null ">#{famousFirend},</if>
+            <if test="recruitInfo != null ">#{recruitInfo},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBOverseasEducationBase" parameterType="BOverseasEducationBase">
+        update b_overseas_education_base
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="universityCn != null ">university_cn = #{universityCn},</if>
+            <if test="universityEn != null ">university_en = #{universityEn},</if>
+            <if test="badge != null ">badge = #{badge},</if>
+            <if test="country != null ">country = #{country},</if>
+            <if test="province != null ">province = #{province},</if>
+            <if test="buildTime != null ">build_time = #{buildTime},</if>
+            <if test="universityNature != null ">university_nature = #{universityNature},</if>
+            <if test="schoolAddress != null ">school_address = #{schoolAddress},</if>
+            <if test="website != null ">website = #{website},</if>
+            <if test="educationSection != null ">education_section = #{educationSection},</if>
+            <if test="qualityOrg != null ">quality_org = #{qualityOrg},</if>
+            <if test="contact != null ">contact = #{contact},</if>
+            <if test="contactInfo != null ">contact_info = #{contactInfo},</if>
+            <if test="contactEmail != null ">contact_email = #{contactEmail},</if>
+            <if test="universityClass != null ">university_class = #{universityClass},</if>
+            <if test="isContracted != null ">is_contracted = #{isContracted},</if>
+            <if test="schoolProfile != null ">school_profile = #{schoolProfile},</if>
+            <if test="advantageMajor != null ">advantage_major = #{advantageMajor},</if>
+            <if test="famousFirend != null ">famous_firend = #{famousFirend},</if>
+            <if test="recruitInfo != null ">recruit_info = #{recruitInfo},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBOverseasEducationBaseById" parameterType="String">
+        delete from b_overseas_education_base where id = #{id}
+    </delete>
+
+    <delete id="deleteBOverseasEducationBaseByIds" parameterType="String">
+        delete from b_overseas_education_base where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

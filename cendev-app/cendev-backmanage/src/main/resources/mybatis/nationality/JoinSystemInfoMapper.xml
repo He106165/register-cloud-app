@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.nationalityManage.mapper.NationalityMapper">
+
+    <select id="selectNationalityListByCode" resultType="Map">
+        SELECT
+            NATIONALITY_NAME,
+            TWOCODE,
+            THREECODE
+        FROM
+            NATIONALITY_INFO
+        WHERE
+	      THREECODE = #{nationality}
+    </select>
+    <select id="selectNationalityAllCode" resultType="Map">
+      SELECT
+        listagg(THREECODE,',') within group ( order by THREECODE) THREECODE
+        FROM
+            NATIONALITY_INFO
+    </select>
+
+    <!--查询国家信息-->
+    <select id="queryNationality" resultType="java.util.Map">
+        SELECT NATIONALITY_NAME AS "dictLabel" ,THREECODE AS "dictValue" FROM NATIONALITY_INFO ORDER BY NATIONALITY_NAME
+    </select>
+
+</mapper>

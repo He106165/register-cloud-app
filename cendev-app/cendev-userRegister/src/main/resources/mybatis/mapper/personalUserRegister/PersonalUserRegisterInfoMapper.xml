@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.userregister.dao.PersonalUserInfoRegisterMapper">
+
+    <insert id="insertPersonalUserInfo" parameterType="com.censoft.userregister.domain.PersonalUserInfo">
+        insert into personal_user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null  and userId != ''">user_Id,</if>
+            <if test="userName != null  and userName != ''">user_name,</if>
+            <if test="cardType != null  and cardType != ''">card_type,</if>
+            <if test="nickName != null  and nickName != ''">nick_name,</if>
+            <if test="cardNo != null  and cardNo != ''">card_no,</if>
+            <if test="nationality != null  and nationality != ''">nationality,</if>
+            <if test="dateOfBirth != null ">date_of_birth,</if>
+            <if test="gender != null  and gender != ''">gender,</if>
+            <if test="email != null  and email != ''">email,</if>
+            <if test="phone != null  and phone != ''">phone,</if>
+            <if test="avatarUrl != null  and avatarUrl != ''">avatar_url,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="authlevel != null  and authlevel != ''">authlevel,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="version != null ">version,</if>
+            <if test="delFlag != null ">del_flag,</if>
+            <if test="isLabourReal != null ">IS_LABOUR_REAL</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null  and userId != ''">#{userId},</if>
+            <if test="userName != null  and userName != ''">#{userName},</if>
+            <if test="cardType != null  and cardType != ''">#{cardType},</if>
+            <if test="nickName != null  and nickName != ''">#{nickName},</if>
+            <if test="cardNo != null  and cardNo != ''">#{cardNo},</if>
+            <if test="nationality != null  and nationality != ''">#{nationality},</if>
+            <if test="dateOfBirth != null ">#{dateOfBirth},</if>
+            <if test="gender != null  and gender != ''">#{gender},</if>
+            <if test="email != null  and email != ''">#{email},</if>
+            <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="avatarUrl != null  and avatarUrl != ''">#{avatarUrl},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="authlevel != null  and authlevel != ''">#{authlevel},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createTime != null ">#{createTime},</if>
+             <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="delFlag != null ">#{delFlag},</if>
+            <if test="isLabourReal != null ">#{isLabourReal},</if>
+        </trim>
+    </insert>
+    <!--查询国家信息-->
+    <select id="queryNationality" resultType="java.util.Map">
+             SELECT NATIONALITY_NAME AS "label" ,THREECODE AS "values" FROM NATIONALITY_INFO ORDER BY EP2
+    </select>
+    <!--查询电话是否唯一-->
+    <select id="countByPhone" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(phone) from PERSONAL_USER_LOGIN where phone = #{phone,jdbcType=VARCHAR}
+    </select>
+    <!--查询身份证号是否唯一-->
+    <select id="countByCardNo" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(idnumber) from PERSONAL_USER_LOGIN where idnumber = #{idnumber,jdbcType=VARCHAR}
+    </select>
+    <!--查询邮箱是否唯一-->
+    <select id="countByEmail" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(email) from PERSONAL_USER_LOGIN where email = #{email,jdbcType=VARCHAR}
+    </select>
+    <select id="queryCardType" resultType="java.util.Map">
+         SELECT DICT_LABEL AS "label" ,DICT_VALUE AS "values" FROM SYS_DICT_DATA WHERE DICT_TYPE = 'card_type' ORDER BY DICT_LABEL
+    </select>
+
+    <select id="countBySomeThing" parameterType="com.censoft.userregister.domain.PersonalUserInfo"  resultType="java.lang.Integer">
+        select count(*) from personal_user_info
+        <where>
+            <if test="userName != null  and userName != ''"> and user_name = #{userName}</if>
+            <if test="cardType != null  and cardType != ''"> and card_type = #{cardType}</if>
+            <if test="nickName != null  and nickName != ''"> and nick_name = #{nickName}</if>
+            <if test="cardNo != null  and cardNo != ''"> and card_no = #{cardNo}</if>
+            <if test="nationality != null  and nationality != ''"> and nationality = #{nationality}</if>
+            <if test="dateOfBirth != null "> and date_of_birth = #{dateOfBirth}</if>
+            <if test="gender != null  and gender != ''"> and gender = #{gender}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="avatarUrl != null  and avatarUrl != ''"> and avatar_url = #{avatarUrl}</if>
+            <if test="authlevel != null  and authlevel != ''"> and authlevel = #{authlevel}</if>
+            and status = 1 and del_flag = 0
+        </where>
+    </select>
+
+</mapper>

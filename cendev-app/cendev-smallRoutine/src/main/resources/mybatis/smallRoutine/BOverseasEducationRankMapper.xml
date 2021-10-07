@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.smallRoutine.mapper.BOverseasEducationRankMapper">
+
+    <resultMap type="BOverseasEducationRank" id="BOverseasEducationRankResult">
+        <result property="id"    column="id"    />
+        <result property="pid"    column="pid"    />
+        <result property="rankName"    column="rank_name"    />
+        <result property="rankYear"    column="rank_year"    />
+        <result property="rankGrade"    column="rank_grade"    />
+        <result property="insertTime"    column="insert_time"    />
+    </resultMap>
+
+    <sql id="selectBOverseasEducationRankVo">
+        select id, pid, rank_name, rank_year, rank_grade, insert_time from b_overseas_education_rank
+    </sql>
+
+    <select id="selectBOverseasEducationRankList" parameterType="BOverseasEducationRank" resultMap="BOverseasEducationRankResult">
+        <include refid="selectBOverseasEducationRankVo"/>
+        <where>
+            <if test="pid != null "> and pid = #{pid}</if>
+            <if test="rankName != null "> and rank_name like  '%' ||  #{rankName} || '%'</if>
+            <if test="rankYear != null "> and rank_year = #{rankYear}</if>
+            <if test="rankGrade != null "> and rank_grade = #{rankGrade}</if>
+            <if test="insertTime != null "> and insert_time = #{insertTime}</if>
+        </where>
+    </select>
+
+    <select id="selectBOverseasEducationRankById" parameterType="String" resultMap="BOverseasEducationRankResult">
+        <include refid="selectBOverseasEducationRankVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBOverseasEducationRank" parameterType="BOverseasEducationRank">
+        insert into b_overseas_education_rank
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="pid != null ">pid,</if>
+            <if test="rankName != null ">rank_name,</if>
+            <if test="rankYear != null ">rank_year,</if>
+            <if test="rankGrade != null ">rank_grade,</if>
+            <if test="insertTime != null ">insert_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="pid != null ">#{pid},</if>
+            <if test="rankName != null ">#{rankName},</if>
+            <if test="rankYear != null ">#{rankYear},</if>
+            <if test="rankGrade != null ">#{rankGrade},</if>
+            <if test="insertTime != null ">#{insertTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBOverseasEducationRank" parameterType="BOverseasEducationRank">
+        update b_overseas_education_rank
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pid != null ">pid = #{pid},</if>
+            <if test="rankName != null ">rank_name = #{rankName},</if>
+            <if test="rankYear != null ">rank_year = #{rankYear},</if>
+            <if test="rankGrade != null ">rank_grade = #{rankGrade},</if>
+            <if test="insertTime != null ">insert_time = #{insertTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBOverseasEducationRankById" parameterType="String">
+        delete from b_overseas_education_rank where id = #{id}
+    </delete>
+
+    <delete id="deleteBOverseasEducationRankByIds" parameterType="String">
+        delete from b_overseas_education_rank where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

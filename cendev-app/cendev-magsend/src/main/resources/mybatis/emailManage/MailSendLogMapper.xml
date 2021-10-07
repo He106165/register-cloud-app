@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.sendMag.emailManage.mapper.MailSendLogMapper">
+
+    <resultMap type="MailSendLog" id="MailSendLogResult">
+        <result property="id"    column="id"    />
+        <result property="reveiceEmail"    column="reveice_email"    />
+        <result property="theme"    column="theme"    />
+        <result property="content"    column="content"    />
+        <result property="sendEmail"    column="send_email"    />
+        <result property="sendTime"    column="send_time"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectMailSendLogVo">
+        select id, reveice_email, theme, content, send_email, send_time, status from mail_send_log
+    </sql>
+
+    <select id="selectMailSendLogList" parameterType="MailSendLog" resultMap="MailSendLogResult">
+        <include refid="selectMailSendLogVo"/>
+        <where>
+            <if test="reveiceEmail != null  and reveiceEmail != ''"> and reveice_email = #{reveiceEmail}</if>
+            <if test="theme != null  and theme != ''"> and theme = #{theme}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="sendEmail != null  and sendEmail != ''"> and send_email = #{sendEmail}</if>
+            <if test="sendTime != null "> and send_time = #{sendTime}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectMailSendLogById" parameterType="String" resultMap="MailSendLogResult">
+        <include refid="selectMailSendLogVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertMailSendLog" parameterType="MailSendLog" useGeneratedKeys="true" keyProperty="id">
+        insert into mail_send_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="reveiceEmail != null  and reveiceEmail != ''">reveice_email,</if>
+            <if test="theme != null  and theme != ''">theme,</if>
+            <if test="content != null  and content != ''">content,</if>
+            <if test="sendEmail != null  and sendEmail != ''">send_email,</if>
+            <if test="sendTime != null ">send_time,</if>
+            <if test="status != null  and status != ''">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="reveiceEmail != null  and reveiceEmail != ''">#{reveiceEmail},</if>
+            <if test="theme != null  and theme != ''">#{theme},</if>
+            <if test="content != null  and content != ''">#{content},</if>
+            <if test="sendEmail != null  and sendEmail != ''">#{sendEmail},</if>
+            <if test="sendTime != null ">#{sendTime},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMailSendLog" parameterType="MailSendLog">
+        update mail_send_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="reveiceEmail != null  and reveiceEmail != ''">reveice_email = #{reveiceEmail},</if>
+            <if test="theme != null  and theme != ''">theme = #{theme},</if>
+            <if test="content != null  and content != ''">content = #{content},</if>
+            <if test="sendEmail != null  and sendEmail != ''">send_email = #{sendEmail},</if>
+            <if test="sendTime != null ">send_time = #{sendTime},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMailSendLogById" parameterType="String">
+        delete from mail_send_log where id = #{id}
+    </delete>
+
+    <delete id="deleteMailSendLogByIds" parameterType="String">
+        delete from mail_send_log where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

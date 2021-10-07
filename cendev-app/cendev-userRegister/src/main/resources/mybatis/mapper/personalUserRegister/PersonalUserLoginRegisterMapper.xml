@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.userregister.dao.PersonalUserLoginRegisterMapper">
+
+    <sql id="selectPersonalUserLoginVo">
+        select id, user_id, name, phone_ischeck, phone, email_ischeck, email, password, idnumber, alipay_id, wechar_id, tolinked_id, status, create_time, create_by, update_time, update_by, version, del_flag from personal_user_login
+    </sql>
+
+    <insert id="insertPersonalUserLogins" parameterType="com.censoft.userregister.domain.PersonalUserLogin" >
+        insert into personal_user_login
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="userId != null  and userId != ''">user_id,</if>
+            <if test="name != null  and name != ''">name,</if>
+            <if test="phoneIscheck != null ">phone_ischeck,</if>
+            <if test="phone != null  and phone != ''">phone,</if>
+            <if test="emailIscheck != null ">email_ischeck,</if>
+            <if test="email != null  and email != ''">email,</if>
+            <if test="password != null  and password != ''">password,</if>
+            <if test="idnumber != null  and idnumber != ''">idnumber,</if>
+            <if test="alipayId != null  and alipayId != ''">alipay_id,</if>
+            <if test="wecharId != null  and wecharId != ''">wechar_id,</if>
+            <if test="tolinkedId != null  and tolinkedId != ''">tolinked_id,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="version != null ">version,</if>
+            <if test="delFlag != null ">del_flag,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="userId != null  and userId != ''">#{userId},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="phoneIscheck != null ">#{phoneIscheck},</if>
+            <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="emailIscheck != null ">#{emailIscheck},</if>
+            <if test="email != null  and email != ''">#{email},</if>
+            <if test="password != null  and password != ''">#{password},</if>
+            <if test="idnumber != null  and idnumber != ''">#{idnumber},</if>
+            <if test="alipayId != null  and alipayId != ''">#{alipayId},</if>
+            <if test="wecharId != null  and wecharId != ''">#{wecharId},</if>
+            <if test="tolinkedId != null  and tolinkedId != ''">#{tolinkedId},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="delFlag != null ">#{delFlag},</if>
+        </trim>
+    </insert>
+
+    <insert id="insertPersonalUserLogins1" parameterType="com.censoft.userregister.domain.PersonalUserLogin">
+        insert into PERSONAL_USER_LOGIN
+        (ID,USER_ID,NAME,PHONE_ISCHECK,PHONE,EMAIL_ISCHECK,EMAIL,PASSWORD,IDNUMBER,
+        ALIPAY_ID,WECHAR_ID,TOLINKED_ID,CREATE_TIME,CREATE_BY,UPDATE_TIME,UPDATE_BY)
+        values
+           (
+            #{id,jdbcType=VARCHAR},
+            #{userId,jdbcType=VARCHAR},
+            #{name,jdbcType=VARCHAR},
+            #{phoneIscheck,jdbcType=BIGINT},
+            #{phone,jdbcType=VARCHAR},
+            #{emailIscheck,jdbcType=BIGINT},
+            #{email,jdbcType=VARCHAR},
+            #{password,jdbcType=VARCHAR},
+            #{idnumber,jdbcType=VARCHAR},
+            #{alipayId,jdbcType=VARCHAR},
+            #{wecharId,jdbcType=VARCHAR},
+            #{tolinkedId,jdbcType=VARCHAR},
+            #{createBy,jdbcType=VARCHAR},
+            #{createTime,jdbcType=TIMESTAMP},
+            #{updateBy,jdbcType=VARCHAR},
+            #{updateTime,jdbcType=TIMESTAMP}
+            )
+    </insert>
+    <select id="countByPhoneEmail" resultType="java.lang.Integer">
+        select count(email) from PERSONAL_USER_LOGIN where  email = #{email,jdbcType=VARCHAR}
+    </select>
+    <select id="countByEmailPhone" resultType="java.lang.Integer">
+        select count(phone) from PERSONAL_USER_LOGIN where  phone = #{phone,jdbcType=VARCHAR}
+    </select>
+</mapper>

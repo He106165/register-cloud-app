@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.personalcenter.personalUser.mapper.PersonalUserInfoMapper">
+
+    <resultMap type="PersonalUserInfo" id="PersonalUserInfoResult">
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="cardType"    column="card_type"    />
+        <result property="cardNo"    column="card_no"    />
+        <result property="nationality"    column="nationality"    />
+        <result property="dateOfBirth"    column="date_of_birth"    />
+        <result property="gender"    column="gender"    />
+        <result property="email"    column="email"    />
+        <result property="phone"    column="phone"    />
+        <result property="avatarUrl"    column="avatar_url"    />
+        <result property="status"    column="status"    />
+        <result property="authlevel"    column="authlevel"    />
+        <result property="remark"    column="remark"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="version"    column="version"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <resultMap id="PersonalUserLoginResult" type="com.censoft.personalcenter.personalUser.domain.PersonalUserLogin">
+        <result property="id" column="id"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="name" column="name"/>
+        <result property="email" column="email"/>
+        <result property="phone" column="phone"/>
+        <result property="idnumber" column="idnumber"/>
+        <result property="password" column="password"/>
+        <result property="alipayId" column="alipay_id"/>
+        <result property="wecharId" column="wechar_id"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="version" column="version"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+
+    <sql id="selectPersonalUserInfoVo">
+        select user_id, user_name, card_type, card_no, nationality, date_of_birth, gender, email, phone, avatar_url, status, authlevel, remark, create_time, create_by, update_time, update_by, version, del_flag from personal_user_info
+    </sql>
+
+    <select id="selectPersonalUserInfoList" parameterType="PersonalUserInfo" resultMap="PersonalUserInfoResult">
+        <include refid="selectPersonalUserInfoVo"/>
+        <where>
+            <if test="userName != null  and userName != ''"> and user_name like  '%' ||  #{userName} || '%'</if>
+            <if test="cardType != null  and cardType != ''"> and card_type = #{cardType}</if>
+            <if test="cardNo != null  and cardNo != ''"> and card_no = #{cardNo}</if>
+            <if test="nationality != null  and nationality != ''"> and nationality = #{nationality}</if>
+            <if test="dateOfBirth != null "> and date_of_birth = #{dateOfBirth}</if>
+            <if test="gender != null  and gender != ''"> and gender = #{gender}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="avatarUrl != null  and avatarUrl != ''"> and avatar_url = #{avatarUrl}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="authlevel != null  and authlevel != ''"> and authlevel = #{authlevel}</if>
+            <if test="version != null "> and version = #{version}</if>
+        </where>
+    </select>
+
+    <select id="selectPersonalUserInfoById" parameterType="String" resultMap="PersonalUserInfoResult">
+        <include refid="selectPersonalUserInfoVo"/>
+        where user_id = #{userId}
+    </select>
+    <select id="selectLoginInfo" resultMap="PersonalUserLoginResult">
+        select * from PERSONAL_USER_Login where USER_ID = #{userId,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insertPersonalUserInfo" parameterType="PersonalUserInfo" useGeneratedKeys="true" keyProperty="userId">
+        insert into personal_user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userName != null  and userName != ''">user_name,</if>
+            <if test="cardType != null  and cardType != ''">card_type,</if>
+            <if test="cardNo != null  and cardNo != ''">card_no,</if>
+            <if test="nationality != null  and nationality != ''">nationality,</if>
+            <if test="dateOfBirth != null ">date_of_birth,</if>
+            <if test="gender != null  and gender != ''">gender,</if>
+            <if test="email != null  and email != ''">email,</if>
+            <if test="phone != null  and phone != ''">phone,</if>
+            <if test="avatarUrl != null  and avatarUrl != ''">avatar_url,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="authlevel != null  and authlevel != ''">authlevel,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="version != null ">version,</if>
+            <if test="delFlag != null ">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userName != null  and userName != ''">#{userName},</if>
+            <if test="cardType != null  and cardType != ''">#{cardType},</if>
+            <if test="cardNo != null  and cardNo != ''">#{cardNo},</if>
+            <if test="nationality != null  and nationality != ''">#{nationality},</if>
+            <if test="dateOfBirth != null ">#{dateOfBirth},</if>
+            <if test="gender != null  and gender != ''">#{gender},</if>
+            <if test="email != null  and email != ''">#{email},</if>
+            <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="avatarUrl != null  and avatarUrl != ''">#{avatarUrl},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="authlevel != null  and authlevel != ''">#{authlevel},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="delFlag != null ">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePersonalUserInfo" parameterType="PersonalUserInfo">
+        update personal_user_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userName != null  and userName != ''">user_name = #{userName},</if>
+            <if test="cardType != null  and cardType != ''">card_type = #{cardType},</if>
+            <if test="cardNo != null  and cardNo != ''">card_no = #{cardNo},</if>
+            <if test="nationality != null  and nationality != ''">nationality = #{nationality},</if>
+            <if test="dateOfBirth != null ">date_of_birth = #{dateOfBirth},</if>
+            <if test="gender != null  and gender != ''">gender = #{gender},</if>
+            <if test="email != null  and email != ''">email = #{email},</if>
+            <if test="phone != null  and phone != ''">phone = #{phone},</if>
+            <if test="avatarUrl != null  and avatarUrl != ''">avatar_url = #{avatarUrl},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="authlevel != null  and authlevel != ''">authlevel = #{authlevel},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="delFlag != null ">del_flag = #{delFlag}</if>
+        </trim>
+        where user_id = #{userId}
+    </update>
+
+    <delete id="deletePersonalUserInfoById" parameterType="String">
+        delete from personal_user_info where user_id = #{userId}
+    </delete>
+
+    <delete id="deletePersonalUserInfoByIds" parameterType="String">
+        delete from personal_user_info where user_id in
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+
+</mapper>

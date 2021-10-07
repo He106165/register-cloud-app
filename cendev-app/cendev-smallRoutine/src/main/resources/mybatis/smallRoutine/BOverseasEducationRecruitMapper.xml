@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.censoft.smallRoutine.mapper.BOverseasEducationRecruitMapper">
+
+    <resultMap type="BOverseasEducationRecruit" id="BOverseasEducationRecruitResult">
+        <result property="id"    column="id"    />
+        <result property="pid"    column="pid"    />
+        <result property="degreeCertificate"    column="degree_certificate"    />
+        <result property="subject"    column="subject"    />
+        <result property="universityType"    column="university_type"    />
+        <result property="majorType"    column="major_type"    />
+        <result property="recruitArrangement"    column="recruit_arrangement"    />
+        <result property="recruitMajorCn"    column="recruit_major_cn"    />
+        <result property="recruitMajorEn"    column="recruit_major_en"    />
+        <result property="year"    column="year"    />
+        <result property="applyTime"    column="apply_time"    />
+        <result property="recruitContact"    column="recruit_contact"    />
+        <result property="contactPhone"    column="contact_phone"    />
+        <result property="contactEmail"    column="contact_email"    />
+        <result property="recruitRequireInter"    column="recruit_require_inter"    />
+        <result property="insertTime"    column="insert_time"    />
+    </resultMap>
+
+    <sql id="selectBOverseasEducationRecruitVo">
+        select id, pid, degree_certificate, subject, university_type, major_type, recruit_arrangement, recruit_major_cn, recruit_major_en, year, apply_time, recruit_contact, contact_phone, contact_email, recruit_require_inter, insert_time from b_overseas_education_recruit
+    </sql>
+
+    <select id="selectBOverseasEducationRecruitList" parameterType="BOverseasEducationRecruit" resultMap="BOverseasEducationRecruitResult">
+        <include refid="selectBOverseasEducationRecruitVo"/>
+        <where>
+            <if test="pid != null "> and pid = #{pid}</if>
+            <if test="degreeCertificate != null "> and degree_certificate = #{degreeCertificate}</if>
+            <if test="subject != null "> and subject = #{subject}</if>
+            <if test="universityType != null "> and university_type = #{universityType}</if>
+            <if test="majorType != null "> and major_type = #{majorType}</if>
+            <if test="recruitArrangement != null "> and recruit_arrangement = #{recruitArrangement}</if>
+            <if test="recruitMajorCn != null "> and recruit_major_cn = #{recruitMajorCn}</if>
+            <if test="recruitMajorEn != null "> and recruit_major_en = #{recruitMajorEn}</if>
+            <if test="year != null "> and year = #{year}</if>
+            <if test="applyTime != null "> and apply_time = #{applyTime}</if>
+            <if test="recruitContact != null "> and recruit_contact = #{recruitContact}</if>
+            <if test="contactPhone != null "> and contact_phone = #{contactPhone}</if>
+            <if test="contactEmail != null "> and contact_email = #{contactEmail}</if>
+            <if test="recruitRequireInter != null "> and recruit_require_inter = #{recruitRequireInter}</if>
+            <if test="insertTime != null "> and insert_time = #{insertTime}</if>
+        </where>
+    </select>
+
+    <select id="selectBOverseasEducationRecruitById" parameterType="String" resultMap="BOverseasEducationRecruitResult">
+        <include refid="selectBOverseasEducationRecruitVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBOverseasEducationRecruit" parameterType="BOverseasEducationRecruit">
+        insert into b_overseas_education_recruit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="pid != null ">pid,</if>
+            <if test="degreeCertificate != null ">degree_certificate,</if>
+            <if test="subject != null ">subject,</if>
+            <if test="universityType != null ">university_type,</if>
+            <if test="majorType != null ">major_type,</if>
+            <if test="recruitArrangement != null ">recruit_arrangement,</if>
+            <if test="recruitMajorCn != null ">recruit_major_cn,</if>
+            <if test="recruitMajorEn != null ">recruit_major_en,</if>
+            <if test="year != null ">year,</if>
+            <if test="applyTime != null ">apply_time,</if>
+            <if test="recruitContact != null ">recruit_contact,</if>
+            <if test="contactPhone != null ">contact_phone,</if>
+            <if test="contactEmail != null ">contact_email,</if>
+            <if test="recruitRequireInter != null ">recruit_require_inter,</if>
+            <if test="insertTime != null ">insert_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="pid != null ">#{pid},</if>
+            <if test="degreeCertificate != null ">#{degreeCertificate},</if>
+            <if test="subject != null ">#{subject},</if>
+            <if test="universityType != null ">#{universityType},</if>
+            <if test="majorType != null ">#{majorType},</if>
+            <if test="recruitArrangement != null ">#{recruitArrangement},</if>
+            <if test="recruitMajorCn != null ">#{recruitMajorCn},</if>
+            <if test="recruitMajorEn != null ">#{recruitMajorEn},</if>
+            <if test="year != null ">#{year},</if>
+            <if test="applyTime != null ">#{applyTime},</if>
+            <if test="recruitContact != null ">#{recruitContact},</if>
+            <if test="contactPhone != null ">#{contactPhone},</if>
+            <if test="contactEmail != null ">#{contactEmail},</if>
+            <if test="recruitRequireInter != null ">#{recruitRequireInter},</if>
+            <if test="insertTime != null ">#{insertTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBOverseasEducationRecruit" parameterType="BOverseasEducationRecruit">
+        update b_overseas_education_recruit
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pid != null ">pid = #{pid},</if>
+            <if test="degreeCertificate != null ">degree_certificate = #{degreeCertificate},</if>
+            <if test="subject != null ">subject = #{subject},</if>
+            <if test="universityType != null ">university_type = #{universityType},</if>
+            <if test="majorType != null ">major_type = #{majorType},</if>
+            <if test="recruitArrangement != null ">recruit_arrangement = #{recruitArrangement},</if>
+            <if test="recruitMajorCn != null ">recruit_major_cn = #{recruitMajorCn},</if>
+            <if test="recruitMajorEn != null ">recruit_major_en = #{recruitMajorEn},</if>
+            <if test="year != null ">year = #{year},</if>
+            <if test="applyTime != null ">apply_time = #{applyTime},</if>
+            <if test="recruitContact != null ">recruit_contact = #{recruitContact},</if>
+            <if test="contactPhone != null ">contact_phone = #{contactPhone},</if>
+            <if test="contactEmail != null ">contact_email = #{contactEmail},</if>
+            <if test="recruitRequireInter != null ">recruit_require_inter = #{recruitRequireInter},</if>
+            <if test="insertTime != null ">insert_time = #{insertTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBOverseasEducationRecruitById" parameterType="String">
+        delete from b_overseas_education_recruit where id = #{id}
+    </delete>
+
+    <delete id="deleteBOverseasEducationRecruitByIds" parameterType="String">
+        delete from b_overseas_education_recruit where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
